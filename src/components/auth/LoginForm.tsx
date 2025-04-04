@@ -1,106 +1,121 @@
 
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useAuth } from '@/contexts/AuthContext';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import ScolaLogo from '@/components/ScolaLogo';
 
-const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+const loginSchema = z.object({
+  email: z.string().email('Introduce un email válido'),
+  password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres')
+});
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real implementation, this would authenticate with a backend
-    console.log('Login attempt:', { email, password, rememberMe });
-    
-    // Mock authentication for demo purposes
-    if (email && password) {
-      window.location.href = '/dashboard';
+type LoginFormValues = z.infer<typeof loginSchema>;
+
+const LoginForm = () => {
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+
+  const onSubmit = async (data: LoginFormValues) => {
+    setIsLoading(true);
+    try {
+      await signIn(data.email, data.password);
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Erro ao iniciar sesión:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-md p-8 mx-auto rounded-lg shadow-md bg-white">
-      <div className="flex flex-col items-center justify-center mb-8">
-        <ScolaLogo size="lg" />
-        <h2 className="mt-4 text-2xl font-bold text-scola-primary">Inicio de sesión</h2>
-        <div className="w-32 h-1 mt-2 dotted-border"></div>
-      </div>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Correo electrónico
-          </label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="nome@exemplo.com"
-            className="w-full p-2 border rounded-md focus:ring-scola-primary focus:border-scola-primary"
-            required
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-            Contrasinal
-          </label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded-md focus:ring-scola-primary focus:border-scola-primary"
-            required
-          />
-        </div>
-        
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="remember" 
-              checked={rememberMe}
-              onCheckedChange={(checked) => setRememberMe(!!checked)}
-            />
-            <label htmlFor="remember" className="text-sm text-gray-600">
-              Recordar usuario e contrasinal
-            </label>
-          </div>
-        </div>
-        
-        <Button 
-          type="submit" 
-          className="w-full bg-scola-primary hover:bg-scola-primary-light"
-        >
-          Iniciar sesión
-        </Button>
-        
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <Link 
-            to="/forgot-password" 
-            className="text-sm text-scola-primary hover:underline"
-          >
-            Recuperar contrasinal
-          </Link>
-          
-          <div className="flex items-center space-x-2">
-            <span className="text-sm text-gray-600">
-              Non tes unha conta?
-            </span>
-            <Link 
-              to="/register" 
-              className="text-sm text-scola-primary hover:underline"
-            >
-              Ir a Rexistro
-            </Link>
-          </div>
-        </div>
-      </form>
+    <div className="flex items-center justify-center min-h-screen bg-scola-gray">
+      <Card className="w-full max-w-md">
+        <CardHeader className="flex flex-col items-center space-y-2">
+          <ScolaLogo className="mb-4" />
+          <CardTitle className="text-2xl font-bold">Iniciar sesión</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Correo electrónico</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="nome@escola.edu"
+                        type="email"
+                        autoComplete="email"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contrasinal</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="••••••••"
+                        type="password"
+                        autoComplete="current-password"
+                        disabled={isLoading}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <div className="flex justify-end">
+                <Link to="/forgot-password" className="text-sm text-scola-primary hover:underline">
+                  Esquecín o contrasinal
+                </Link>
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full bg-scola-primary hover:bg-scola-primary/90" 
+                disabled={isLoading}
+              >
+                {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+              </Button>
+              <div className="text-center mt-4">
+                <p className="text-sm text-muted-foreground">
+                  ¿Non tes unha conta?{' '}
+                  <Link to="/register" className="text-scola-primary hover:underline">
+                    Rexístrate
+                  </Link>
+                </p>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
