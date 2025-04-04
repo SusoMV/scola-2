@@ -13,6 +13,7 @@ import ScolaLogo from '@/components/ScolaLogo';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
+import { Tables } from '@/integrations/supabase/types';
 
 const registerSchema = z.object({
   fullName: z.string().min(2, 'O nome debe ter polo menos 2 caracteres'),
@@ -29,13 +30,13 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-const fetchSchools = async () => {
+const fetchSchools = async (): Promise<Tables<'schools'>[]> => {
   const { data, error } = await supabase
     .from('schools')
     .select('id, name');
 
   if (error) throw error;
-  return data;
+  return data || [];
 };
 
 const RegisterForm = () => {
