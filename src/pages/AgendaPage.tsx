@@ -31,6 +31,7 @@ import { Badge } from '@/components/ui/badge';
 import { format, startOfWeek, addDays, isWeekend } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useForm } from 'react-hook-form';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Event {
   id: string;
@@ -175,6 +176,11 @@ const AgendaPage = () => {
     }
   };
 
+  const handleCreateEvent = () => {
+    form.setValue('date', format(new Date(), 'yyyy-MM-dd'));
+    setOpenDialog(true);
+  };
+
   return (
     <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
@@ -196,131 +202,17 @@ const AgendaPage = () => {
                 Complete os datos do novo evento para o calendario.
               </DialogDescription>
             </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Título do evento</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Introduza o título do evento" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo de evento</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar tipo" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {eventTypes.map((type) => (
-                            <SelectItem key={type.id} value={type.id}>{type.label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descrición (opcional)</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Introduza unha descrición do evento" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="recipients"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Destinatarios</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Introduza os destinatarios do evento" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Espazo</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar espazo" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {spaces.map((space) => (
-                            <SelectItem key={space} value={space}>{space}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="date"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Data</FormLabel>
-                      <FormControl>
-                        <div className="flex items-center">
-                          <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
-                          <Input type="date" {...field} />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <div className="grid grid-cols-2 gap-4">
+            <ScrollArea className="max-h-[60vh]">
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-1">
                   <FormField
                     control={form.control}
-                    name="startTime"
+                    name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hora de inicio</FormLabel>
+                        <FormLabel>Título do evento</FormLabel>
                         <FormControl>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                            <Input type="time" {...field} />
-                          </div>
+                          <Input placeholder="Introduza o título do evento" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -329,53 +221,169 @@ const AgendaPage = () => {
                   
                   <FormField
                     control={form.control}
-                    name="endTime"
+                    name="type"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Hora de fin</FormLabel>
+                        <FormLabel>Tipo de evento</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Seleccionar tipo" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {eventTypes.map((type) => (
+                              <SelectItem key={type.id} value={type.id}>{type.label}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Descrición (opcional)</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Introduza unha descrición do evento" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="recipients"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Destinatarios</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Introduza os destinatarios do evento" 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Espazo</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Seleccionar espazo" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {spaces.map((space) => (
+                              <SelectItem key={space} value={space}>{space}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="date"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Data</FormLabel>
                         <FormControl>
                           <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                            <Input type="time" {...field} />
+                            <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
+                            <Input type="date" {...field} />
                           </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
-                </div>
-                
-                <FormField
-                  control={form.control}
-                  name="mandatory"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Evento obrigatorio</FormLabel>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                
-                <DialogFooter>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => setOpenDialog(false)}
-                    className="mr-2"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button type="submit">Gardar</Button>
-                </DialogFooter>
-              </form>
-            </Form>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="startTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Hora de inicio</FormLabel>
+                          <FormControl>
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                              <Input type="time" {...field} />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="endTime"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Hora de fin</FormLabel>
+                          <FormControl>
+                            <div className="flex items-center">
+                              <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                              <Input type="time" {...field} />
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="mandatory"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>Evento obrigatorio</FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <DialogFooter className="pt-4">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      onClick={() => setOpenDialog(false)}
+                      className="mr-2"
+                    >
+                      Cancelar
+                    </Button>
+                    <Button type="submit">Gardar</Button>
+                  </DialogFooter>
+                </form>
+              </Form>
+            </ScrollArea>
           </DialogContent>
         </Dialog>
       </div>
@@ -388,10 +396,16 @@ const AgendaPage = () => {
         
         <TabsContent value="week">
           <Card className="border border-scola-gray-dark">
-            <CardHeader className="pb-2">
+            <CardHeader className="pb-2 flex flex-row justify-between items-center">
               <CardTitle className="text-lg font-medium">
                 Semana do {format(weekDays[0], 'd MMMM', { locale: es })} ao {format(weekDays[6], 'd MMMM yyyy', { locale: es })}
               </CardTitle>
+              <Button 
+                className="bg-scola-primary hover:bg-scola-primary/90"
+                onClick={handleCreateEvent}
+              >
+                <Plus className="mr-2 h-4 w-4" /> Crear Evento
+              </Button>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-7 gap-2">
@@ -408,18 +422,20 @@ const AgendaPage = () => {
                       <div className="text-xs uppercase">{format(day, 'EEEE', { locale: es })}</div>
                       <div className="text-lg">{format(day, 'd')}</div>
                     </div>
-                    <div className="p-1 min-h-[150px]">
-                      {getEventsByDay(day).map((event) => (
-                        <div 
-                          key={event.id}
-                          className={`mb-1 p-1 rounded-sm text-xs truncate ${getEventTypeDetails(event.type).color}`}
-                          title={event.title}
-                        >
-                          <div className="font-semibold">{event.title}</div>
-                          <div>{event.startTime} - {event.endTime}</div>
-                        </div>
-                      ))}
-                    </div>
+                    <ScrollArea className="h-[150px]">
+                      <div className="p-1">
+                        {getEventsByDay(day).map((event) => (
+                          <div 
+                            key={event.id}
+                            className={`mb-1 p-1 rounded-sm text-xs ${getEventTypeDetails(event.type).color}`}
+                            title={`${event.title} - ${event.description || ''}`}
+                          >
+                            <div className="font-semibold line-clamp-1">{event.title}</div>
+                            <div>{event.startTime} - {event.endTime}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </ScrollArea>
                   </div>
                 ))}
               </div>
@@ -470,45 +486,47 @@ const AgendaPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                  {events.length > 0 ? (
-                    events.map((event) => (
-                      <div key={event.id} className="border rounded-md p-3 hover:bg-gray-50">
-                        <div className="flex justify-between items-start">
-                          <h3 className="font-medium">{event.title}</h3>
-                          <Badge className={getEventTypeDetails(event.type).color}>
-                            {getEventTypeDetails(event.type).label}
-                          </Badge>
-                        </div>
-                        <div className="text-sm text-gray-500 mt-1">
-                          <div className="flex items-center">
-                            <CalendarIcon className="h-3 w-3 mr-1" /> 
-                            {format(new Date(event.date), 'EEEE, d MMMM', { locale: es })}
-                          </div>
-                          <div className="flex items-center mt-1">
-                            <Clock className="h-3 w-3 mr-1" /> 
-                            {event.startTime} - {event.endTime}
-                          </div>
-                        </div>
-                        {event.description && (
-                          <p className="text-sm mt-2">{event.description}</p>
-                        )}
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-xs text-gray-500">
-                            {event.location}
-                          </span>
-                          {event.mandatory && (
-                            <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
-                              Obligatorio
+                <ScrollArea className="h-[500px] pr-2">
+                  <div className="space-y-3">
+                    {events.length > 0 ? (
+                      events.map((event) => (
+                        <div key={event.id} className="border rounded-md p-3 hover:bg-gray-50">
+                          <div className="flex justify-between items-start">
+                            <h3 className="font-medium">{event.title}</h3>
+                            <Badge className={getEventTypeDetails(event.type).color}>
+                              {getEventTypeDetails(event.type).label}
                             </Badge>
+                          </div>
+                          <div className="text-sm text-gray-500 mt-1">
+                            <div className="flex items-center">
+                              <CalendarIcon className="h-3 w-3 mr-1" /> 
+                              {format(new Date(event.date), 'EEEE, d MMMM', { locale: es })}
+                            </div>
+                            <div className="flex items-center mt-1">
+                              <Clock className="h-3 w-3 mr-1" /> 
+                              {event.startTime} - {event.endTime}
+                            </div>
+                          </div>
+                          {event.description && (
+                            <p className="text-sm mt-2 line-clamp-2">{event.description}</p>
                           )}
+                          <div className="mt-2 flex items-center justify-between">
+                            <span className="text-xs text-gray-500">
+                              {event.location}
+                            </span>
+                            {event.mandatory && (
+                              <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
+                                Obligatorio
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-center py-4 text-gray-500">Non hai eventos planificados</p>
-                  )}
-                </div>
+                      ))
+                    ) : (
+                      <p className="text-center py-4 text-gray-500">Non hai eventos planificados</p>
+                    )}
+                  </div>
+                </ScrollArea>
               </CardContent>
             </Card>
           </div>
