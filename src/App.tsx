@@ -15,6 +15,8 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import CompleteProfilePage from "./pages/CompleteProfilePage";
 import DashboardPage from "./pages/DashboardPage";
 import SubstitutionsPage from "./pages/SubstitutionsPage";
+import AgendaPage from "./pages/AgendaPage";
+import SpacesPage from "./pages/SpacesPage";
 import NotFound from "./pages/NotFound";
 
 // Importamos componentes de placeholder para las rutas pendientes
@@ -61,20 +63,20 @@ const App = () => (
                 <SubstitutionsPage />
               </ProtectedRoute>
             } />
-            {/* Añadimos las rutas pendientes */}
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <PlaceholderPage title="Perfil" />
-              </ProtectedRoute>
-            } />
             <Route path="/agenda" element={
               <ProtectedRoute>
-                <PlaceholderPage title="Axenda" />
+                <AgendaPage />
               </ProtectedRoute>
             } />
             <Route path="/spaces" element={
               <ProtectedRoute>
-                <PlaceholderPage title="Espazos" />
+                <SpacesPage />
+              </ProtectedRoute>
+            } />
+            {/* Añadimos las rutas pendientes */}
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Perfil" />
               </ProtectedRoute>
             } />
             <Route path="/faculty" element={
