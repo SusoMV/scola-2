@@ -1,10 +1,11 @@
 
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import ScolaLogo from '@/components/ScolaLogo';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/contexts/AuthContext';
 import { 
   LayoutDashboard, 
   UserRound, 
@@ -56,18 +57,29 @@ const navItems = [
 
 const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Mock user data (in a real app this would come from a user context or state management)
-  const user = {
-    name: 'Ana García',
-    avatar: '',
-    role: 'Docente',
-    specialty: 'Educación Infantil'
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  // Get user data from auth context (in a real app this would come from a user context or state management)
+  const userData = {
+    name: user?.user_metadata?.full_name || 'Usuario',
+    avatar: user?.user_metadata?.avatar_url || '',
+    role: user?.user_metadata?.role || 'Docente',
+    specialty: user?.user_metadata?.specialty || 'Educación'
   };
 
   const isActive = (path: string) => {
@@ -109,14 +121,14 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <Avatar>
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={userData.avatar} alt={userData.name} />
               <AvatarFallback className="bg-scola-primary text-white">
-                {user.name.split(' ').map(name => name[0]).join('')}
+                {userData.name.split(' ').map(name => name[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="font-medium">{user.name}</span>
-              <span className="text-xs text-gray-500">{user.role} - {user.specialty}</span>
+              <span className="font-medium">{userData.name}</span>
+              <span className="text-xs text-gray-500">{userData.role} - {userData.specialty}</span>
             </div>
           </div>
           <Link to="/profile">
@@ -150,15 +162,14 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
 
         {/* Logout button */}
         <div className="p-4 border-t border-gray-200">
-          <Link to="/login">
-            <Button 
-              variant="ghost" 
-              className="w-full flex items-center justify-center text-gray-700 hover:bg-scola-pastel hover:text-scola-primary"
-            >
-              <LogOut className="h-5 w-5 mr-2" />
-              <span>Pechar sesión</span>
-            </Button>
-          </Link>
+          <Button 
+            variant="ghost" 
+            className="w-full flex items-center justify-center text-gray-700 hover:bg-scola-pastel hover:text-scola-primary"
+            onClick={handleSignOut}
+          >
+            <LogOut className="h-5 w-5 mr-2" />
+            <span>Pechar sesión</span>
+          </Button>
         </div>
       </div>
 

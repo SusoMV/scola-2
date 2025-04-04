@@ -17,6 +17,9 @@ import DashboardPage from "./pages/DashboardPage";
 import SubstitutionsPage from "./pages/SubstitutionsPage";
 import NotFound from "./pages/NotFound";
 
+// Importamos componentes de placeholder para las rutas pendientes
+import PlaceholderPage from "./pages/PlaceholderPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -56,6 +59,47 @@ const App = () => (
             <Route path="/substitutions" element={
               <ProtectedRoute>
                 <SubstitutionsPage />
+              </ProtectedRoute>
+            } />
+            {/* Añadimos las rutas pendientes */}
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Perfil" />
+              </ProtectedRoute>
+            } />
+            <Route path="/agenda" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Axenda" />
+              </ProtectedRoute>
+            } />
+            <Route path="/spaces" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Espazos" />
+              </ProtectedRoute>
+            } />
+            <Route path="/faculty" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Claustro" />
+              </ProtectedRoute>
+            } />
+            <Route path="/messages" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Mensaxes" />
+              </ProtectedRoute>
+            } />
+            <Route path="/school-info" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Datos do centro" />
+              </ProtectedRoute>
+            } />
+            <Route path="/schedules" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Horarios" />
+              </ProtectedRoute>
+            } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Documentos" />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />

@@ -66,7 +66,7 @@ const QuickLinksSection = () => {
                   <div className="text-scola-primary mb-2">
                     {link.icon}
                   </div>
-                  <span className="text-sm text-center text-gray-700">{link.name}</span>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
                   <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
                 </a>
               ) : (
@@ -77,7 +77,7 @@ const QuickLinksSection = () => {
                   <div className="text-scola-primary mb-2">
                     {link.icon}
                   </div>
-                  <span className="text-sm text-center text-gray-700">{link.name}</span>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
                 </Link>
               )}
             </div>

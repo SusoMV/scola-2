@@ -12,8 +12,12 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    // Podería mostrar un spinner aquí
-    return <div className="flex items-center justify-center h-screen">Cargando...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-scola-primary"></div>
+        <span className="ml-2">Cargando...</span>
+      </div>
+    );
   }
 
   if (!user) {
