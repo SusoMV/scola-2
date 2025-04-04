@@ -15,6 +15,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { Tables } from '@/integrations/supabase/types';
 
+// Define a specific type for the school data we need
+type SchoolBasic = Pick<Tables<'schools'>, 'id' | 'name'>;
+
 const registerSchema = z.object({
   fullName: z.string().min(2, 'O nome debe ter polo menos 2 caracteres'),
   email: z.string().email('Introduce un email válido'),
@@ -30,7 +33,7 @@ const registerSchema = z.object({
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
 
-const fetchSchools = async (): Promise<Tables<'schools'>[]> => {
+const fetchSchools = async (): Promise<SchoolBasic[]> => {
   const { data, error } = await supabase
     .from('schools')
     .select('id, name');
