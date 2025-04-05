@@ -1,53 +1,86 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link } from 'lucide-react';
-
-interface QuickLink {
-  title: string;
-  description: string;
-  href: string;
-}
+import { Link } from 'react-router-dom';
+import { ExternalLink, CalendarDays, Globe, FileText, Clock } from 'lucide-react';
 
 const QuickLinksSection = () => {
-  const quickLinks: QuickLink[] = [
+  const quickLinks = [
     {
-      title: 'Solicitar titoría',
-      description: 'Accede ao formulario para solicitar titorías.',
-      href: '/tutoring'
+      name: 'Próximas reservas',
+      icon: <CalendarDays className="h-5 w-5" />,
+      link: '/spaces',
     },
     {
-      title: 'Ver horarios',
-      description: 'Consulta os horarios de clases e actividades.',
-      href: '/schedules'
+      name: 'Portal Educativo',
+      icon: <Globe className="h-5 w-5" />,
+      link: 'https://www.edu.xunta.gal/portal/',
+      external: true,
     },
     {
-      title: 'Reservar espazo',
-      description: 'Reserva aulas ou outros espazos do centro.',
-      href: '/spaces'
+      name: 'Web do centro',
+      icon: <Globe className="h-5 w-5" />,
+      link: 'https://www.edu.xunta.gal/centros/ceipsanmarcos/',
+      external: true,
     },
     {
-      title: 'Acceder ao Drive',
-      description: 'Accede aos documentos compartidos do centro.',
-      href: '/documents'
-    }
+      name: 'Gardas',
+      icon: <Clock className="h-5 w-5" />,
+      link: '/substitutions',
+    },
+    {
+      name: 'Datos do centro',
+      icon: <FileText className="h-5 w-5" />,
+      link: '/school-info',
+    },
+    {
+      name: 'Horarios',
+      icon: <Clock className="h-5 w-5" />,
+      link: '/schedules',
+    },
+    {
+      name: 'Documentos',
+      icon: <FileText className="h-5 w-5" />,
+      link: '/documents',
+    },
   ];
 
   return (
     <Card className="mt-6 border border-scola-gray-dark">
       <CardHeader className="pb-2">
-        <CardTitle icon={Link}>Accesos rápidos</CardTitle>
+        <CardTitle className="text-lg font-medium">
+          Enlaces rápidos
+        </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {quickLinks.map((link, index) => (
-            <a 
-              key={index} 
-              href={link.href} 
-              className="block p-4 bg-white rounded-md border border-scola-gray-dark hover:shadow-md transition-shadow duration-200"
-            >
-              <h4 className="text-lg font-medium text-gray-800">{link.title}</h4>
-              <p className="text-sm text-gray-500 mt-1">{link.description}</p>
-            </a>
+            <div key={index}>
+              {link.external ? (
+                <a 
+                  href={link.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                >
+                  <div className="text-scola-primary mb-2">
+                    {link.icon}
+                  </div>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
+                  <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
+                </a>
+              ) : (
+                <Link 
+                  to={link.link}
+                  className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                >
+                  <div className="text-scola-primary mb-2">
+                    {link.icon}
+                  </div>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
+                </Link>
+              )}
+            </div>
           ))}
         </div>
       </CardContent>

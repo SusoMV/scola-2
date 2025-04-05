@@ -1,7 +1,7 @@
+
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
-import SectionTitle from '@/components/ui/section-title';
 
 interface ScheduleItem {
   time: string;
@@ -42,7 +42,10 @@ const ScheduleSection = () => {
   return (
     <Card className="mt-6 border border-scola-gray-dark">
       <CardHeader className="pb-2">
-        <SectionTitle icon={Clock}>Clases do día</SectionTitle>
+        <CardTitle className="text-lg font-medium flex items-center">
+          <Clock className="h-5 w-5 mr-2 text-scola-primary" />
+          Clases do día
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
