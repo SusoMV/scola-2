@@ -220,7 +220,7 @@ const SpacesPage = () => {
         {(['aula', 'sala', 'biblioteca', 'pavillón', 'taller', 'despacho'] as const).map(type => <TabsContent key={type} value={type}>
             <Card className="border border-scola-gray-dark">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-medium flex items-center">
+                <CardTitle className="font-medium flex items-center my-0 px-0 text-lg py-[9px]">
                   <Building className="h-5 w-5 mr-2 text-[#0070C0]" />
                   {type === 'aula' ? 'Aulas' : type === 'biblioteca' ? 'Biblioteca' : type === 'pavillón' ? 'Pavillón' : type === 'sala' ? 'Salas' : type === 'taller' ? 'Talleres' : 'Despachos'}
                 </CardTitle>
