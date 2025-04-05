@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,17 +11,22 @@ import * as z from 'zod';
 import { useAuth } from '@/contexts/AuthContext';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import ScolaLogo from '@/components/ScolaLogo';
+import { toast } from 'sonner';
+
 const loginSchema = z.object({
   email: z.string().email('Introduce un email válido'),
   password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres')
 });
+
 type LoginFormValues = z.infer<typeof loginSchema>;
+
 const LoginForm = () => {
   const {
     signIn
   } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,18 +34,22 @@ const LoginForm = () => {
       password: ''
     }
   });
+
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
       await signIn(data.email, data.password);
       navigate('/dashboard');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao iniciar sesión:', error);
+      toast.error(error.message || 'Ocorreu un erro ao iniciar sesión');
     } finally {
       setIsLoading(false);
     }
   };
-  return <div className="flex items-center justify-center min-h-screen bg-scola-gray">
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-scola-gray">
       <Card className="w-full max-w-md px-0 my-0 mx-0 py-0">
         <CardHeader className="flex flex-col items-center space-y-2">
           <ScolaLogo className="mb-4" />
@@ -49,8 +59,8 @@ const LoginForm = () => {
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField control={form.control} name="email" render={({
-              field
-            }) => <FormItem className="px-0">
+                field
+              }) => <FormItem className="px-0">
                     <FormLabel>Correo electrónico</FormLabel>
                     <FormControl>
                       <Input placeholder="nome@escola.edu" type="email" autoComplete="email" disabled={isLoading} {...field} />
@@ -58,8 +68,8 @@ const LoginForm = () => {
                     <FormMessage />
                   </FormItem>} />
               <FormField control={form.control} name="password" render={({
-              field
-            }) => <FormItem className="px-0">
+                field
+              }) => <FormItem className="px-0">
                     <FormLabel>Contrasinal</FormLabel>
                     <FormControl>
                       <Input placeholder="••••••••" type="password" autoComplete="current-password" disabled={isLoading} {...field} />
@@ -86,6 +96,8 @@ const LoginForm = () => {
           </Form>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default LoginForm;

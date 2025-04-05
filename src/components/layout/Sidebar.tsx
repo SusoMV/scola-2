@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -15,7 +16,8 @@ import {
   Menu,
   X,
   LogOut,
-  GraduationCap
+  GraduationCap,
+  Settings
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -136,6 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               variant="outline" 
               className="mt-3 w-full text-scola-primary border-scola-primary hover:bg-scola-pastel"
             >
+              <Settings className="h-4 w-4 mr-2" />
               Editar perfil
             </Button>
           </Link>
