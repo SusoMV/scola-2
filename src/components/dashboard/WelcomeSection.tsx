@@ -23,6 +23,9 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userName }) => {
 
   // Use the actual user name from auth context if available
   const displayName = user?.user_metadata?.full_name || userName;
+  
+  // Get the school name from user metadata
+  const schoolName = user?.user_metadata?.school_name || "CEIP San Marcos";
 
   return (
     <Card className="border border-scola-gray-dark bg-white">
@@ -34,7 +37,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userName }) => {
           </div>
           <div className="mt-4 md:mt-0">
             <span className="inline-block py-1 px-3 rounded-full bg-scola-pastel text-scola-primary text-sm font-medium">
-              Centro: CEIP San Marcos
+              Centro: {schoolName}
             </span>
           </div>
         </div>

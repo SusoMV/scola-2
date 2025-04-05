@@ -1,57 +1,63 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Users, MessageSquare, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { Building2, Calendar, ChevronsLeftRight, Headphones, MessageSquare, Users } from 'lucide-react';
 
 const SummaryCards = () => {
-  // This would be data from an API in a real app
-  const summaryData = {
-    absences: 2,
-    events: 3,
-    unreadMessages: 5,
-    notifications: 4
-  };
-
-  const cards = [
+  const items = [
     {
+      title: 'Substitucións',
+      count: 3,
+      path: '/substitutions',
+      icon: <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />,
+    },
+    {
+      title: 'Claustro',
+      count: 25,
+      path: '/faculty',
       icon: <Users className="h-6 w-6 text-scola-primary" />,
-      title: "Ausencias",
-      value: summaryData.absences,
-      link: "/substitutions"
     },
     {
-      icon: <Calendar className="h-6 w-6 text-scola-primary" />,
-      title: "Eventos do día",
-      value: summaryData.events,
-      link: "/agenda"
+      title: 'Espazos',
+      count: 12,
+      path: '/spaces',
+      icon: <Building2 className="h-6 w-6 text-scola-primary" />,
     },
     {
+      title: 'Mensaxes',
+      count: 4,
+      path: '/messages',
       icon: <MessageSquare className="h-6 w-6 text-scola-primary" />,
-      title: "Mensaxes",
-      value: summaryData.unreadMessages,
-      link: "/messages"
     },
     {
-      icon: <Bell className="h-6 w-6 text-scola-primary" />,
-      title: "Notificacións",
-      value: summaryData.notifications,
-      link: "/notifications"
-    }
+      title: 'Eventos',
+      count: 7,
+      path: '/agenda',
+      icon: <Calendar className="h-6 w-6 text-scola-primary" />,
+    },
+    {
+      title: 'Titorías',
+      count: 2,
+      path: '/tutoring',
+      icon: <Headphones className="h-6 w-6 text-scola-primary" />,
+    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-      {cards.map((card, index) => (
-        <Link to={card.link} key={index} className="block">
-          <Card className="border border-scola-gray-dark hover:shadow-md transition-shadow duration-200 hover:border-scola-primary">
-            <CardContent className="p-4 flex items-center">
-              <div className="rounded-full w-12 h-12 bg-scola-pastel flex items-center justify-center mr-4">
-                {card.icon}
-              </div>
-              <div>
-                <p className="text-gray-500 text-sm">{card.title}</p>
-                <p className="text-xl font-bold text-gray-800">{card.value}</p>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 my-6">
+      {items.map((item, index) => (
+        <Link to={item.path} key={index}>
+          <Card className="bg-white hover:shadow-md transition-shadow">
+            <CardContent className="p-4 flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {item.icon}
+                <div>
+                  <h3 className="text-lg font-medium">{item.title}</h3>
+                  <p className="text-3xl font-bold text-scola-primary">
+                    {item.count}
+                  </p>
+                </div>
               </div>
             </CardContent>
           </Card>
