@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -411,5 +412,297 @@ const SCHOOLS = [
   '32002781 - CPI Tomás Terrón Mendaña',
   '32015025 - CEIP de Casaio',
   '32002951 - CEIP Plurilingüe Calvo Sotelo',
-  '32003059 - CEIP San Marcos',
-  '3
+  '32003059 - CEIP San Marcos'
+];
+
+// Lista de especialidades
+const SPECIALTIES = [
+  '597031 Infantil',
+  '597032 Inglés',
+  '597033 Francés',
+  '597034 Educación Física',
+  '597036 Pedagoxía Terapéutica',
+  '597035 Música',
+  '597037 Audición e Linguaxe',
+  '597038 Primaria',
+  '597939 Orientación'
+];
+
+// Roles que un usuario puede tener
+const ROLES = [
+  'docente',
+  'alumnado',
+  'directivo'
+];
+
+// Define the form schema using Zod
+const registerSchema = z.object({
+  email: z.string().email('O correo electrónico é obrigatorio'),
+  password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres'),
+  confirmPassword: z.string(),
+  full_name: z.string().min(3, 'O nome completo é obrigatorio'),
+  phone: z.string().min(9, 'O teléfono é obrigatorio'),
+  role: z.string({
+    required_error: 'Selecciona un rol',
+  }),
+  specialty: z.string().optional(),
+  school_code: z.string({
+    required_error: 'Selecciona un centro educativo',
+  }),
+})
+.refine(data => data.password === data.confirmPassword, {
+  message: 'Os contrasinais non coinciden',
+  path: ['confirmPassword'],
+});
+
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
+const RegisterForm = () => {
+  const { signUp } = useAuth();
+  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+
+  // Use React Hook Form with Zod validation
+  const form = useForm<RegisterFormValues>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      full_name: '',
+      phone: '',
+      role: 'docente',
+      specialty: '',
+      school_code: '',
+    },
+  });
+
+  const onSubmit = async (values: RegisterFormValues) => {
+    setIsSubmitting(true);
+    setServerError(null);
+    
+    try {
+      // Extract school name from the selected code
+      const schoolSelection = values.school_code;
+      const schoolName = schoolSelection.split(' - ')[1] || schoolSelection;
+      
+      // Prepare user metadata
+      const userData = {
+        full_name: values.full_name,
+        phone: values.phone,
+        role: values.role,
+        specialty: values.specialty || null,
+        school_code: values.school_code.split(' - ')[0] || null,
+        school_name: schoolName
+      };
+      
+      // Register the user
+      await signUp(values.email, values.password, userData);
+      
+      // Navigate to login after successful registration
+      navigate('/login');
+    } catch (error: any) {
+      console.error('Registration error:', error);
+      setServerError(error.message || 'Houbo un erro ao rexistrarse. Téntao de novo máis tarde.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const watchRole = form.watch('role');
+  const showSpecialty = watchRole === 'docente';
+
+  return (
+    <Card className="w-full max-w-md shadow-md border border-scola-gray-dark">
+      <CardHeader className="pb-2">
+        <div className="flex justify-center mb-4">
+          <ScolaLogo size="lg" />
+        </div>
+        <CardTitle className="text-xl text-center text-scola-primary">Crear conta</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Correo electrónico</FormLabel>
+                  <FormControl>
+                    <Input placeholder="nome@exemplo.gal" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contrasinal</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Contrasinal" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirmar contrasinal</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Confirmar contrasinal" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="full_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome completo</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Nome e apelidos" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Teléfono</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Teléfono de contacto" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Rol</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange} 
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona o teu rol no centro" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ROLES.map((role) => (
+                        <SelectItem key={role} value={role}>
+                          {role.charAt(0).toUpperCase() + role.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {showSpecialty && (
+              <FormField
+                control={form.control}
+                name="specialty"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Especialidade</FormLabel>
+                    <Select 
+                      onValueChange={field.onChange} 
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona a túa especialidade" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {SPECIALTIES.map((specialty) => (
+                          <SelectItem key={specialty} value={specialty}>
+                            {specialty}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            
+            <FormField
+              control={form.control}
+              name="school_code"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Centro educativo</FormLabel>
+                  <Select 
+                    onValueChange={field.onChange} 
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona o teu centro educativo" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {SCHOOLS.map((school) => (
+                        <SelectItem key={school} value={school}>
+                          {school}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {serverError && (
+              <div className="text-destructive text-sm font-medium">{serverError}</div>
+            )}
+            
+            <Button 
+              type="submit" 
+              className="w-full bg-scola-primary text-white"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Rexistrando...' : 'Crear conta'}
+            </Button>
+            
+            <div className="text-center text-sm mt-4">
+              <span className="text-muted-foreground">Xa tes unha conta?</span>
+              <Link to="/login" className="text-scola-primary hover:underline ml-1 font-medium">
+                Inicia sesión
+              </Link>
+            </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default RegisterForm;
