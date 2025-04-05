@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (error) throw error;
 
-      // O perfil (profiles) crearase automaticamente cun trigger no Supabase
+      // All users are automatically approved, we removed the conditional approval flow
       toast.success('Rexistro completado! Por favor, verifica o teu correo electrónico.');
     } catch (error: any) {
       toast.error(error.message || 'Erro ao rexistrarse');

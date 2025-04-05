@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -25,7 +25,7 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userName }) => {
   const displayName = user?.user_metadata?.full_name || userName;
   
   // Get the school center from user metadata
-  const schoolCenter = user?.user_metadata?.school_center || 'CEIP San Marcos';
+  const schoolCenter = user?.user_metadata?.school_name || 'CEIP San Marcos';
 
   return (
     <Card className="border border-scola-gray-dark bg-white">
