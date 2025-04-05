@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -11,41 +10,14 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Shield } from 'lucide-react';
 import { useProfileImage } from '@/hooks/use-profile-image';
 
 // Lista de especialidades predefinidas
-const SPECIALTIES = [
-  'Matemáticas',
-  'Lingua e Literatura Galega',
-  'Lingua e Literatura Castelá',
-  'Inglés',
-  'Francés',
-  'Ciencias Naturais',
-  'Física e Química',
-  'Xeografía e Historia',
-  'Tecnoloxía',
-  'Educación Física',
-  'Música',
-  'Educación Plástica',
-  'Filosofía',
-  'Economía',
-  'Informática',
-  'Orientación Educativa',
-  'Pedagoxía Terapéutica',
-  'Audición e Linguaxe',
-  'Outro'
-];
+const SPECIALTIES = ['Matemáticas', 'Lingua e Literatura Galega', 'Lingua e Literatura Castelá', 'Inglés', 'Francés', 'Ciencias Naturais', 'Física e Química', 'Xeografía e Historia', 'Tecnoloxía', 'Educación Física', 'Música', 'Educación Plástica', 'Filosofía', 'Economía', 'Informática', 'Orientación Educativa', 'Pedagoxía Terapéutica', 'Audición e Linguaxe', 'Outro'];
 
 // Definimos o esquema de validación
 const profileSchema = z.object({
@@ -53,27 +25,29 @@ const profileSchema = z.object({
   email: z.string().email('Introduce un email válido'),
   school_name: z.string().min(2, 'O nome do centro debe ter polo menos 2 caracteres'),
   specialty: z.string().min(1, 'Selecciona unha especialidade'),
-  profile_image_url: z.string().optional(),
+  profile_image_url: z.string().optional()
 });
-
 type ProfileFormValues = z.infer<typeof profileSchema>;
-
 const ProfileForm = () => {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
-  const [schools, setSchools] = useState<{ id: string, name: string }[]>([]);
+  const [schools, setSchools] = useState<{
+    id: string;
+    name: string;
+  }[]>([]);
   const [isDirectorRequestOpen, setIsDirectorRequestOpen] = useState(false);
   const [isUserDirector, setIsUserDirector] = useState(false);
-  
+
   // Usar o hook personalizado para xestionar a imaxe de perfil
-  const { 
-    previewUrl, 
-    handleFileChange, 
-    uploadProfileImage, 
+  const {
+    previewUrl,
+    handleFileChange,
+    uploadProfileImage,
     isUploading,
     setPreviewUrl
   } = useProfileImage(user?.id);
-  
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -81,7 +55,7 @@ const ProfileForm = () => {
       email: '',
       school_name: '',
       specialty: '',
-      profile_image_url: '',
+      profile_image_url: ''
     }
   });
 
@@ -90,12 +64,10 @@ const ProfileForm = () => {
     const fetchUserProfile = async () => {
       if (user) {
         try {
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
-
+          const {
+            data,
+            error
+          } = await supabase.from('profiles').select('*').eq('id', user.id).single();
           if (error) {
             throw error;
           }
@@ -106,17 +78,16 @@ const ProfileForm = () => {
             email: data.email || user.email || '',
             school_name: data.school_name || '',
             specialty: data.specialty || '',
-            profile_image_url: data.profile_image_url || '',
+            profile_image_url: data.profile_image_url || ''
           });
 
           // Comprobar se o usuario é director
           setIsUserDirector(data.role === 'directivo');
-          
+
           // Establecer a URL da imaxe de perfil
           if (data.profile_image_url) {
             setPreviewUrl(data.profile_image_url);
           }
-
         } catch (error) {
           console.error('Error ao cargar o perfil:', error);
           toast.error('Error ao cargar os datos do perfil');
@@ -127,29 +98,35 @@ const ProfileForm = () => {
     // Cargar os centros educativos
     const fetchSchools = async () => {
       try {
-        const { data, error } = await supabase
-          .from('schools')
-          .select('id, name')
-          .order('name');
-
+        const {
+          data,
+          error
+        } = await supabase.from('schools').select('id, name').order('name');
         if (error) {
           throw error;
         }
-
         setSchools(data || []);
       } catch (error) {
         console.error('Error ao cargar os centros educativos:', error);
         // Usar datos de proba se hai un erro
-        setSchools([
-          { id: '1', name: 'IES Rosalía de Castro' },
-          { id: '2', name: 'CEIP Eusebio da Guarda' },
-          { id: '3', name: 'IES Ramón Menéndez Pidal' },
-          { id: '4', name: 'IES A Sardiñeira' },
-          { id: '5', name: 'CEIP Emilia Pardo Bazán' }
-        ]);
+        setSchools([{
+          id: '1',
+          name: 'IES Rosalía de Castro'
+        }, {
+          id: '2',
+          name: 'CEIP Eusebio da Guarda'
+        }, {
+          id: '3',
+          name: 'IES Ramón Menéndez Pidal'
+        }, {
+          id: '4',
+          name: 'IES A Sardiñeira'
+        }, {
+          id: '5',
+          name: 'CEIP Emilia Pardo Bazán'
+        }]);
       }
     };
-
     fetchUserProfile();
     fetchSchools();
   }, [user, form, setPreviewUrl]);
@@ -157,28 +134,22 @@ const ProfileForm = () => {
   // Xestionar a solicitude para ser director
   const handleDirectorRequest = async () => {
     if (!user) return;
-
     try {
       setIsLoading(true);
 
       // Obter os directores do mesmo centro
-      const { data: userProfile } = await supabase
-        .from('profiles')
-        .select('school_id')
-        .eq('id', user.id)
-        .single();
-
+      const {
+        data: userProfile
+      } = await supabase.from('profiles').select('school_id').eq('id', user.id).single();
       if (!userProfile?.school_id) {
         throw new Error('Non se atopou o centro educativo');
       }
 
       // Obter os directores do centro
-      const { data: directors, error: directorsError } = await supabase
-        .from('profiles')
-        .select('id, full_name')
-        .eq('school_id', userProfile.school_id)
-        .eq('role', 'directivo');
-
+      const {
+        data: directors,
+        error: directorsError
+      } = await supabase.from('profiles').select('id, full_name').eq('school_id', userProfile.school_id).eq('role', 'directivo');
       if (directorsError) {
         throw directorsError;
       }
@@ -186,7 +157,6 @@ const ProfileForm = () => {
       // Simular o envío de notificacións aos directores
       // Nunha implementación real, isto enviaría notificacións a través dun sistema de notificacións
       console.log('Enviando solicitude aos directores:', directors);
-      
       toast.success('Solicitude enviada aos directores do centro');
       setIsDirectorRequestOpen(false);
     } catch (error: any) {
@@ -205,27 +175,23 @@ const ProfileForm = () => {
       // Subir a nova imaxe se se seleccionou unha
       let profileImageUrl = data.profile_image_url;
       const uploadedImageUrl = await uploadProfileImage();
-      
       if (uploadedImageUrl) {
         profileImageUrl = uploadedImageUrl;
       }
 
       // Actualizar o perfil na base de datos
-      const { error } = await supabase
-        .from('profiles')
-        .update({
-          full_name: data.full_name,
-          email: data.email,
-          school_name: data.school_name,
-          specialty: data.specialty,
-          profile_image_url: profileImageUrl
-        })
-        .eq('id', user?.id);
-
+      const {
+        error
+      } = await supabase.from('profiles').update({
+        full_name: data.full_name,
+        email: data.email,
+        school_name: data.school_name,
+        specialty: data.specialty,
+        profile_image_url: profileImageUrl
+      }).eq('id', user?.id);
       if (error) {
         throw error;
       }
-
       toast.success('Perfil actualizado correctamente');
     } catch (error: any) {
       console.error('Error ao actualizar o perfil:', error);
@@ -234,12 +200,10 @@ const ProfileForm = () => {
       setIsLoading(false);
     }
   };
-
-  return (
-    <div className="w-full">
+  return <div className="w-full">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Editar perfil</h1>
-        <div className="w-32 h-1 mt-2 dotted-border"></div>
+        
       </div>
 
       <Card className="p-6 bg-white rounded-lg shadow-sm">
@@ -249,39 +213,23 @@ const ProfileForm = () => {
               {/* Área de imaxe de perfil */}
               <div className="flex flex-col items-center space-y-4">
                 <Avatar className="w-32 h-32 border-2 border-scola-primary">
-                  <AvatarImage 
-                    src={previewUrl || ''} 
-                    alt="Foto de perfil" 
-                  />
+                  <AvatarImage src={previewUrl || ''} alt="Foto de perfil" />
                   <AvatarFallback className="text-2xl bg-scola-primary text-white">
                     {form.getValues().full_name?.split(' ').map(name => name[0]).join('') || 'U'}
                   </AvatarFallback>
                 </Avatar>
 
                 <div className="flex flex-col items-center">
-                  <Label 
-                    htmlFor="profile_image" 
-                    className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md"
-                  >
+                  <Label htmlFor="profile_image" className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md">
                     Cambiar foto
                   </Label>
-                  <Input 
-                    id="profile_image" 
-                    type="file" 
-                    className="hidden" 
-                    accept="image/*"
-                    onChange={handleFileChange}
-                  />
+                  <Input id="profile_image" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                   <p className="text-xs text-gray-500 mt-1">JPG, PNG ou GIF. Máx 2MB.</p>
                 </div>
 
-                {!isUserDirector && (
-                  <AlertDialog open={isDirectorRequestOpen} onOpenChange={setIsDirectorRequestOpen}>
+                {!isUserDirector && <AlertDialog open={isDirectorRequestOpen} onOpenChange={setIsDirectorRequestOpen}>
                     <AlertDialogTrigger asChild>
-                      <Button 
-                        variant="outline" 
-                        className="mt-4 border-scola-primary text-scola-primary hover:bg-scola-pastel"
-                      >
+                      <Button variant="outline" className="mt-4 border-scola-primary text-scola-primary hover:bg-scola-pastel">
                         <Shield className="h-4 w-4 mr-2" />
                         Solicitar ser directivo
                       </Button>
@@ -296,123 +244,84 @@ const ProfileForm = () => {
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction 
-                          className="bg-scola-primary hover:bg-scola-primary/90"
-                          onClick={handleDirectorRequest}
-                          disabled={isLoading}
-                        >
+                        <AlertDialogAction className="bg-scola-primary hover:bg-scola-primary/90" onClick={handleDirectorRequest} disabled={isLoading}>
                           {isLoading ? 'Enviando...' : 'Enviar solicitude'}
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
-                  </AlertDialog>
-                )}
+                  </AlertDialog>}
               </div>
 
               {/* Campos do formulario */}
               <div className="flex-1 space-y-4">
-                <FormField
-                  control={form.control}
-                  name="full_name"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="full_name" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Nome completo</FormLabel>
                       <FormControl>
                         <Input placeholder="Nome e apelidos" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="email" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Correo electrónico</FormLabel>
                       <FormControl>
                         <Input placeholder="email@exemplo.com" type="email" {...field} />
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="school_name"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="school_name" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Centro educativo</FormLabel>
                       <FormControl>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                          value={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona o centro educativo" />
                           </SelectTrigger>
                           <SelectContent>
-                            {schools.map(school => (
-                              <SelectItem key={school.id} value={school.name}>
+                            {schools.map(school => <SelectItem key={school.id} value={school.name}>
                                 {school.name}
-                              </SelectItem>
-                            ))}
+                              </SelectItem>)}
                           </SelectContent>
                         </Select>
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
 
-                <FormField
-                  control={form.control}
-                  name="specialty"
-                  render={({ field }) => (
-                    <FormItem>
+                <FormField control={form.control} name="specialty" render={({
+                field
+              }) => <FormItem>
                       <FormLabel>Especialidade</FormLabel>
                       <FormControl>
-                        <Select 
-                          onValueChange={field.onChange} 
-                          defaultValue={field.value}
-                          value={field.value}
-                        >
+                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
                           <SelectTrigger>
                             <SelectValue placeholder="Selecciona a túa especialidade" />
                           </SelectTrigger>
                           <SelectContent>
-                            {SPECIALTIES.map(specialty => (
-                              <SelectItem key={specialty} value={specialty}>
+                            {SPECIALTIES.map(specialty => <SelectItem key={specialty} value={specialty}>
                                 {specialty}
-                              </SelectItem>
-                            ))}
+                              </SelectItem>)}
                           </SelectContent>
                         </Select>
                       </FormControl>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    </FormItem>} />
               </div>
             </div>
 
             <div className="flex justify-end pt-4">
-              <Button 
-                type="submit" 
-                className="bg-scola-primary hover:bg-scola-primary/90"
-                disabled={isLoading || isUploading}
-              >
+              <Button type="submit" className="bg-scola-primary hover:bg-scola-primary/90" disabled={isLoading || isUploading}>
                 {isLoading ? 'Gardando...' : 'Gardar cambios'}
               </Button>
             </div>
           </form>
         </Form>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default ProfileForm;
