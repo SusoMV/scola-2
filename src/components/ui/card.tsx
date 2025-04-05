@@ -1,5 +1,6 @@
-import * as React from "react"
 
+import * as React from "react"
+import { LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const Card = React.forwardRef<
@@ -29,18 +30,25 @@ const CardHeader = React.forwardRef<
 ))
 CardHeader.displayName = "CardHeader"
 
+interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
+  icon?: LucideIcon;
+}
+
 const CardTitle = React.forwardRef<
   HTMLParagraphElement,
-  React.HTMLAttributes<HTMLHeadingElement>
->(({ className, ...props }, ref) => (
+  CardTitleProps
+>(({ className, children, icon: Icon, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
+      "text-2xl font-semibold leading-none tracking-tight flex items-center",
       className
     )}
     {...props}
-  />
+  >
+    {Icon && <Icon className="h-5 w-5 mr-2 text-scola-primary" />}
+    <span>{children}</span>
+  </h3>
 ))
 CardTitle.displayName = "CardTitle"
 
