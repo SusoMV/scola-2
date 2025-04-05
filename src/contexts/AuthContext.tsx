@@ -11,6 +11,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, userData: any) => Promise<void>;
   signOut: () => Promise<void>;
+  updateUserMetadata: (metadata: Record<string, any>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -80,13 +81,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const updateUserMetadata = async (metadata: Record<string, any>) => {
+    try {
+      if (!user) return;
+      
+      const { error } = await supabase.auth.updateUser({
+        data: metadata
+      });
+      
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao actualizar os datos do usuario');
+      throw error;
+    }
+  };
+
   const value = {
     user,
     session,
     loading,
     signIn,
     signUp,
-    signOut
+    signOut,
+    updateUserMetadata
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
