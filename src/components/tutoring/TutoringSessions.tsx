@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -14,14 +13,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { toast } from 'sonner';
 
 // Mock data - in a real app, this would come from the database
-const MOCK_STUDENTS = [
-  { id: 1, name: 'Ana García', family: 'García Fernández' },
-  { id: 2, name: 'Carlos Rodríguez', family: 'Rodríguez Martínez' },
-  { id: 3, name: 'María López', family: 'López Sánchez' },
-  { id: 4, name: 'David Fernández', family: 'Fernández Pérez' },
-  { id: 5, name: 'Laura Martínez', family: 'Martínez López' },
-];
-
+const MOCK_STUDENTS = [{
+  id: 1,
+  name: 'Ana García',
+  family: 'García Fernández'
+}, {
+  id: 2,
+  name: 'Carlos Rodríguez',
+  family: 'Rodríguez Martínez'
+}, {
+  id: 3,
+  name: 'María López',
+  family: 'López Sánchez'
+}, {
+  id: 4,
+  name: 'David Fernández',
+  family: 'Fernández Pérez'
+}, {
+  id: 5,
+  name: 'Laura Martínez',
+  family: 'Martínez López'
+}];
 interface TutoringSession {
   id: number;
   studentId: number;
@@ -31,7 +43,6 @@ interface TutoringSession {
   time: string;
   topics: string;
 }
-
 const TutoringSessions = () => {
   const [sessions, setSessions] = useState<TutoringSession[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -39,22 +50,16 @@ const TutoringSessions = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState('');
   const [topics, setTopics] = useState('');
-
   const handleAddSession = () => {
     if (!selectedStudent || !selectedDate || !selectedTime || !topics) {
       toast.error('Por favor, complete todos os campos obrigatorios');
       return;
     }
-
-    const selectedStudentObject = MOCK_STUDENTS.find(
-      student => student.name === selectedStudent
-    );
-
+    const selectedStudentObject = MOCK_STUDENTS.find(student => student.name === selectedStudent);
     if (!selectedStudentObject) {
       toast.error('Estudante non atopado');
       return;
     }
-
     const newSession: TutoringSession = {
       id: Date.now(),
       studentId: selectedStudentObject.id,
@@ -62,28 +67,25 @@ const TutoringSessions = () => {
       family: selectedStudentObject.family,
       date: selectedDate,
       time: selectedTime,
-      topics: topics,
+      topics: topics
     };
-
     setSessions([...sessions, newSession]);
     toast.success('Titoría solicitada con éxito');
     setIsDialogOpen(false);
-    
+
     // Reset form
     setSelectedStudent('');
     setSelectedDate(new Date());
     setSelectedTime('');
     setTopics('');
   };
-
-  return (
-    <Card className="bg-white">
+  return <Card className="bg-white">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium">Titorías solicitadas</h2>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-scola-primary">Solicitar titoría</Button>
+              <Button className="bg-scola-primary">Engadir titoría</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -92,18 +94,11 @@ const TutoringSessions = () => {
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
                   <Label htmlFor="student">Alumno/a</Label>
-                  <select 
-                    id="student"
-                    className="w-full p-2 border rounded-md"
-                    value={selectedStudent}
-                    onChange={(e) => setSelectedStudent(e.target.value)}
-                  >
+                  <select id="student" className="w-full p-2 border rounded-md" value={selectedStudent} onChange={e => setSelectedStudent(e.target.value)}>
                     <option value="">Seleccione alumno/a</option>
-                    {MOCK_STUDENTS.map(student => (
-                      <option key={student.id} value={student.name}>
+                    {MOCK_STUDENTS.map(student => <option key={student.id} value={student.name}>
                         {student.name}
-                      </option>
-                    ))}
+                      </option>)}
                   </select>
                 </div>
 
@@ -111,21 +106,13 @@ const TutoringSessions = () => {
                   <Label htmlFor="date">Data</Label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start text-left font-normal"
-                      >
+                      <Button variant="outline" className="w-full justify-start text-left font-normal">
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {selectedDate ? format(selectedDate, 'PPP') : "Seleccione data"}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        initialFocus
-                      />
+                      <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} initialFocus />
                     </PopoverContent>
                   </Popover>
                 </div>
@@ -134,24 +121,13 @@ const TutoringSessions = () => {
                   <Label htmlFor="time">Hora</Label>
                   <div className="flex items-center">
                     <Clock className="mr-2 h-4 w-4 text-gray-500" />
-                    <Input
-                      id="time"
-                      type="time"
-                      value={selectedTime}
-                      onChange={(e) => setSelectedTime(e.target.value)}
-                    />
+                    <Input id="time" type="time" value={selectedTime} onChange={e => setSelectedTime(e.target.value)} />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="topics">Asuntos a tratar</Label>
-                  <Textarea
-                    id="topics"
-                    placeholder="Introduza os asuntos a tratar na titoría"
-                    value={topics}
-                    onChange={(e) => setTopics(e.target.value)}
-                    rows={4}
-                  />
+                  <Textarea id="topics" placeholder="Introduza os asuntos a tratar na titoría" value={topics} onChange={e => setTopics(e.target.value)} rows={4} />
                 </div>
               </div>
               <div className="flex justify-end gap-2">
@@ -164,8 +140,7 @@ const TutoringSessions = () => {
           </Dialog>
         </div>
 
-        {sessions.length > 0 ? (
-          <Table>
+        {sessions.length > 0 ? <Table>
             <TableHeader>
               <TableRow>
                 <TableHead>Familia</TableHead>
@@ -176,8 +151,7 @@ const TutoringSessions = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sessions.map((session) => (
-                <TableRow key={session.id}>
+              {sessions.map(session => <TableRow key={session.id}>
                   <TableCell>{session.family}</TableCell>
                   <TableCell>{session.studentName}</TableCell>
                   <TableCell>{format(session.date, 'dd/MM/yyyy')}</TableCell>
@@ -187,18 +161,12 @@ const TutoringSessions = () => {
                       {session.topics}
                     </div>
                   </TableCell>
-                </TableRow>
-              ))}
+                </TableRow>)}
             </TableBody>
-          </Table>
-        ) : (
-          <div className="text-center py-8 text-gray-500">
+          </Table> : <div className="text-center py-8 text-gray-500">
             Non hai titorías solicitadas
-          </div>
-        )}
+          </div>}
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default TutoringSessions;
