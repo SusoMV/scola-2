@@ -11,6 +11,9 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import ScolaLogo from '@/components/ScolaLogo';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 // Lista de centros educativos
 const SCHOOLS = [
@@ -493,11 +496,14 @@ const specializations = [
 ];
 
 const CompleteProfileForm = () => {
-  const [fullName, setFullName] = useState('');
-  const [school, setSchool] = useState('');
-  const [role, setRole] = useState('');
-  const [specialization, setSpecialization] = useState('');
+  const { user, updateUserMetadata } = useAuth();
+  const navigate = useNavigate();
+  const [fullName, setFullName] = useState(user?.user_metadata?.full_name || '');
+  const [school, setSchool] = useState(user?.user_metadata?.school_name || '');
+  const [role, setRole] = useState(user?.user_metadata?.role || 'docente');
+  const [specialization, setSpecialization] = useState(user?.user_metadata?.specialty || '');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Filtrar escolas baseado na búsqueda
   const filteredSchools = searchQuery.length > 0
@@ -505,13 +511,40 @@ const CompleteProfileForm = () => {
         school.toLowerCase().includes(searchQuery.toLowerCase()))
     : SCHOOLS;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Profile completion:', { fullName, school, role, specialization });
+    setIsSubmitting(true);
     
-    // Mock profile completion success for demo purposes
-    if (fullName && school && role && specialization) {
-      window.location.href = '/dashboard';
+    if (!fullName || !school || !role || !specialization) {
+      toast.error('Por favor, completa todos os campos');
+      setIsSubmitting(false);
+      return;
+    }
+    
+    try {
+      // Extract school code and name from the selected school
+      const schoolCode = school.split(' - ')[0] || '';
+      const schoolName = school.split(' - ')[1] || school;
+      
+      // Prepare metadata update
+      const metadata = {
+        full_name: fullName,
+        school_code: schoolCode,
+        school_name: schoolName,
+        role: role,
+        specialty: specialization
+      };
+      
+      // Update user metadata
+      await updateUserMetadata(metadata);
+      
+      // Navigate to dashboard on success
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Ocorreu un erro ao actualizar o perfil');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -607,8 +640,9 @@ const CompleteProfileForm = () => {
         <Button 
           type="submit" 
           className="w-full bg-scola-primary hover:bg-scola-primary-light"
+          disabled={isSubmitting}
         >
-          Completar rexistro
+          {isSubmitting ? 'Procesando...' : 'Completar rexistro'}
         </Button>
       </form>
     </div>
