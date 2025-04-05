@@ -3,7 +3,6 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
 import { ExternalLink, CalendarDays, Globe, FileText, Clock } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 const QuickLinksSection = () => {
   const quickLinks = [
@@ -54,38 +53,36 @@ const QuickLinksSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-full pr-4">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-            {quickLinks.map((link, index) => (
-              <div key={index}>
-                {link.external ? (
-                  <a 
-                    href={link.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
-                  >
-                    <div className="text-scola-primary mb-2">
-                      {link.icon}
-                    </div>
-                    <span className="text-xs text-center text-gray-700 w-full px-2">{link.name}</span>
-                    <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
-                  </a>
-                ) : (
-                  <Link 
-                    to={link.link}
-                    className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
-                  >
-                    <div className="text-scola-primary mb-2">
-                      {link.icon}
-                    </div>
-                    <span className="text-xs text-center text-gray-700 w-full px-2">{link.name}</span>
-                  </Link>
-                )}
-              </div>
-            ))}
-          </div>
-        </ScrollArea>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {quickLinks.map((link, index) => (
+            <div key={index}>
+              {link.external ? (
+                <a 
+                  href={link.link} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="h-24 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                >
+                  <div className="text-scola-primary mb-2">
+                    {link.icon}
+                  </div>
+                  <span className="text-xs text-center text-gray-700 truncate w-full">{link.name}</span>
+                  <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
+                </a>
+              ) : (
+                <Link 
+                  to={link.link}
+                  className="h-24 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                >
+                  <div className="text-scola-primary mb-2">
+                    {link.icon}
+                  </div>
+                  <span className="text-xs text-center text-gray-700 truncate w-full">{link.name}</span>
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

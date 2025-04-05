@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Users, Calendar, MessageSquare } from 'lucide-react';
+import { Calendar, Users, MessageSquare, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SummaryCards = () => {
@@ -9,7 +9,8 @@ const SummaryCards = () => {
   const summaryData = {
     absences: 2,
     events: 3,
-    unreadMessages: 5
+    unreadMessages: 5,
+    dailyClasses: 4
   };
 
   const cards = [
@@ -30,15 +31,21 @@ const SummaryCards = () => {
       title: "Mensaxes sen ler",
       value: summaryData.unreadMessages,
       link: "/messages"
+    },
+    {
+      icon: <Clock className="h-6 w-6 text-scola-primary" />,
+      title: "Clases do día",
+      value: summaryData.dailyClasses,
+      link: "/schedules"
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
       {cards.map((card, index) => (
         <Link to={card.link} key={index} className="block">
-          <Card className="border border-scola-gray-dark hover:shadow-md transition-shadow duration-200 hover:border-scola-primary h-full">
-            <CardContent className="p-4 flex items-center h-full">
+          <Card className="border border-scola-gray-dark hover:shadow-md transition-shadow duration-200 hover:border-scola-primary">
+            <CardContent className="p-4 flex items-center">
               <div className="rounded-full w-12 h-12 bg-scola-pastel flex items-center justify-center mr-4">
                 {card.icon}
               </div>
