@@ -200,7 +200,7 @@ const FacultyPage = () => {
             
             <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
           </div>
-          <div className="w-32 h-1 mt-2 dotted-border"></div>
+          
         </div>
         
         {isDirector && <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={() => setOpenAddDialog(true)}>
