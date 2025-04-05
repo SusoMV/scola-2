@@ -1,20 +1,17 @@
-
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import AttendanceControl from '@/components/tutoring/AttendanceControl';
 import TutoringSessions from '@/components/tutoring/TutoringSessions';
 import { Headphones } from 'lucide-react';
-
 const TutoringPage = () => {
-  return (
-    <DashboardLayout>
+  return <DashboardLayout>
       <div className="mb-6">
         <div className="flex items-center gap-2">
-          <Headphones className="h-6 w-6 text-[#0070C0]" />
+          
           <h1 className="text-2xl font-bold">Titorías</h1>
         </div>
-        <div className="w-32 h-1 mt-2 dotted-border"></div>
+        
       </div>
       
       <Tabs defaultValue="attendance" className="w-full">
@@ -31,8 +28,6 @@ const TutoringPage = () => {
           <TutoringSessions />
         </TabsContent>
       </Tabs>
-    </DashboardLayout>
-  );
+    </DashboardLayout>;
 };
-
 export default TutoringPage;
