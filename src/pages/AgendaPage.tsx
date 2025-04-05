@@ -3,176 +3,149 @@ import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
-import { Plus, Calendar as CalendarIcon, Clock } from 'lucide-react';
+import { 
+  Calendar, 
+  Plus,
+  Users,
+  MapPin,
+  Calendar as CalendarIcon,
+  Clock
+} from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger 
+  DialogFooter 
 } from '@/components/ui/dialog';
 import { 
   Form, 
-  FormControl, 
   FormField, 
   FormItem, 
   FormLabel, 
+  FormControl, 
   FormMessage 
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { format, startOfWeek, addDays, isWeekend } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/contexts/AuthContext';
+import { format, addDays, startOfWeek, endOfWeek, isWeekend } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface Event {
   id: string;
-  title: string;
-  description?: string;
   date: Date;
-  startTime: string;
-  endTime: string;
-  type: string;
+  title: string;
+  eventType: 'reunión' | 'claustro' | 'consello escolar' | 'formación' | 'charla';
   recipients: string;
-  location: string;
+  space: string;
+  timeStart: string;
+  timeEnd: string;
   mandatory: boolean;
 }
 
-const eventTypes = [
-  { id: 'meeting', label: 'Reunión', color: 'bg-blue-100 text-blue-800' },
-  { id: 'faculty', label: 'Claustro', color: 'bg-purple-100 text-purple-800' },
-  { id: 'council', label: 'Consello escolar', color: 'bg-amber-100 text-amber-800' },
-  { id: 'training', label: 'Formación', color: 'bg-green-100 text-green-800' },
-  { id: 'talk', label: 'Charla', color: 'bg-pink-100 text-pink-800' },
-];
-
-const spaces = [
-  'Biblioteca', 'Salón de actos', 'Aula 1A', 'Aula 1B', 'Aula 2A', 
-  'Aula 2B', 'Sala de profesores', 'Laboratorio', 'Ximnasio'
-];
-
-// Mock data for events
-const mockEvents: Event[] = [
-  {
-    id: '1',
-    title: 'Reunión de departamento',
-    description: 'Revisar os proxectos do trimestre',
-    date: new Date('2025-04-04'),
-    startTime: '10:00',
-    endTime: '11:30',
-    type: 'meeting',
-    recipients: 'Departamento de Ciencias',
-    location: 'Sala de profesores',
-    mandatory: true
-  },
-  {
-    id: '2',
-    title: 'Charla sobre novas tecnoloxías',
-    description: 'Presentación de novos recursos dixitais',
-    date: new Date('2025-04-05'),
-    startTime: '12:00',
-    endTime: '13:30',
-    type: 'talk',
-    recipients: 'Todo o profesorado',
-    location: 'Salón de actos',
-    mandatory: false
-  },
-  {
-    id: '3',
-    title: 'Claustro final de mes',
-    description: 'Avaliación de actividades do mes',
-    date: new Date('2025-04-08'),
-    startTime: '16:00',
-    endTime: '18:00',
-    type: 'faculty',
-    recipients: 'Todo o profesorado',
-    location: 'Biblioteca',
-    mandatory: true
-  },
-  {
-    id: '4',
-    title: 'Formación en atención á diversidade',
-    description: 'Taller práctico sobre adaptacións curriculares',
-    date: new Date('2025-04-10'),
-    startTime: '09:30',
-    endTime: '13:30',
-    type: 'training',
-    recipients: 'Profesorado de apoio',
-    location: 'Aula 2A',
-    mandatory: true
-  }
-];
+const eventTypeColors = {
+  'reunión': 'bg-blue-100 text-blue-800',
+  'claustro': 'bg-green-100 text-green-800',
+  'consello escolar': 'bg-yellow-100 text-yellow-800',
+  'formación': 'bg-purple-100 text-purple-800',
+  'charla': 'bg-pink-100 text-pink-800'
+};
 
 const AgendaPage = () => {
-  const [date, setDate] = useState<Date>(new Date());
-  const [events] = useState<Event[]>(mockEvents);
+  const { user } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [currentDate, setCurrentDate] = useState(new Date());
   
+  // Mock data for events
+  const [events, setEvents] = useState<Event[]>([
+    {
+      id: '1',
+      date: new Date(2025, 3, 8),
+      title: 'Claustro extraordinario',
+      eventType: 'claustro',
+      recipients: 'Todo o claustro',
+      space: 'Sala de profesores',
+      timeStart: '16:00',
+      timeEnd: '17:30',
+      mandatory: true
+    },
+    {
+      id: '2',
+      date: new Date(2025, 3, 9),
+      title: 'Formación LOMLOE',
+      eventType: 'formación',
+      recipients: 'Todo o claustro',
+      space: 'Biblioteca',
+      timeStart: '17:00',
+      timeEnd: '19:00',
+      mandatory: false
+    },
+    {
+      id: '3',
+      date: new Date(2025, 3, 10),
+      title: 'Reunión ciclo',
+      eventType: 'reunión',
+      recipients: 'Profesorado 1º ciclo',
+      space: 'Aula 12',
+      timeStart: '14:00',
+      timeEnd: '15:00',
+      mandatory: true
+    }
+  ]);
+
+  // Form for adding a new event
   const form = useForm({
     defaultValues: {
-      title: '',
-      description: '',
       date: format(new Date(), 'yyyy-MM-dd'),
-      startTime: '09:00',
-      endTime: '10:00',
-      type: '',
+      eventType: 'reunión',
+      title: '',
       recipients: '',
-      location: '',
+      space: '',
+      timeStart: '16:00',
+      timeEnd: '17:00',
       mandatory: false
     }
   });
 
   const onSubmit = (data: any) => {
-    console.log("New event data:", data);
+    const newEvent: Event = {
+      id: Date.now().toString(),
+      date: new Date(data.date),
+      title: data.title,
+      eventType: data.eventType,
+      recipients: data.recipients,
+      space: data.space,
+      timeStart: data.timeStart,
+      timeEnd: data.timeEnd,
+      mandatory: data.mandatory
+    };
+    
+    setEvents([...events, newEvent]);
     setOpenDialog(false);
-    // In a real app, this would make an API call to create the event
+    form.reset();
   };
 
-  // Get week days for weekly view
-  const getWeekDays = (date: Date) => {
-    const start = startOfWeek(date, { weekStartsOn: 1 }); // Start week on Monday
-    return Array.from({ length: 7 }, (_, i) => addDays(start, i));
-  };
-
-  const weekDays = getWeekDays(date);
-
-  // Filter events for the current week
-  const getEventsByWeek = () => {
-    return events.filter(event => {
-      const eventDate = new Date(event.date);
-      return weekDays.some(day => 
-        format(day, 'yyyy-MM-dd') === format(eventDate, 'yyyy-MM-dd')
-      );
-    });
-  };
-
+  // Get the current week dates
+  const startOfCurrentWeek = startOfWeek(currentDate, { weekStartsOn: 1 });
+  const endOfCurrentWeek = endOfWeek(currentDate, { weekStartsOn: 1 });
+  
+  const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(startOfCurrentWeek, i));
+  
   // Get events for a specific day
-  const getEventsByDay = (day: Date) => {
+  const getEventsForDay = (day: Date) => {
     return events.filter(event => 
-      format(new Date(event.date), 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
+      format(event.date, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
     );
   };
 
-  // Get event type details
-  const getEventTypeDetails = (typeId: string) => {
-    return eventTypes.find(type => type.id === typeId) || { id: typeId, label: typeId, color: 'bg-gray-100 text-gray-800' };
-  };
-
-  // Handle date selection in calendar
-  const handleDateSelect = (date: Date | undefined) => {
-    if (date) {
-      setSelectedDate(date);
-      form.setValue('date', format(date, 'yyyy-MM-dd'));
-      setOpenDialog(true);
-    }
+  // Format a day label
+  const formatDayLabel = (day: Date) => {
+    return format(day, 'EEEE d', { locale: es }).replace(/^\w/, (c) => c.toUpperCase());
   };
 
   return (
@@ -183,121 +156,182 @@ const AgendaPage = () => {
           <div className="w-32 h-1 mt-2 dotted-border"></div>
         </div>
         
-        <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-          <DialogTrigger asChild>
-            <Button className="bg-scola-primary hover:bg-scola-primary/90">
-              <Plus className="mr-2 h-4 w-4" /> Crear Evento
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>Crear Novo Evento</DialogTitle>
-              <DialogDescription>
-                Complete os datos do novo evento para o calendario.
-              </DialogDescription>
-            </DialogHeader>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Título do evento</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Introduza o título do evento" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tipo de evento</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar tipo" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {eventTypes.map((type) => (
-                            <SelectItem key={type.id} value={type.id}>{type.label}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Descrición (opcional)</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Introduza unha descrición do evento" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="recipients"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Destinatarios</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Introduza os destinatarios do evento" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="location"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Espazo</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Seleccionar espazo" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {spaces.map((space) => (
-                            <SelectItem key={space} value={space}>{space}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
+        <Button 
+          className="bg-scola-primary hover:bg-scola-primary/90"
+          onClick={() => setOpenDialog(true)}
+        >
+          <Plus className="mr-2 h-4 w-4" /> Crear evento
+        </Button>
+      </div>
+
+      <Tabs defaultValue="week">
+        <TabsList className="mb-4">
+          <TabsTrigger value="week">Vista semanal</TabsTrigger>
+          <TabsTrigger value="month">Vista mensual</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="week">
+          <Card className="border border-scola-gray-dark">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-lg font-medium flex items-center">
+                  <Calendar className="h-5 w-5 mr-2 text-scola-primary" />
+                  Semana del {format(startOfCurrentWeek, 'd MMM', { locale: es })} al {format(endOfCurrentWeek, 'd MMM yyyy', { locale: es })}
+                </CardTitle>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setCurrentDate(addDays(currentDate, -7))}
+                  >
+                    Anterior
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setCurrentDate(new Date())}
+                  >
+                    Hoxe
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setCurrentDate(addDays(currentDate, 7))}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-7 gap-4">
+                {weekDays.map((day, index) => (
+                  <div key={index} className={`border rounded-md p-2 ${isWeekend(day) ? 'bg-gray-50' : ''}`}>
+                    <div className="text-center border-b pb-2 mb-2">
+                      <p className={`font-medium ${isWeekend(day) ? 'text-gray-500' : ''}`}>{formatDayLabel(day)}</p>
+                    </div>
+                    <div className="relative">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="absolute top-0 right-0 h-6 w-6 p-0"
+                        onClick={() => {
+                          form.setValue('date', format(day, 'yyyy-MM-dd'));
+                          setOpenDialog(true);
+                        }}
+                      >
+                        <Plus className="h-4 w-4" />
+                        <span className="sr-only">Engadir evento</span>
+                      </Button>
+                      <div className="space-y-2 max-h-[200px] overflow-y-auto pr-6">
+                        {getEventsForDay(day).length > 0 ? (
+                          getEventsForDay(day).map((event) => (
+                            <div 
+                              key={event.id} 
+                              className="p-2 border rounded-md text-xs"
+                            >
+                              <div className="flex justify-between items-start mb-1">
+                                <Badge className={`${eventTypeColors[event.eventType]} text-[10px]`}>
+                                  {event.eventType}
+                                </Badge>
+                                {event.mandatory && (
+                                  <span className="text-red-500 text-[10px]">*</span>
+                                )}
+                              </div>
+                              <p className="font-medium line-clamp-2">{event.title}</p>
+                              <div className="flex items-center text-gray-500 mt-1">
+                                <Clock className="h-3 w-3 mr-1" />
+                                <span>{event.timeStart} - {event.timeEnd}</span>
+                              </div>
+                              <div className="flex items-center text-gray-500 mt-1">
+                                <MapPin className="h-3 w-3 mr-1" />
+                                <span className="truncate">{event.space}</span>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-center text-gray-400 text-xs py-2">Sen eventos</p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="month">
+          <Card className="border border-scola-gray-dark">
+            <CardHeader className="pb-2">
+              <div className="flex justify-between items-center">
+                <CardTitle className="text-lg font-medium flex items-center">
+                  <Calendar className="h-5 w-5 mr-2 text-scola-primary" />
+                  {format(currentDate, 'MMMM yyyy', { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
+                </CardTitle>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const newDate = new Date(currentDate);
+                      newDate.setMonth(newDate.getMonth() - 1);
+                      setCurrentDate(newDate);
+                    }}
+                  >
+                    Anterior
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setCurrentDate(new Date())}
+                  >
+                    Hoxe
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => {
+                      const newDate = new Date(currentDate);
+                      newDate.setMonth(newDate.getMonth() + 1);
+                      setCurrentDate(newDate);
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center">
+                <p className="text-gray-500 mb-4">Seleccione "Vista semanal" para ver e xestionar os eventos</p>
+                <Button 
+                  className="bg-scola-primary hover:bg-scola-primary/90"
+                  onClick={() => setOpenDialog(true)}
+                >
+                  <Plus className="mr-2 h-4 w-4" /> Crear evento
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {/* Dialog to create a new event */}
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Crear evento</DialogTitle>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <FormField
                   control={form.control}
                   name="date"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Data</FormLabel>
+                      <FormLabel>Data do evento</FormLabel>
                       <FormControl>
                         <div className="flex items-center">
                           <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
@@ -308,212 +342,156 @@ const AgendaPage = () => {
                     </FormItem>
                   )}
                 />
-                
-                <div className="grid grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="startTime"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hora de inicio</FormLabel>
-                        <FormControl>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                            <Input type="time" {...field} />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="endTime"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Hora de fin</FormLabel>
-                        <FormControl>
-                          <div className="flex items-center">
-                            <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                            <Input type="time" {...field} />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
                 <FormField
                   control={form.control}
-                  name="mandatory"
+                  name="eventType"
                   render={({ field }) => (
-                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Evento obrigatorio</FormLabel>
-                      </div>
+                    <FormItem>
+                      <FormLabel>Tipo de evento</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar tipo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="reunión">Reunión</SelectItem>
+                          <SelectItem value="claustro">Claustro</SelectItem>
+                          <SelectItem value="consello escolar">Consello Escolar</SelectItem>
+                          <SelectItem value="formación">Formación</SelectItem>
+                          <SelectItem value="charla">Charla</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
-                
-                <DialogFooter>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={() => setOpenDialog(false)}
-                    className="mr-2"
-                  >
-                    Cancelar
-                  </Button>
-                  <Button type="submit">Gardar</Button>
-                </DialogFooter>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      <Tabs defaultValue="week">
-        <TabsList className="mb-4">
-          <TabsTrigger value="week">Vista Semanal</TabsTrigger>
-          <TabsTrigger value="month">Vista Mensual</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="week">
-          <Card className="border border-scola-gray-dark">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-medium">
-                Semana do {format(weekDays[0], 'd MMMM', { locale: es })} ao {format(weekDays[6], 'd MMMM yyyy', { locale: es })}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-7 gap-2">
-                {weekDays.map((day, index) => (
-                  <div 
-                    key={index} 
-                    className={`border rounded-md ${
-                      isWeekend(day) ? 'bg-gray-50' : 'bg-white'
-                    }`}
-                  >
-                    <div className={`text-center p-2 font-medium border-b ${
-                      isWeekend(day) ? 'bg-gray-100' : 'bg-scola-pastel'
-                    }`}>
-                      <div className="text-xs uppercase">{format(day, 'EEEE', { locale: es })}</div>
-                      <div className="text-lg">{format(day, 'd')}</div>
-                    </div>
-                    <div className="p-1 min-h-[150px]">
-                      {getEventsByDay(day).map((event) => (
-                        <div 
-                          key={event.id}
-                          className={`mb-1 p-1 rounded-sm text-xs truncate ${getEventTypeDetails(event.type).color}`}
-                          title={event.title}
-                        >
-                          <div className="font-semibold">{event.title}</div>
-                          <div>{event.startTime} - {event.endTime}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
               </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="month">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border border-scola-gray-dark">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-medium">
-                  Calendario
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={handleDateSelect}
-                  className="rounded-md border"
-                  locale={es}
-                  // Mark days with events
-                  modifiers={{
-                    hasEvent: (date) => events.some(
-                      event => format(new Date(event.date), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
-                    )
-                  }}
-                  modifiersClassNames={{
-                    hasEvent: 'bg-scola-pastel text-scola-primary font-bold'
-                  }}
-                />
-                <div className="mt-4">
-                  <h3 className="font-medium mb-2">Lenda:</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {eventTypes.map((type) => (
-                      <Badge key={type.id} className={type.color}>{type.label}</Badge>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card className="border border-scola-gray-dark">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg font-medium">
-                  Eventos do mes
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
-                  {events.length > 0 ? (
-                    events.map((event) => (
-                      <div key={event.id} className="border rounded-md p-3 hover:bg-gray-50">
-                        <div className="flex justify-between items-start">
-                          <h3 className="font-medium">{event.title}</h3>
-                          <Badge className={getEventTypeDetails(event.type).color}>
-                            {getEventTypeDetails(event.type).label}
-                          </Badge>
+              
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Título do evento</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Ex: Reunión ciclo" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="recipients"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Destinatarios</FormLabel>
+                      <FormControl>
+                        <div className="flex items-center">
+                          <Users className="h-4 w-4 mr-2 text-gray-500" />
+                          <Input {...field} placeholder="Ex: Todo o claustro" />
                         </div>
-                        <div className="text-sm text-gray-500 mt-1">
-                          <div className="flex items-center">
-                            <CalendarIcon className="h-3 w-3 mr-1" /> 
-                            {format(new Date(event.date), 'EEEE, d MMMM', { locale: es })}
-                          </div>
-                          <div className="flex items-center mt-1">
-                            <Clock className="h-3 w-3 mr-1" /> 
-                            {event.startTime} - {event.endTime}
-                          </div>
-                        </div>
-                        {event.description && (
-                          <p className="text-sm mt-2">{event.description}</p>
-                        )}
-                        <div className="mt-2 flex items-center justify-between">
-                          <span className="text-xs text-gray-500">
-                            {event.location}
-                          </span>
-                          {event.mandatory && (
-                            <Badge variant="outline" className="bg-red-50 text-red-800 border-red-200">
-                              Obligatorio
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-center py-4 text-gray-500">Non hai eventos planificados</p>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
+                />
+                <FormField
+                  control={form.control}
+                  name="space"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Espazo</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar espazo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Sala de profesores">Sala de profesores</SelectItem>
+                          <SelectItem value="Biblioteca">Biblioteca</SelectItem>
+                          <SelectItem value="Aula 12">Aula 12</SelectItem>
+                          <SelectItem value="Aula 14">Aula 14</SelectItem>
+                          <SelectItem value="Salón de actos">Salón de actos</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="timeStart"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Hora de inicio</FormLabel>
+                      <FormControl>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                          <Input type="time" {...field} />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="timeEnd"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Hora de fin</FormLabel>
+                      <FormControl>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                          <Input type="time" {...field} />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={form.control}
+                name="mandatory"
+                render={({ field }) => (
+                  <FormItem className="flex items-start space-x-2 space-y-0">
+                    <FormControl>
+                      <Checkbox 
+                        checked={field.value} 
+                        onCheckedChange={field.onChange} 
+                      />
+                    </FormControl>
+                    <FormLabel className="font-normal">Evento obrigatorio</FormLabel>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <DialogFooter>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={() => setOpenDialog(false)}
+                  className="mr-2"
+                >
+                  Cancelar
+                </Button>
+                <Button type="submit">Gardar</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </DashboardLayout>
   );
 };

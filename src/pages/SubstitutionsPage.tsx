@@ -36,6 +36,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
@@ -60,7 +61,7 @@ const SubstitutionsPage = () => {
   const isDirector = true; // Mock value: user?.role === 'director'
   
   // Mock data for substitutions
-  const substitutions: Substitution[] = [
+  const [substitutions, setSubstitutions] = useState<Substitution[]>([
     {
       id: '1',
       absentTeacher: 'Carlos Rodríguez',
@@ -91,10 +92,10 @@ const SubstitutionsPage = () => {
       seen: false,
       date: '2025-04-04'
     }
-  ];
+  ]);
 
   // Mock data for historical substitutions
-  const historicalSubstitutions: Substitution[] = [
+  const [historicalSubstitutions, setHistoricalSubstitutions] = useState<Substitution[]>([
     {
       id: '4',
       absentTeacher: 'Carlos Rodríguez',
@@ -135,12 +136,13 @@ const SubstitutionsPage = () => {
       seen: true,
       date: '2025-03-20'
     }
-  ];
+  ]);
 
   // Function to handle marking a substitution as seen
   const handleToggleSeen = (id: string) => {
-    console.log(`Toggled seen status for substitution ${id}`);
-    // In a real app, this would update the state or make an API call
+    setSubstitutions(substitutions.map(sub => 
+      sub.id === id ? { ...sub, seen: !sub.seen } : sub
+    ));
   };
 
   // Form for adding a new substitution
@@ -158,8 +160,27 @@ const SubstitutionsPage = () => {
 
   const onSubmit = (data: any) => {
     console.log("New substitution data:", data);
+    const newSubstitution: Substitution = {
+      id: Date.now().toString(),
+      absentTeacher: data.absentTeacher,
+      substituteTeacher: data.substituteTeacher,
+      course: data.course,
+      time: `${data.startTime} - ${data.endTime}`,
+      reason: data.reason,
+      seen: false,
+      date: data.date
+    };
+    
+    // Add to current substitutions if today's date
+    if (data.date === format(new Date(), 'yyyy-MM-dd')) {
+      setSubstitutions([...substitutions, newSubstitution]);
+    } else {
+      // Add to historical substitutions if past date
+      setHistoricalSubstitutions([...historicalSubstitutions, newSubstitution]);
+    }
+    
     setOpenDialog(false);
-    // In a real app, this would make an API call to create the substitution
+    form.reset();
   };
 
   // Filter handling for historical substitutions
@@ -454,62 +475,64 @@ const SubstitutionsPage = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
-                    <DropdownMenuLabel>Filtros</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="text-xs text-gray-500">Por profesor ausente</DropdownMenuLabel>
-                      {absentTeachers.map((teacher) => (
-                        <DropdownMenuItem 
-                          key={teacher} 
-                          onClick={() => handleFilter('Ausente', teacher)}
-                        >
-                          {teacher}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
-                    
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="text-xs text-gray-500">Por profesor substituto</DropdownMenuLabel>
-                      {substituteTeachers.map((teacher) => (
-                        <DropdownMenuItem 
-                          key={teacher} 
-                          onClick={() => handleFilter('Substituto', teacher)}
-                        >
-                          {teacher}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
-                    
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="text-xs text-gray-500">Por mes</DropdownMenuLabel>
-                      {months.map((month) => (
-                        <DropdownMenuItem 
-                          key={month} 
-                          onClick={() => handleFilter('Mes', month)}
-                        >
-                          {month}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
-                    
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuGroup>
-                      <DropdownMenuLabel className="text-xs text-gray-500">Por semana</DropdownMenuLabel>
-                      {weeks.map((week) => (
-                        <DropdownMenuItem 
-                          key={week} 
-                          onClick={() => handleFilter('Semana', week)}
-                        >
-                          {week}
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
+                    <ScrollArea className="h-80">
+                      <DropdownMenuLabel>Filtros</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel className="text-xs text-gray-500">Por profesor ausente</DropdownMenuLabel>
+                        {absentTeachers.map((teacher) => (
+                          <DropdownMenuItem 
+                            key={teacher} 
+                            onClick={() => handleFilter('Ausente', teacher)}
+                          >
+                            {teacher}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                      
+                      <DropdownMenuSeparator />
+                      
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel className="text-xs text-gray-500">Por profesor substituto</DropdownMenuLabel>
+                        {substituteTeachers.map((teacher) => (
+                          <DropdownMenuItem 
+                            key={teacher} 
+                            onClick={() => handleFilter('Substituto', teacher)}
+                          >
+                            {teacher}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                      
+                      <DropdownMenuSeparator />
+                      
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel className="text-xs text-gray-500">Por mes</DropdownMenuLabel>
+                        {months.map((month) => (
+                          <DropdownMenuItem 
+                            key={month} 
+                            onClick={() => handleFilter('Mes', month)}
+                          >
+                            {month}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                      
+                      <DropdownMenuSeparator />
+                      
+                      <DropdownMenuGroup>
+                        <DropdownMenuLabel className="text-xs text-gray-500">Por semana</DropdownMenuLabel>
+                        {weeks.map((week) => (
+                          <DropdownMenuItem 
+                            key={week} 
+                            onClick={() => handleFilter('Semana', week)}
+                          >
+                            {week}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuGroup>
+                    </ScrollArea>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -525,7 +548,6 @@ const SubstitutionsPage = () => {
                         <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Curso</th>
                         <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Hora</th>
                         <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Substituto</th>
-                        <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Motivo</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -536,9 +558,6 @@ const SubstitutionsPage = () => {
                           <td className="py-3 px-2">{substitution.course}</td>
                           <td className="py-3 px-2">{substitution.time}</td>
                           <td className="py-3 px-2 font-medium">{substitution.substituteTeacher}</td>
-                          <td className="py-3 px-2">
-                            <Badge variant="outline">{substitution.reason}</Badge>
-                          </td>
                         </tr>
                       ))}
                     </tbody>

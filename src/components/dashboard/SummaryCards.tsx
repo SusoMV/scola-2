@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Users, MessageSquare, Clock } from 'lucide-react';
+import { Calendar, Users, MessageSquare, Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SummaryCards = () => {
@@ -10,13 +10,13 @@ const SummaryCards = () => {
     absences: 2,
     events: 3,
     unreadMessages: 5,
-    dailyClasses: 4
+    notifications: 4
   };
 
   const cards = [
     {
       icon: <Users className="h-6 w-6 text-scola-primary" />,
-      title: "Ausencias de hoxe",
+      title: "Ausencias",
       value: summaryData.absences,
       link: "/substitutions"
     },
@@ -28,15 +28,15 @@ const SummaryCards = () => {
     },
     {
       icon: <MessageSquare className="h-6 w-6 text-scola-primary" />,
-      title: "Mensaxes sen ler",
+      title: "Mensaxes",
       value: summaryData.unreadMessages,
       link: "/messages"
     },
     {
-      icon: <Clock className="h-6 w-6 text-scola-primary" />,
-      title: "Clases do día",
-      value: summaryData.dailyClasses,
-      link: "/schedules"
+      icon: <Bell className="h-6 w-6 text-scola-primary" />,
+      title: "Notificacións",
+      value: summaryData.notifications,
+      link: "/notifications"
     }
   ];
 

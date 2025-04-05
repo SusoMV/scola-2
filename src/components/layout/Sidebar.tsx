@@ -15,7 +15,8 @@ import {
   MessageSquare,
   Menu,
   X,
-  LogOut
+  LogOut,
+  GraduationCap
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -52,6 +53,11 @@ const navItems = [
     name: 'Mensaxes', 
     path: '/messages', 
     icon: <MessageSquare className="h-5 w-5" /> 
+  },
+  { 
+    name: 'Titorías', 
+    path: '/tutoring', 
+    icon: <GraduationCap className="h-5 w-5" /> 
   },
 ];
 
@@ -164,7 +170,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <div className="p-4 border-t border-gray-200">
           <Button 
             variant="ghost" 
-            className="w-full flex items-center justify-center text-gray-700 hover:bg-scola-pastel hover:text-scola-primary"
+            className="w-full flex items-center justify-start text-gray-700 hover:bg-scola-pastel hover:text-scola-primary"
             onClick={handleSignOut}
           >
             <LogOut className="h-5 w-5 mr-2" />

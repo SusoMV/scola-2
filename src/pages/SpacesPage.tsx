@@ -4,52 +4,44 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { 
-  Calendar, 
-  Clock, 
-  Info, 
+  Building, 
   Plus, 
-  Trash2,
-  MapPin,
-  Users,
-  Wifi,
-  Monitor,
-  Printer
+  Info, 
+  Calendar,
+  Trash2
 } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
   DialogHeader, 
   DialogTitle, 
-  DialogTrigger 
+  DialogFooter 
 } from '@/components/ui/dialog';
 import { 
   Form, 
-  FormControl, 
   FormField, 
   FormItem, 
   FormLabel, 
+  FormControl, 
   FormMessage 
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Badge } from '@/components/ui/badge';
 import { useForm } from 'react-hook-form';
-import { format } from 'date-fns';
 import { useAuth } from '@/contexts/AuthContext';
+import { format } from 'date-fns';
 
 interface Space {
   id: string;
   name: string;
-  type: string;
+  type: 'aula' | 'sala' | 'biblioteca' | 'pavillón' | 'taller' | 'despacho';
   capacity: number;
   availability: string[];
   features: string[];
   location: string;
-  image?: string;
 }
 
 interface Reservation {
@@ -57,230 +49,190 @@ interface Reservation {
   spaceId: string;
   title: string;
   date: string;
-  startTime: string;
-  endTime: string;
-  userName: string;
+  timeStart: string;
+  timeEnd: string;
   approved: boolean;
 }
 
 const SpacesPage = () => {
   const { user } = useAuth();
+  const [openAddSpaceDialog, setOpenAddSpaceDialog] = useState(false);
+  const [openReserveDialog, setOpenReserveDialog] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
+  const [activeTab, setActiveTab] = useState<'aula' | 'sala' | 'biblioteca' | 'pavillón' | 'taller' | 'despacho'>('aula');
   
   // Check if the user has director role (in a real app, this would come from user context)
   const isDirector = true; // Mock value: user?.role === 'director'
   
-  const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
-  const [activeTab, setActiveTab] = useState('classroom');
-  const [openSpaceDialog, setOpenSpaceDialog] = useState(false);
-  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const [openReservationDialog, setOpenReservationDialog] = useState(false);
-  
   // Mock data for spaces
-  const spaces: Space[] = [
+  const [spaces, setSpaces] = useState<Space[]>([
     {
       id: '1',
-      name: 'Aula 1A',
-      type: 'classroom',
+      name: 'Aula 1º A',
+      type: 'aula',
       capacity: 25,
-      availability: ['Luns', 'Martes', 'Mércores', 'Xoves', 'Venres'],
-      features: ['wifi', 'projector', 'computers'],
-      location: 'Planta 1, Corredor A'
+      availability: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+      features: ['wifi', 'proyector', 'pizarra digital'],
+      location: 'Planta baja, ala este'
     },
     {
       id: '2',
-      name: 'Aula 2B',
-      type: 'classroom',
-      capacity: 30,
-      availability: ['Luns', 'Martes', 'Mércores', 'Xoves'],
-      features: ['wifi', 'projector'],
-      location: 'Planta 2, Corredor B'
+      name: 'Aula 2º B',
+      type: 'aula',
+      capacity: 20,
+      availability: ['Lunes', 'Miércoles', 'Viernes'],
+      features: ['wifi', 'ordenadores'],
+      location: 'Primera planta, ala oeste'
     },
     {
       id: '3',
-      name: 'Biblioteca',
-      type: 'library',
-      capacity: 40,
-      availability: ['Luns', 'Martes', 'Mércores', 'Xoves', 'Venres'],
-      features: ['wifi', 'computers', 'printer'],
-      location: 'Planta baixa, Ala este'
+      name: 'Biblioteca central',
+      type: 'biblioteca',
+      capacity: 50,
+      availability: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+      features: ['wifi', 'ordenadores', 'proyector', 'impresora'],
+      location: 'Planta baja, ala norte'
     },
     {
       id: '4',
-      name: 'Sala de reunións',
-      type: 'room',
+      name: 'Sala de profesores',
+      type: 'sala',
       capacity: 15,
-      availability: ['Luns', 'Mércores', 'Venres'],
-      features: ['wifi', 'projector'],
-      location: 'Planta 1, Ala oeste'
+      availability: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+      features: ['wifi', 'ordenadores', 'impresora'],
+      location: 'Primera planta, ala este'
     },
     {
       id: '5',
       name: 'Pavillón deportivo',
-      type: 'gym',
+      type: 'pavillón',
       capacity: 100,
-      availability: ['Luns', 'Martes', 'Mércores', 'Xoves', 'Venres'],
-      features: [],
-      location: 'Exterior, Zona norte'
+      availability: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+      features: ['vestuarios', 'material deportivo'],
+      location: 'Exterior, zona norte'
     },
     {
       id: '6',
-      name: 'Taller de tecnoloxía',
-      type: 'workshop',
-      capacity: 20,
-      availability: ['Martes', 'Xoves'],
-      features: ['computers', '3dprinter', 'robots'],
-      location: 'Planta 2, Ala este'
+      name: 'Taller de tecnología',
+      type: 'taller',
+      capacity: 30,
+      availability: ['Martes', 'Jueves'],
+      features: ['impresora 3d', 'herramientas', 'robots'],
+      location: 'Segunda planta, ala oeste'
     },
     {
       id: '7',
-      name: 'Despacho de dirección',
-      type: 'office',
-      capacity: 5,
-      availability: ['Luns', 'Martes', 'Mércores', 'Xoves', 'Venres'],
-      features: ['wifi', 'computers', 'printer'],
-      location: 'Planta baixa, Zona central'
+      name: 'Despacho orientación',
+      type: 'despacho',
+      capacity: 6,
+      availability: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'],
+      features: ['wifi', 'ordenador'],
+      location: 'Primera planta, ala este'
     }
-  ];
-  
+  ]);
+
   // Mock data for reservations
-  const reservations: Reservation[] = [
+  const [reservations, setReservations] = useState<Reservation[]>([
     {
       id: '1',
       spaceId: '3',
-      title: 'Club de lectura',
-      date: '2025-04-05',
-      startTime: '16:00',
-      endTime: '18:00',
-      userName: 'Ana García',
+      title: 'Reunión claustro',
+      date: '2025-04-10',
+      timeStart: '16:00',
+      timeEnd: '18:00',
       approved: true
     },
     {
       id: '2',
       spaceId: '5',
-      title: 'Preparación campionato',
-      date: '2025-04-06',
-      startTime: '15:00',
-      endTime: '17:00',
-      userName: 'Carlos Rodríguez',
+      title: 'Jornadas deportivas',
+      date: '2025-04-15',
+      timeStart: '09:00',
+      timeEnd: '14:00',
       approved: true
     },
     {
       id: '3',
-      spaceId: '6',
-      title: 'Taller de robótica',
-      date: '2025-04-07',
-      startTime: '17:00',
-      endTime: '19:00',
-      userName: 'María López',
+      spaceId: '4',
+      title: 'Formación LOMLOE',
+      date: '2025-04-12',
+      timeStart: '17:00',
+      timeEnd: '19:00',
       approved: false
     }
-  ];
-  
-  // Form for adding new space
-  const spaceForm = useForm({
+  ]);
+
+  // Forms
+  const addSpaceForm = useForm({
     defaultValues: {
       name: '',
-      type: activeTab,
+      type: 'aula',
       capacity: 0,
-      availability: [] as string[],
-      features: [] as string[],
+      availability: [],
+      features: '',
       location: ''
     }
   });
-  
-  // Form for reserving a space
-  const reservationForm = useForm({
+
+  const reserveSpaceForm = useForm({
     defaultValues: {
       title: '',
       date: format(new Date(), 'yyyy-MM-dd'),
-      startTime: '09:00',
-      endTime: '10:00'
+      timeStart: '16:00',
+      timeEnd: '17:00'
     }
   });
-  
-  const onSubmitSpaceForm = (data: any) => {
-    console.log("New space data:", data);
-    setOpenSpaceDialog(false);
-    // In a real app, this would make an API call to create the space
-  };
-  
-  const onSubmitReservationForm = (data: any) => {
-    console.log("New reservation data:", data, "for space:", selectedSpace?.id);
-    setOpenReservationDialog(false);
-    // In a real app, this would make an API call to create the reservation
-  };
-  
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
-    spaceForm.setValue('type', value);
-  };
-  
-  const handleOpenDetails = (space: Space) => {
-    setSelectedSpace(space);
-    setOpenDetailsDialog(true);
-  };
-  
-  const handleOpenReservation = (space: Space) => {
-    setSelectedSpace(space);
-    setOpenReservationDialog(true);
-  };
-  
-  const handleDeleteSpace = (spaceId: string) => {
-    console.log("Delete space:", spaceId);
-    // In a real app, this would make an API call to delete the space
-  };
-  
-  // Helper function to get spaces by type
+
+  const weekdays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+
+  // Get spaces by type
   const getSpacesByType = (type: string) => {
     return spaces.filter(space => space.type === type);
   };
-  
-  // Helper function to get reservations by space
-  const getReservationsBySpace = (spaceId: string) => {
-    return reservations.filter(
-      reservation => reservation.spaceId === spaceId && reservation.approved
-    );
+
+  // Handle adding a new space
+  const handleAddSpace = (data: any) => {
+    const selectedAvailability = weekdays.filter((_, index) => data.availability[index]);
+    
+    const newSpace: Space = {
+      id: Date.now().toString(),
+      name: data.name,
+      type: data.type,
+      capacity: data.capacity,
+      availability: selectedAvailability,
+      features: data.features.split(',').map((feature: string) => feature.trim()),
+      location: data.location
+    };
+    
+    setSpaces([...spaces, newSpace]);
+    setOpenAddSpaceDialog(false);
+    addSpaceForm.reset();
   };
-  
-  // Helper function to render feature icon
-  const renderFeatureIcon = (feature: string) => {
-    switch (feature) {
-      case 'wifi':
-        return <Wifi className="h-4 w-4" />;
-      case 'projector':
-        return <Monitor className="h-4 w-4" />;
-      case 'computers':
-        return <Monitor className="h-4 w-4" />;
-      case 'printer':
-        return <Printer className="h-4 w-4" />;
-      case '3dprinter':
-        return <Printer className="h-4 w-4" />;
-      case 'robots':
-        return <Monitor className="h-4 w-4" />;
-      default:
-        return null;
+
+  // Handle reserving a space
+  const handleReserveSpace = (data: any) => {
+    if (selectedSpace) {
+      const newReservation: Reservation = {
+        id: Date.now().toString(),
+        spaceId: selectedSpace.id,
+        title: data.title,
+        date: data.date,
+        timeStart: data.timeStart,
+        timeEnd: data.timeEnd,
+        approved: false // Needs to be approved by the director
+      };
+      
+      setReservations([...reservations, newReservation]);
+      setOpenReserveDialog(false);
+      reserveSpaceForm.reset();
     }
   };
-  
-  // Options for space features
-  const featureOptions = [
-    { id: 'wifi', label: 'Wifi' },
-    { id: 'projector', label: 'Proxector' },
-    { id: 'computers', label: 'Ordenadores' },
-    { id: 'tablets', label: 'Tablets' },
-    { id: 'printer', label: 'Impresora' },
-    { id: '3dprinter', label: 'Impresora 3D' },
-    { id: 'robots', label: 'Robots' }
-  ];
-  
-  // Days of the week for availability
-  const daysOfWeek = [
-    { id: 'Luns', label: 'Luns' },
-    { id: 'Martes', label: 'Martes' },
-    { id: 'Mércores', label: 'Mércores' },
-    { id: 'Xoves', label: 'Xoves' },
-    { id: 'Venres', label: 'Venres' }
-  ];
+
+  // Handle deleting a space
+  const handleDeleteSpace = (id: string) => {
+    setSpaces(spaces.filter(space => space.id !== id));
+  };
 
   return (
     <DashboardLayout>
@@ -291,399 +243,261 @@ const SpacesPage = () => {
         </div>
         
         {isDirector && (
-          <Dialog open={openSpaceDialog} onOpenChange={setOpenSpaceDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-scola-primary hover:bg-scola-primary/90">
-                <Plus className="mr-2 h-4 w-4" /> Engadir Espazo
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[500px]">
-              <DialogHeader>
-                <DialogTitle>Engadir Novo Espazo</DialogTitle>
-                <DialogDescription>
-                  Complete os datos do novo espazo.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...spaceForm}>
-                <form onSubmit={spaceForm.handleSubmit(onSubmitSpaceForm)} className="space-y-4">
-                  <FormField
-                    control={spaceForm.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Nome do espazo</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Introduza o nome do espazo" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={spaceForm.control}
-                    name="capacity"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Capacidade</FormLabel>
-                        <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Número de persoas" 
-                            {...field} 
-                            onChange={(e) => field.onChange(parseInt(e.target.value))}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={spaceForm.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Ubicación</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Ubicación do espazo" 
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={spaceForm.control}
-                    name="availability"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-2">
-                          <FormLabel>Dispoñibilidade</FormLabel>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                          {daysOfWeek.map((day) => (
-                            <FormField
-                              key={day.id}
-                              control={spaceForm.control}
-                              name="availability"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={day.id}
-                                    className="flex flex-row items-start space-x-2 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(day.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, day.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== day.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm font-normal">
-                                      {day.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={spaceForm.control}
-                    name="features"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-2">
-                          <FormLabel>Características</FormLabel>
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          {featureOptions.map((feature) => (
-                            <FormField
-                              key={feature.id}
-                              control={spaceForm.control}
-                              name="features"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={feature.id}
-                                    className="flex flex-row items-start space-x-2 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(feature.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, feature.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== feature.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm font-normal">
-                                      {feature.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <DialogFooter>
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={() => setOpenSpaceDialog(false)}
-                      className="mr-2"
-                    >
-                      Cancelar
-                    </Button>
-                    <Button type="submit">Gardar</Button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
+          <Button 
+            className="bg-scola-primary hover:bg-scola-primary/90"
+            onClick={() => setOpenAddSpaceDialog(true)}
+          >
+            <Plus className="mr-2 h-4 w-4" /> Engadir espazo
+          </Button>
         )}
       </div>
 
-      <Tabs defaultValue="classroom" onValueChange={handleTabChange}>
+      <Tabs 
+        defaultValue="aula" 
+        onValueChange={(value) => setActiveTab(value as any)}
+      >
         <TabsList className="mb-4">
-          <TabsTrigger value="classroom">Aulas</TabsTrigger>
-          <TabsTrigger value="room">Salas</TabsTrigger>
-          <TabsTrigger value="library">Biblioteca</TabsTrigger>
-          <TabsTrigger value="gym">Pavillón</TabsTrigger>
-          <TabsTrigger value="workshop">Taller</TabsTrigger>
-          <TabsTrigger value="office">Despacho</TabsTrigger>
+          <TabsTrigger value="aula">Aulas</TabsTrigger>
+          <TabsTrigger value="sala">Salas</TabsTrigger>
+          <TabsTrigger value="biblioteca">Biblioteca</TabsTrigger>
+          <TabsTrigger value="pavillón">Pavillón</TabsTrigger>
+          <TabsTrigger value="taller">Taller</TabsTrigger>
+          <TabsTrigger value="despacho">Despachos</TabsTrigger>
         </TabsList>
         
-        <TabsContent value={activeTab}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {getSpacesByType(activeTab).map((space) => (
-              <Card key={space.id} className="border border-scola-gray-dark">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg font-medium flex justify-between items-center">
-                    <span>{space.name}</span>
-                    {isDirector && (
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0 text-red-500"
-                        onClick={() => handleDeleteSpace(space.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    )}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-center text-sm">
-                      <Users className="h-4 w-4 mr-2 text-gray-500" />
-                      <span>Capacidade: {space.capacity} persoas</span>
-                    </div>
-                    
-                    <div className="flex items-center text-sm">
-                      <MapPin className="h-4 w-4 mr-2 text-gray-500" />
-                      <span>{space.location}</span>
-                    </div>
-                    
-                    {space.features.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {space.features.map((feature) => (
-                          <Badge key={feature} variant="outline" className="flex items-center gap-1">
-                            {renderFeatureIcon(feature)}
-                            <span>{feature}</span>
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {space.availability.map((day) => (
-                        <Badge key={day} variant="secondary" className="text-xs">
-                          {day}
-                        </Badge>
-                      ))}
-                    </div>
-                    
-                    <div className="flex justify-between mt-4 pt-2 border-t">
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-xs"
-                        onClick={() => handleOpenDetails(space)}
-                      >
-                        <Info className="h-3 w-3 mr-1" /> Ver Detalles
-                      </Button>
-                      
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-xs"
-                        onClick={() => handleOpenReservation(space)}
-                      >
-                        <Calendar className="h-3 w-3 mr-1" /> Reservar
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-          
-          {getSpacesByType(activeTab).length === 0 && (
-            <div className="text-center py-8 text-gray-500">
-              <p>Non hai espazos dispoñibles nesta categoría</p>
-              {isDirector && (
-                <Button 
-                  className="mt-4 bg-scola-primary hover:bg-scola-primary/90"
-                  onClick={() => setOpenSpaceDialog(true)}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Engadir Espazo
-                </Button>
-              )}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-      
-      {/* Space Details Dialog */}
-      <Dialog open={openDetailsDialog} onOpenChange={setOpenDetailsDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>{selectedSpace?.name}</DialogTitle>
-            <DialogDescription>
-              Información detallada e reservas deste espazo.
-            </DialogDescription>
-          </DialogHeader>
-          
-          {selectedSpace && (
-            <div className="space-y-4">
-              <div className="border rounded-md p-3 bg-gray-50">
-                <h3 className="font-medium mb-2">Detalles do espazo</h3>
-                <div className="space-y-2 text-sm">
-                  <div className="flex items-center">
-                    <Users className="h-4 w-4 mr-2 text-gray-500" />
-                    <span>Capacidade: {selectedSpace.capacity} persoas</span>
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin className="h-4 w-4 mr-2 text-gray-500" />
-                    <span>Ubicación: {selectedSpace.location}</span>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-xs text-gray-500 mb-1">Dispoñibilidade:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedSpace.availability.map((day) => (
-                        <Badge key={day} variant="secondary" className="text-xs">
-                          {day}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  {selectedSpace.features.length > 0 && (
-                    <div>
-                      <h4 className="font-medium text-xs text-gray-500 mb-1">Características:</h4>
-                      <div className="flex flex-wrap gap-1">
-                        {selectedSpace.features.map((feature) => (
-                          <Badge key={feature} variant="outline" className="flex items-center gap-1">
-                            {renderFeatureIcon(feature)}
-                            <span>{feature}</span>
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-              
-              <div className="border rounded-md p-3">
-                <h3 className="font-medium mb-2">Próximas reservas</h3>
-                <div className="space-y-2">
-                  {getReservationsBySpace(selectedSpace.id).length > 0 ? (
-                    getReservationsBySpace(selectedSpace.id).map((reservation) => (
-                      <div key={reservation.id} className="border-b pb-2 last:border-0 last:pb-0">
-                        <div className="font-medium">{reservation.title}</div>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <Calendar className="h-3 w-3 mr-1" />
-                          {format(new Date(reservation.date), 'dd/MM/yyyy')}
+        {(['aula', 'sala', 'biblioteca', 'pavillón', 'taller', 'despacho'] as const).map((type) => (
+          <TabsContent key={type} value={type}>
+            <Card className="border border-scola-gray-dark">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg font-medium flex items-center">
+                  <Building className="h-5 w-5 mr-2 text-[#0070C0]" />
+                  {type === 'aula' ? 'Aulas' : 
+                   type === 'biblioteca' ? 'Biblioteca' : 
+                   type === 'pavillón' ? 'Pavillón' : 
+                   type === 'sala' ? 'Salas' : 
+                   type === 'taller' ? 'Talleres' : 'Despachos'}
+                </CardTitle>
+                <div className="w-full h-1 mt-2 border-b border-dotted border-[#0070C0]"></div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {getSpacesByType(type).length > 0 ? (
+                    getSpacesByType(type).map((space) => (
+                      <div key={space.id} className="border rounded-md p-4 relative overflow-hidden">
+                        <div className="border-l-4 border-[#0070C0] pl-2 mb-3">
+                          <h3 className="font-medium">{space.name}</h3>
                         </div>
-                        <div className="text-sm text-gray-500 flex items-center">
-                          <Clock className="h-3 w-3 mr-1" />
-                          {reservation.startTime} - {reservation.endTime}
+                        <p className="text-sm text-gray-600 mb-2">
+                          <span className="font-medium">Capacidade:</span> {space.capacity} persoas
+                        </p>
+                        <div className="flex flex-wrap gap-1 mb-2">
+                          {space.features.map((feature, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {feature}
+                            </Badge>
+                          ))}
+                        </div>
+                        <div className="flex gap-2 mt-4">
+                          <Button 
+                            className="flex-1 bg-[#0070C0] hover:bg-[#0070C0]/90"
+                            onClick={() => {
+                              setSelectedSpace(space);
+                              setOpenReserveDialog(true);
+                            }}
+                          >
+                            <Calendar className="h-4 w-4 mr-2" /> Reservar
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            onClick={() => {
+                              setSelectedSpace(space);
+                              setOpenDetailsDialog(true);
+                            }}
+                          >
+                            <Info className="h-4 w-4 text-[#0070C0]" />
+                          </Button>
+                          {isDirector && (
+                            <Button 
+                              variant="outline" 
+                              size="icon"
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() => handleDeleteSpace(space.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
                         </div>
                       </div>
                     ))
                   ) : (
-                    <p className="text-sm text-gray-500">Non hai reservas</p>
+                    <div className="col-span-full text-center py-8 text-gray-500">
+                      Non hai espazos nesta categoría
+                    </div>
                   )}
                 </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        ))}
+      </Tabs>
+
+      {/* Dialog to add a new space */}
+      <Dialog open={openAddSpaceDialog} onOpenChange={setOpenAddSpaceDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Engadir novo espazo</DialogTitle>
+          </DialogHeader>
+          <Form {...addSpaceForm}>
+            <form onSubmit={addSpaceForm.handleSubmit(handleAddSpace)} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={addSpaceForm.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome do espazo</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Ex: Aula 1º A" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={addSpaceForm.control}
+                  name="type"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo de espazo</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Seleccionar tipo" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="aula">Aula</SelectItem>
+                          <SelectItem value="sala">Sala</SelectItem>
+                          <SelectItem value="biblioteca">Biblioteca</SelectItem>
+                          <SelectItem value="pavillón">Pavillón</SelectItem>
+                          <SelectItem value="taller">Taller</SelectItem>
+                          <SelectItem value="despacho">Despacho</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={addSpaceForm.control}
+                  name="capacity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Capacidade</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} onChange={e => field.onChange(Number(e.target.value))} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={addSpaceForm.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Ubicación</FormLabel>
+                      <FormControl>
+                        <Input {...field} placeholder="Ex: Planta baixa, ala este" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              <FormField
+                control={addSpaceForm.control}
+                name="availability"
+                render={() => (
+                  <FormItem>
+                    <FormLabel>Dispoñibilidade</FormLabel>
+                    <div className="space-y-2">
+                      {weekdays.map((day, index) => (
+                        <div key={day} className="flex items-center">
+                          <Checkbox
+                            id={`day-${index}`}
+                            onCheckedChange={(checked) => {
+                              const currentAvailability = addSpaceForm.getValues('availability') || [];
+                              const newAvailability = [...currentAvailability];
+                              newAvailability[index] = checked === true;
+                              addSpaceForm.setValue('availability', newAvailability);
+                            }}
+                          />
+                          <label
+                            htmlFor={`day-${index}`}
+                            className="ml-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {day}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={addSpaceForm.control}
+                name="features"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Características (separadas por comas)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Ex: wifi, proyector, ordenadores" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
               <DialogFooter>
                 <Button 
+                  type="button" 
                   variant="outline" 
-                  onClick={() => setOpenDetailsDialog(false)}
+                  onClick={() => setOpenAddSpaceDialog(false)}
+                  className="mr-2"
                 >
-                  Pechar
+                  Cancelar
                 </Button>
-                
-                <Button 
-                  onClick={() => {
-                    setOpenDetailsDialog(false);
-                    handleOpenReservation(selectedSpace);
-                  }}
-                >
-                  <Calendar className="h-4 w-4 mr-2" /> Reservar
-                </Button>
+                <Button type="submit" className="bg-[#0070C0] hover:bg-[#0070C0]/90">Gardar</Button>
               </DialogFooter>
-            </div>
-          )}
+            </form>
+          </Form>
         </DialogContent>
       </Dialog>
-      
-      {/* Reservation Dialog */}
-      <Dialog open={openReservationDialog} onOpenChange={setOpenReservationDialog}>
+
+      {/* Dialog to reserve a space */}
+      <Dialog open={openReserveDialog} onOpenChange={setOpenReserveDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Reservar Espazo</DialogTitle>
-            <DialogDescription>
-              Complete os datos para reservar {selectedSpace?.name}.
-            </DialogDescription>
+            <DialogTitle>Reservar espazo: {selectedSpace?.name}</DialogTitle>
           </DialogHeader>
-          
-          <Form {...reservationForm}>
-            <form onSubmit={reservationForm.handleSubmit(onSubmitReservationForm)} className="space-y-4">
+          <Form {...reserveSpaceForm}>
+            <form onSubmit={reserveSpaceForm.handleSubmit(handleReserveSpace)} className="space-y-4">
               <FormField
-                control={reservationForm.control}
+                control={reserveSpaceForm.control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Título da reserva</FormLabel>
                     <FormControl>
-                      <Input placeholder="Introduza o motivo da reserva" {...field} />
+                      <Input {...field} placeholder="Ex: Reunión ciclo" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -691,16 +505,13 @@ const SpacesPage = () => {
               />
               
               <FormField
-                control={reservationForm.control}
+                control={reserveSpaceForm.control}
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Data</FormLabel>
+                    <FormLabel>Data da reserva</FormLabel>
                     <FormControl>
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-2 text-gray-500" />
-                        <Input type="date" {...field} />
-                      </div>
+                      <Input type="date" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -709,16 +520,13 @@ const SpacesPage = () => {
               
               <div className="grid grid-cols-2 gap-4">
                 <FormField
-                  control={reservationForm.control}
-                  name="startTime"
+                  control={reserveSpaceForm.control}
+                  name="timeStart"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Hora de inicio</FormLabel>
                       <FormControl>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                          <Input type="time" {...field} />
-                        </div>
+                        <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -726,16 +534,13 @@ const SpacesPage = () => {
                 />
                 
                 <FormField
-                  control={reservationForm.control}
-                  name="endTime"
+                  control={reserveSpaceForm.control}
+                  name="timeEnd"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Hora de fin</FormLabel>
                       <FormControl>
-                        <div className="flex items-center">
-                          <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                          <Input type="time" {...field} />
-                        </div>
+                        <Input type="time" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -743,19 +548,102 @@ const SpacesPage = () => {
                 />
               </div>
               
+              <p className="text-sm text-gray-500">
+                A reserva será enviada ao equipo directivo para a súa aprobación.
+              </p>
+              
               <DialogFooter>
                 <Button 
                   type="button" 
                   variant="outline" 
-                  onClick={() => setOpenReservationDialog(false)}
+                  onClick={() => setOpenReserveDialog(false)}
                   className="mr-2"
                 >
                   Cancelar
                 </Button>
-                <Button type="submit">Solicitar</Button>
+                <Button type="submit" className="bg-[#0070C0] hover:bg-[#0070C0]/90">Reservar</Button>
               </DialogFooter>
             </form>
           </Form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog to show space details */}
+      <Dialog open={openDetailsDialog} onOpenChange={setOpenDetailsDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{selectedSpace?.name}</DialogTitle>
+          </DialogHeader>
+          
+          {selectedSpace && (
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Tipo de espazo</h4>
+                <p className="text-[#0070C0]">{selectedSpace.type}</p>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Capacidade</h4>
+                <p>{selectedSpace.capacity} persoas</p>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Ubicación</h4>
+                <p>{selectedSpace.location}</p>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Dispoñibilidade</h4>
+                <div className="flex flex-wrap gap-1">
+                  {selectedSpace.availability.map((day, index) => (
+                    <Badge key={index} variant="outline">
+                      {day}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Características</h4>
+                <div className="flex flex-wrap gap-1">
+                  {selectedSpace.features.map((feature, index) => (
+                    <Badge key={index} variant="outline">
+                      {feature}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium text-gray-500 mb-1">Próximas reservas</h4>
+                {reservations.filter(r => r.spaceId === selectedSpace.id && r.approved).length > 0 ? (
+                  <ul className="space-y-2">
+                    {reservations
+                      .filter(r => r.spaceId === selectedSpace.id && r.approved)
+                      .map(reservation => (
+                        <li key={reservation.id} className="text-sm p-2 bg-gray-50 rounded-md">
+                          <p className="font-medium">{reservation.title}</p>
+                          <p className="text-gray-500">
+                            {format(new Date(reservation.date), 'dd/MM/yyyy')} | {reservation.timeStart} - {reservation.timeEnd}
+                          </p>
+                        </li>
+                      ))
+                    }
+                  </ul>
+                ) : (
+                  <p className="text-sm text-gray-500">Non hai reservas próximas</p>
+                )}
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button 
+              onClick={() => setOpenDetailsDialog(false)}
+            >
+              Pechar
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </DashboardLayout>

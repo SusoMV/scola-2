@@ -53,7 +53,7 @@ const QuickLinksSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {quickLinks.map((link, index) => (
             <div key={index}>
               {link.external ? (
@@ -61,23 +61,23 @@ const QuickLinksSection = () => {
                   href={link.link} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="h-24 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                  className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
                 >
                   <div className="text-scola-primary mb-2">
                     {link.icon}
                   </div>
-                  <span className="text-xs text-center text-gray-700 truncate w-full">{link.name}</span>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
                   <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
                 </a>
               ) : (
                 <Link 
                   to={link.link}
-                  className="h-24 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
+                  className="h-28 flex flex-col items-center justify-center p-2 border border-scola-gray-dark rounded-md hover:bg-scola-pastel hover:border-scola-primary transition-all duration-200"
                 >
                   <div className="text-scola-primary mb-2">
                     {link.icon}
                   </div>
-                  <span className="text-xs text-center text-gray-700 truncate w-full">{link.name}</span>
+                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
                 </Link>
               )}
             </div>

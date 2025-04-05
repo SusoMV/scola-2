@@ -89,6 +89,16 @@ const App = () => (
                 <PlaceholderPage title="Mensaxes" />
               </ProtectedRoute>
             } />
+            <Route path="/tutoring" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Titorías" />
+              </ProtectedRoute>
+            } />
+            <Route path="/notifications" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Notificacións" />
+              </ProtectedRoute>
+            } />
             <Route path="/school-info" element={
               <ProtectedRoute>
                 <PlaceholderPage title="Datos do centro" />

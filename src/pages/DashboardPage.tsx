@@ -5,10 +5,12 @@ import WelcomeSection from '@/components/dashboard/WelcomeSection';
 import SummaryCards from '@/components/dashboard/SummaryCards';
 import ScheduleSection from '@/components/dashboard/ScheduleSection';
 import QuickLinksSection from '@/components/dashboard/QuickLinksSection';
+import { useAuth } from '@/contexts/AuthContext';
 
 const DashboardPage = () => {
-  // Mock user data (in a real app, this would come from user context or state management)
-  const userName = 'Ana';
+  const { user } = useAuth();
+  // Use the user's name from auth context if available, otherwise use 'Fresa' as requested
+  const userName = user?.user_metadata?.full_name || 'Fresa';
 
   return (
     <DashboardLayout>

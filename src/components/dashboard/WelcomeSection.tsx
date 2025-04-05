@@ -1,12 +1,14 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface WelcomeSectionProps {
   userName: string;
 }
 
 const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userName }) => {
+  const { user } = useAuth();
   // Get current date in Galician format
   const currentDate = new Date();
   const options: Intl.DateTimeFormatOptions = { 
@@ -19,12 +21,15 @@ const WelcomeSection: React.FC<WelcomeSectionProps> = ({ userName }) => {
   // Galician locale might not be supported in all browsers, so we'll use Spanish as a fallback
   const formattedDate = currentDate.toLocaleDateString('es-ES', options);
 
+  // Use the actual user name from auth context if available
+  const displayName = user?.user_metadata?.full_name || userName;
+
   return (
     <Card className="border border-scola-gray-dark bg-white">
       <CardContent className="p-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
           <div>
-            <h1 className="text-2xl font-bold text-gray-800">Benvido/a, {userName}</h1>
+            <h1 className="text-2xl font-bold text-gray-800">Benvido/a, {displayName}</h1>
             <p className="text-gray-600 mt-1 capitalize">{formattedDate}</p>
           </div>
           <div className="mt-4 md:mt-0">
