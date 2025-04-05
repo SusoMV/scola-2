@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -33,8 +33,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useForm } from 'react-hook-form';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
-import { format, addDays, startOfWeek, endOfWeek, isWeekend } from 'date-fns';
+import { format, addDays, startOfWeek, endOfWeek, isWeekend, startOfMonth, endOfMonth, isSameMonth, isSameDay, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 
 interface Event {
   id: string;
@@ -60,6 +61,7 @@ const AgendaPage = () => {
   const { user } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   
   // Mock data for events
   const [events, setEvents] = useState<Event[]>([
@@ -94,6 +96,28 @@ const AgendaPage = () => {
       space: 'Aula 12',
       timeStart: '14:00',
       timeEnd: '15:00',
+      mandatory: true
+    },
+    {
+      id: '4',
+      date: new Date(2025, 3, 15),
+      title: 'Charla educativa',
+      eventType: 'charla',
+      recipients: 'Todo o claustro',
+      space: 'Salón de actos',
+      timeStart: '18:00',
+      timeEnd: '19:30',
+      mandatory: false
+    },
+    {
+      id: '5',
+      date: new Date(2025, 3, 22),
+      title: 'Consello escolar',
+      eventType: 'consello escolar',
+      recipients: 'Membros do consello',
+      space: 'Sala de xuntas',
+      timeStart: '16:30',
+      timeEnd: '18:00',
       mandatory: true
     }
   ]);
@@ -141,6 +165,21 @@ const AgendaPage = () => {
     return events.filter(event => 
       format(event.date, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
     );
+  };
+
+  // Get events for the current month
+  const getEventsForMonth = () => {
+    const start = startOfMonth(currentDate);
+    const end = endOfMonth(currentDate);
+    
+    return events.filter(event => 
+      event.date >= start && event.date <= end
+    ).sort((a, b) => a.date.getTime() - b.date.getTime());
+  };
+
+  // Get dates that have events in the current month
+  const getDatesWithEvents = () => {
+    return events.map(event => event.date);
   };
 
   // Format a day label
@@ -303,14 +342,78 @@ const AgendaPage = () => {
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-center">
-                <p className="text-gray-500 mb-4">Seleccione "Vista semanal" para ver e xestionar os eventos</p>
-                <Button 
-                  className="bg-scola-primary hover:bg-scola-primary/90"
-                  onClick={() => setOpenDialog(true)}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Crear evento
-                </Button>
+              <div className="grid md:grid-cols-7 lg:grid-cols-3 gap-6">
+                <div className="md:col-span-3 lg:col-span-1">
+                  <div className="border rounded-md p-4">
+                    <CalendarComponent
+                      mode="single"
+                      selected={selectedDate}
+                      onSelect={setSelectedDate}
+                      month={currentDate}
+                      onMonthChange={setCurrentDate}
+                      className="w-full pointer-events-auto"
+                      modifiers={{
+                        hasEvent: getDatesWithEvents()
+                      }}
+                      modifiersStyles={{
+                        hasEvent: { backgroundColor: '#E1F0FA' }
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="md:col-span-4 lg:col-span-2">
+                  <div className="border rounded-md p-4 h-full">
+                    <h3 className="text-lg font-medium mb-4">Eventos do mes</h3>
+                    <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                      {getEventsForMonth().length > 0 ? (
+                        getEventsForMonth().map((event) => (
+                          <div 
+                            key={event.id} 
+                            className={`p-3 border rounded-md ${
+                              selectedDate && isSameDay(event.date, selectedDate) 
+                                ? 'border-scola-primary bg-scola-pastel' 
+                                : ''
+                            }`}
+                          >
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                              <div className="flex items-center">
+                                <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
+                                <span className="font-medium">{format(event.date, 'EEEE d MMMM', { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                                <span>{event.timeStart} - {event.timeEnd}</span>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="text-base font-medium">{event.title}</h4>
+                              <Badge className={`${eventTypeColors[event.eventType]}`}>
+                                {event.eventType}
+                              </Badge>
+                            </div>
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-gray-600">
+                              <div className="flex items-center">
+                                <Users className="h-4 w-4 mr-2" />
+                                <span>{event.recipients}</span>
+                              </div>
+                              <div className="flex items-center">
+                                <MapPin className="h-4 w-4 mr-2" />
+                                <span>{event.space}</span>
+                              </div>
+                            </div>
+                            {event.mandatory && (
+                              <div className="mt-2">
+                                <span className="text-xs text-red-500 font-medium">* Asistencia obrigatoria</span>
+                              </div>
+                            )}
+                          </div>
+                        ))
+                      ) : (
+                        <p className="text-center text-gray-400 py-4">Non hai eventos para este mes</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
