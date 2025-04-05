@@ -26,8 +26,7 @@ interface Absence {
   studentId: number;
   studentName: string;
   date: Date;
-  startTime: string;
-  endTime: string;
+  time: string;
   justified: boolean;
 }
 
@@ -36,11 +35,10 @@ const AttendanceControl = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
 
   const handleAddAbsence = () => {
-    if (!selectedStudent || !selectedDate || !startTime || !endTime) {
+    if (!selectedStudent || !selectedDate || !selectedTime) {
       toast.error('Por favor, complete todos os campos obrigatorios');
       return;
     }
@@ -59,8 +57,7 @@ const AttendanceControl = () => {
       studentId: selectedStudentObject.id,
       studentName: selectedStudentObject.name,
       date: selectedDate,
-      startTime,
-      endTime,
+      time: selectedTime,
       justified: false,
     };
 
@@ -71,8 +68,7 @@ const AttendanceControl = () => {
     // Reset form
     setSelectedStudent('');
     setSelectedDate(new Date());
-    setStartTime('');
-    setEndTime('');
+    setSelectedTime('');
   };
 
   const toggleJustified = (absenceId: number) => {
@@ -139,31 +135,16 @@ const AttendanceControl = () => {
                   </Popover>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="startTime">Hora de inicio</Label>
-                    <div className="flex items-center">
-                      <Clock className="mr-2 h-4 w-4 text-gray-500" />
-                      <Input
-                        id="startTime"
-                        type="time"
-                        value={startTime}
-                        onChange={(e) => setStartTime(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="endTime">Hora de fin</Label>
-                    <div className="flex items-center">
-                      <Clock className="mr-2 h-4 w-4 text-gray-500" />
-                      <Input
-                        id="endTime"
-                        type="time"
-                        value={endTime}
-                        onChange={(e) => setEndTime(e.target.value)}
-                      />
-                    </div>
+                <div className="space-y-2">
+                  <Label htmlFor="time">Hora</Label>
+                  <div className="flex items-center">
+                    <Clock className="mr-2 h-4 w-4 text-gray-500" />
+                    <Input
+                      id="time"
+                      type="time"
+                      value={selectedTime}
+                      onChange={(e) => setSelectedTime(e.target.value)}
+                    />
                   </div>
                 </div>
               </div>
@@ -183,7 +164,7 @@ const AttendanceControl = () => {
               <TableRow>
                 <TableHead>Alumno/a</TableHead>
                 <TableHead>Data</TableHead>
-                <TableHead>Horario</TableHead>
+                <TableHead>Hora</TableHead>
                 <TableHead>Estado</TableHead>
                 <TableHead>Accións</TableHead>
               </TableRow>
@@ -193,7 +174,7 @@ const AttendanceControl = () => {
                 <TableRow key={absence.id}>
                   <TableCell>{absence.studentName}</TableCell>
                   <TableCell>{format(absence.date, 'dd/MM/yyyy')}</TableCell>
-                  <TableCell>{absence.startTime} - {absence.endTime}</TableCell>
+                  <TableCell>{absence.time}</TableCell>
                   <TableCell>
                     {absence.justified ? (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">

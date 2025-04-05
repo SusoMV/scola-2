@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Filter, Plus, ChevronsLeftRight } from 'lucide-react';
+import { Calendar, Clock, Filter, Plus, UserX } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -15,7 +15,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-
 interface Substitution {
   id: string;
   absentTeacher: string;
@@ -26,7 +25,6 @@ interface Substitution {
   seen: boolean;
   date: string;
 }
-
 const SubstitutionsPage = () => {
   const {
     user
@@ -34,8 +32,10 @@ const SubstitutionsPage = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
 
-  const isDirector = true;
+  // Check if the user has director role (in a real app, this would come from user context)
+  const isDirector = true; // Mock value: user?.role === 'director'
 
+  // Mock data for substitutions
   const [substitutions, setSubstitutions] = useState<Substitution[]>([{
     id: '1',
     absentTeacher: 'Carlos Rodríguez',
@@ -65,6 +65,7 @@ const SubstitutionsPage = () => {
     date: '2025-04-04'
   }]);
 
+  // Mock data for historical substitutions
   const [historicalSubstitutions, setHistoricalSubstitutions] = useState<Substitution[]>([{
     id: '4',
     absentTeacher: 'Carlos Rodríguez',
@@ -103,6 +104,7 @@ const SubstitutionsPage = () => {
     date: '2025-03-20'
   }]);
 
+  // Function to handle marking a substitution as seen
   const handleToggleSeen = (id: string) => {
     setSubstitutions(substitutions.map(sub => sub.id === id ? {
       ...sub,
@@ -110,6 +112,7 @@ const SubstitutionsPage = () => {
     } : sub));
   };
 
+  // Form for adding a new substitution
   const form = useForm({
     defaultValues: {
       absentTeacher: '',
@@ -134,33 +137,38 @@ const SubstitutionsPage = () => {
       date: data.date
     };
 
+    // Add to current substitutions if today's date
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
       setSubstitutions([...substitutions, newSubstitution]);
     } else {
+      // Add to historical substitutions if past date
       setHistoricalSubstitutions([...historicalSubstitutions, newSubstitution]);
     }
     setOpenDialog(false);
     form.reset();
   };
 
+  // Filter handling for historical substitutions
   const handleFilter = (filterType: string, value: string) => {
     console.log(`Filter applied: ${filterType} - ${value}`);
     setActiveFilter(`${filterType}: ${value}`);
+    // In a real app, this would filter the data
   };
   const clearFilter = () => {
     setActiveFilter(null);
+    // In a real app, this would reset the filter
   };
 
+  // Mock data for filter dropdowns
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
   const months = ['Xaneiro', 'Febreiro', 'Marzo', 'Abril', 'Maio', 'Xuño', 'Setembro', 'Outubro', 'Novembro', 'Decembro'];
   const weeks = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
-
   return <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
-            <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
+            
             <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
           </div>
           
@@ -452,5 +460,4 @@ const SubstitutionsPage = () => {
       </Tabs>
     </DashboardLayout>;
 };
-
 export default SubstitutionsPage;
