@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -7,9 +8,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Plus, Users } from 'lucide-react';
+import FacultyList from '@/components/faculty/FacultyList';
+import AddFacultyForm from '@/components/faculty/AddFacultyForm';
+import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
+import NewMessageDialog from '@/components/messages/NewMessageDialog';
 
 interface FacultyMember {
   id: string;
+  name: string;
+  role: 'directivo' | 'docente';
+  specialty: string;
+  email: string;
+}
+
+// Define the FacultyFormData interface here to fix the reference error
+interface FacultyFormData {
   name: string;
   role: 'directivo' | 'docente';
   specialty: string;

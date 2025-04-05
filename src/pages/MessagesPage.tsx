@@ -5,6 +5,10 @@ import { Plus, Users, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import ConversationList from '@/components/messages/ConversationList';
+import ChatArea from '@/components/messages/ChatArea';
+import NewMessageDialog from '@/components/messages/NewMessageDialog';
+import NewGroupDialog from '@/components/messages/NewGroupDialog';
 
 interface Participant {
   id: string;
@@ -32,6 +36,80 @@ interface Conversation {
     timestamp: Date;
   };
 }
+
+const sampleFacultyMembers: Participant[] = [
+  { id: '1', name: 'Ana García', role: 'directivo' },
+  { id: '2', name: 'Manuel López', role: 'docente' },
+  { id: '3', name: 'Carmen Rodríguez', role: 'docente' },
+  { id: '4', name: 'David Pérez', role: 'docente' }
+];
+
+const sampleConversations: Conversation[] = [
+  {
+    id: '1',
+    name: 'Ana García',
+    isGroup: false,
+    participants: [sampleFacultyMembers[0]],
+    messages: [
+      {
+        id: '1',
+        sender: 'Ana García',
+        senderId: '1',
+        content: 'Bos días, como vai todo?',
+        timestamp: new Date(Date.now() - 86400000),
+        read: true
+      },
+      {
+        id: '2',
+        sender: 'Usuario Actual',
+        senderId: 'current',
+        content: 'Moi ben, grazas! E ti?',
+        timestamp: new Date(Date.now() - 85000000),
+        read: true
+      }
+    ],
+    lastMessage: {
+      content: 'Moi ben, grazas! E ti?',
+      timestamp: new Date(Date.now() - 85000000)
+    }
+  },
+  {
+    id: '2',
+    name: 'Grupo de Profesores',
+    isGroup: true,
+    participants: [sampleFacultyMembers[0], sampleFacultyMembers[1], sampleFacultyMembers[2]],
+    messages: [
+      {
+        id: '1',
+        sender: 'Manuel López',
+        senderId: '2',
+        content: 'Lembrarvos que mañá temos reunión de departamento',
+        timestamp: new Date(Date.now() - 6400000),
+        read: true
+      },
+      {
+        id: '2',
+        sender: 'Ana García',
+        senderId: '1',
+        content: 'A que hora era?',
+        timestamp: new Date(Date.now() - 5000000),
+        read: true
+      },
+      {
+        id: '3',
+        sender: 'Carmen Rodríguez',
+        senderId: '3',
+        content: 'Ás 16:00h na sala de profesores',
+        timestamp: new Date(Date.now() - 4000000),
+        read: true
+      }
+    ],
+    lastMessage: {
+      content: 'Ás 16:00h na sala de profesores',
+      timestamp: new Date(Date.now() - 4000000)
+    }
+  }
+];
 
 const MessagesPage = () => {
   const { user } = useAuth();
