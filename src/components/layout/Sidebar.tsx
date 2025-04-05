@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -80,7 +79,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     }
   };
 
-  // Get user data from auth context (in a real app this would come from a user context or state management)
   const userData = {
     name: user?.user_metadata?.full_name || 'Usuario',
     avatar: user?.user_metadata?.avatar_url || '',
@@ -94,7 +92,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
 
   return (
     <>
-      {/* Mobile menu button */}
       <div className="fixed top-4 left-4 z-40 lg:hidden">
         <Button
           variant="outline"
@@ -110,7 +107,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         </Button>
       </div>
 
-      {/* Sidebar container */}
       <div 
         className={cn(
           "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-300 lg:translate-x-0 flex flex-col",
@@ -118,12 +114,10 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           className
         )}
       >
-        {/* Logo and branding */}
         <div className="p-4 border-b border-gray-200">
           <ScolaLogo size="md" />
         </div>
 
-        {/* User profile section */}
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <Avatar>
@@ -147,7 +141,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           </Link>
         </div>
 
-        {/* Navigation links */}
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map(item => (
             <Link 
@@ -166,7 +159,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           ))}
         </nav>
 
-        {/* Logout button */}
         <div className="p-4 border-t border-gray-200">
           <Button 
             variant="ghost" 
@@ -179,7 +171,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         </div>
       </div>
 
-      {/* Overlay to close sidebar on mobile */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"

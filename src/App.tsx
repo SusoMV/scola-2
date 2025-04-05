@@ -17,6 +17,7 @@ import DashboardPage from "./pages/DashboardPage";
 import SubstitutionsPage from "./pages/SubstitutionsPage";
 import AgendaPage from "./pages/AgendaPage";
 import SpacesPage from "./pages/SpacesPage";
+import TutoringPage from "./pages/TutoringPage";
 import NotFound from "./pages/NotFound";
 
 // Importamos componentes de placeholder para las rutas pendientes
@@ -73,6 +74,11 @@ const App = () => (
                 <SpacesPage />
               </ProtectedRoute>
             } />
+            <Route path="/tutoring" element={
+              <ProtectedRoute>
+                <TutoringPage />
+              </ProtectedRoute>
+            } />
             {/* Añadimos las rutas pendientes */}
             <Route path="/profile" element={
               <ProtectedRoute>
@@ -87,11 +93,6 @@ const App = () => (
             <Route path="/messages" element={
               <ProtectedRoute>
                 <PlaceholderPage title="Mensaxes" />
-              </ProtectedRoute>
-            } />
-            <Route path="/tutoring" element={
-              <ProtectedRoute>
-                <PlaceholderPage title="Titorías" />
               </ProtectedRoute>
             } />
             <Route path="/notifications" element={
