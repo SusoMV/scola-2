@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,9 +7,17 @@ import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useForm } from 'react-hook-form';
 import { Plus, Send, User, Users } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
+
+interface Participant {
+  id: string;
+  name: string;
+  role: string;
+}
 
 interface Message {
   id: string;
@@ -32,95 +40,16 @@ interface Conversation {
   };
 }
 
-interface Participant {
-  id: string;
-  name: string;
-  role: string;
-}
-
 const MessagesPage = () => {
+  const { user } = useAuth();
   const [openNewMessageDialog, setOpenNewMessageDialog] = useState(false);
   const [openNewGroupDialog, setOpenNewGroupDialog] = useState(false);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   const [messageInput, setMessageInput] = useState('');
-
-  // Mock data for faculty members
-  const facultyMembers: Participant[] = [
-    { id: '1', name: 'María López García', role: 'directivo' },
-    { id: '2', name: 'Carlos Rodríguez Fernández', role: 'directivo' },
-    { id: '3', name: 'Ana García Pérez', role: 'docente' },
-    { id: '4', name: 'Pablo Sánchez Martínez', role: 'docente' },
-    { id: '5', name: 'Lucía Fernández Castro', role: 'docente' },
-    { id: '6', name: 'David Martínez López', role: 'docente' }
-  ];
-
-  // Mock data for conversations
-  const [conversations, setConversations] = useState<Conversation[]>([
-    {
-      id: '1',
-      name: 'María López García',
-      isGroup: false,
-      participants: [facultyMembers[0]],
-      messages: [
-        {
-          id: '1',
-          sender: 'María López García',
-          senderId: '1',
-          content: 'Bos días, como vai todo?',
-          timestamp: new Date('2025-04-04T09:00:00'),
-          read: true
-        },
-        {
-          id: '2',
-          sender: 'Usuario Actual',
-          senderId: 'current',
-          content: 'Moi ben, grazas! E ti?',
-          timestamp: new Date('2025-04-04T09:05:00'),
-          read: true
-        },
-        {
-          id: '3',
-          sender: 'María López García',
-          senderId: '1',
-          content: 'Todo ben, preparando a reunión de mañá',
-          timestamp: new Date('2025-04-04T09:10:00'),
-          read: true
-        }
-      ],
-      lastMessage: {
-        content: 'Todo ben, preparando a reunión de mañá',
-        timestamp: new Date('2025-04-04T09:10:00')
-      }
-    },
-    {
-      id: '2',
-      name: 'Grupo Titorías 5º',
-      isGroup: true,
-      participants: [facultyMembers[0], facultyMembers[2], facultyMembers[4]],
-      messages: [
-        {
-          id: '1',
-          sender: 'María López García',
-          senderId: '1',
-          content: 'Recordade a reunión do xoves',
-          timestamp: new Date('2025-04-03T14:30:00'),
-          read: true
-        },
-        {
-          id: '2',
-          sender: 'Ana García Pérez',
-          senderId: '3',
-          content: 'Perfecto, alí estarei',
-          timestamp: new Date('2025-04-03T14:35:00'),
-          read: true
-        }
-      ],
-      lastMessage: {
-        content: 'Perfecto, alí estarei',
-        timestamp: new Date('2025-04-03T14:35:00')
-      }
-    }
-  ]);
+  const [facultyMembers, setFacultyMembers] = useState<Participant[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentUserName, setCurrentUserName] = useState('');
 
   // Forms
   const newMessageForm = useForm({
@@ -136,6 +65,90 @@ const MessagesPage = () => {
       participants: [] as string[]
     }
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      
+      if (user) {
+        try {
+          // First, get current user's information
+          const { data: currentUserData, error: currentUserError } = await supabase
+            .from('profiles')
+            .select('full_name, school_id')
+            .eq('id', user.id)
+            .single();
+            
+          if (currentUserError) throw currentUserError;
+          
+          setCurrentUserName(currentUserData.full_name);
+          
+          // Then get all faculty members from the same school
+          const { data: facultyData, error: facultyError } = await supabase
+            .from('profiles')
+            .select('id, full_name, role')
+            .eq('school_id', currentUserData.school_id)
+            .neq('id', user.id); // Exclude current user
+            
+          if (facultyError) throw facultyError;
+          
+          const formattedFaculty: Participant[] = facultyData.map(member => ({
+            id: member.id,
+            name: member.full_name,
+            role: member.role
+          }));
+          
+          setFacultyMembers(formattedFaculty);
+          
+          // For now, we're using mock data for conversations
+          // In a real app, you would fetch this from a messages table in Supabase
+          setConversations([
+            {
+              id: '1',
+              name: facultyData[0]?.full_name || 'Usuario',
+              isGroup: false,
+              participants: [
+                {
+                  id: facultyData[0]?.id || '1',
+                  name: facultyData[0]?.full_name || 'Usuario',
+                  role: facultyData[0]?.role || 'docente'
+                }
+              ],
+              messages: [
+                {
+                  id: '1',
+                  sender: facultyData[0]?.full_name || 'Usuario',
+                  senderId: facultyData[0]?.id || '1',
+                  content: 'Bos días, como vai todo?',
+                  timestamp: new Date(Date.now() - 86400000), // Yesterday
+                  read: true
+                },
+                {
+                  id: '2',
+                  sender: currentUserData.full_name,
+                  senderId: 'current',
+                  content: 'Moi ben, grazas! E ti?',
+                  timestamp: new Date(Date.now() - 85000000),
+                  read: true
+                }
+              ],
+              lastMessage: {
+                content: 'Moi ben, grazas! E ti?',
+                timestamp: new Date(Date.now() - 85000000)
+              }
+            }
+          ]);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          toast.error('Erro ao cargar os datos');
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+    
+    fetchData();
+  }, [user]);
 
   // Format date
   const formatDate = (date: Date) => {
@@ -159,7 +172,7 @@ const MessagesPage = () => {
         // Add message to existing conversation
         const newMessage: Message = {
           id: Date.now().toString(),
-          sender: 'Usuario Actual',
+          sender: currentUserName,
           senderId: 'current',
           content: data.content,
           timestamp: new Date(),
@@ -190,7 +203,7 @@ const MessagesPage = () => {
         // Create new conversation
         const newMessage: Message = {
           id: '1',
-          sender: 'Usuario Actual',
+          sender: currentUserName,
           senderId: 'current',
           content: data.content,
           timestamp: new Date(),
@@ -244,7 +257,7 @@ const MessagesPage = () => {
 
     const newMessage: Message = {
       id: Date.now().toString(),
-      sender: 'Usuario Actual',
+      sender: currentUserName,
       senderId: 'current',
       content: messageInput,
       timestamp: new Date(),
@@ -310,7 +323,11 @@ const MessagesPage = () => {
           </CardHeader>
           <CardContent className="p-0">
             <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
-              {conversations.length > 0 ? (
+              {isLoading ? (
+                <div className="p-4 text-center text-gray-500">
+                  Cargando conversas...
+                </div>
+              ) : conversations.length > 0 ? (
                 <ul className="divide-y divide-gray-200">
                   {conversations.map((conversation) => (
                     <li key={conversation.id}>

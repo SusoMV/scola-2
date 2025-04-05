@@ -18,6 +18,8 @@ import SubstitutionsPage from "./pages/SubstitutionsPage";
 import AgendaPage from "./pages/AgendaPage";
 import SpacesPage from "./pages/SpacesPage";
 import TutoringPage from "./pages/TutoringPage";
+import FacultyPage from "./pages/FacultyPage";
+import MessagesPage from "./pages/MessagesPage";
 import NotFound from "./pages/NotFound";
 
 // Importamos componentes de placeholder para las rutas pendientes
@@ -79,20 +81,20 @@ const App = () => (
                 <TutoringPage />
               </ProtectedRoute>
             } />
-            {/* Añadimos las rutas pendientes */}
-            <Route path="/profile" element={
-              <ProtectedRoute>
-                <PlaceholderPage title="Perfil" />
-              </ProtectedRoute>
-            } />
             <Route path="/faculty" element={
               <ProtectedRoute>
-                <PlaceholderPage title="Claustro" />
+                <FacultyPage />
               </ProtectedRoute>
             } />
             <Route path="/messages" element={
               <ProtectedRoute>
-                <PlaceholderPage title="Mensaxes" />
+                <MessagesPage />
+              </ProtectedRoute>
+            } />
+            {/* Añadimos las rutas pendientes */}
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <PlaceholderPage title="Perfil" />
               </ProtectedRoute>
             } />
             <Route path="/notifications" element={

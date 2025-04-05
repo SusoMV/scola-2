@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useForm } from 'react-hook-form';
 import { useAuth } from '@/contexts/AuthContext';
 import { Search, MessageSquare, Plus, Trash2 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -34,55 +36,59 @@ const FacultyPage = () => {
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
   const [selectedMember, setSelectedMember] = useState<FacultyMember | null>(null);
   const [openNewMessageDialog, setOpenNewMessageDialog] = useState(false);
+  const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
-  // Check if user has director role (mock value)
-  const isDirector = true; // In a real app, this would come from user.role
-
-  // Mock data for faculty members
-  const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([
-    {
-      id: '1',
-      name: 'María López García',
-      role: 'directivo',
-      specialty: 'Dirección / Lingua Galega',
-      email: 'maria.lopez@edu.xunta.gal'
-    },
-    {
-      id: '2',
-      name: 'Carlos Rodríguez Fernández',
-      role: 'directivo',
-      specialty: 'Xefatura de estudos / Matemáticas',
-      email: 'carlos.rodriguez@edu.xunta.gal'
-    },
-    {
-      id: '3',
-      name: 'Ana García Pérez',
-      role: 'docente',
-      specialty: 'Educación Primaria',
-      email: 'ana.garcia@edu.xunta.gal'
-    },
-    {
-      id: '4',
-      name: 'Pablo Sánchez Martínez',
-      role: 'docente',
-      specialty: 'Educación Física',
-      email: 'pablo.sanchez@edu.xunta.gal'
-    },
-    {
-      id: '5',
-      name: 'Lucía Fernández Castro',
-      role: 'docente',
-      specialty: 'Música',
-      email: 'lucia.fernandez@edu.xunta.gal'
-    },
-    {
-      id: '6',
-      name: 'David Martínez López',
-      role: 'docente',
-      specialty: 'Lingua Inglesa',
-      email: 'david.martinez@edu.xunta.gal'
-    }
-  ]);
+  // Load faculty members from Supabase
+  useEffect(() => {
+    const fetchFacultyMembers = async () => {
+      setIsLoading(true);
+      
+      if (user) {
+        // First, get current user's school_id and role
+        const { data: profileData, error: profileError } = await supabase
+          .from('profiles')
+          .select('school_id, role')
+          .eq('id', user.id)
+          .single();
+          
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          toast.error('Error ao cargar o perfil');
+          setIsLoading(false);
+          return;
+        }
+        
+        setUserRole(profileData.role);
+        
+        // Then get all users from the same school
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('id, full_name, role, specialty, email')
+          .eq('school_id', profileData.school_id);
+          
+        if (error) {
+          console.error('Error fetching faculty members:', error);
+          toast.error('Error ao cargar os membros do claustro');
+        } else if (data) {
+          const formattedData: FacultyMember[] = data.map(item => ({
+            id: item.id,
+            name: item.full_name,
+            role: item.role as 'directivo' | 'docente',
+            specialty: item.specialty,
+            email: item.email
+          }));
+          
+          setFacultyMembers(formattedData);
+        }
+      }
+      
+      setIsLoading(false);
+    };
+    
+    fetchFacultyMembers();
+  }, [user]);
 
   // Form for adding a new faculty member
   const addForm = useForm({
@@ -107,38 +113,99 @@ const FacultyPage = () => {
   );
 
   // Handle adding a new faculty member
-  const handleAddMember = (data: any) => {
-    const newMember = {
-      id: Date.now().toString(),
-      name: data.name,
-      role: data.role as 'directivo' | 'docente',
-      specialty: data.specialty,
-      email: data.email
-    };
+  const handleAddMember = async (data: any) => {
+    try {
+      // In a real app, you'd create a user account here
+      // For this example, we're just adding a "fictional" profile
+      
+      // Generate a random ID for this fictional user
+      const newUserId = crypto.randomUUID();
+      
+      // Get current user's school info
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('school_id, school_name')
+        .eq('id', user?.id)
+        .single();
+        
+      if (profileError) {
+        throw new Error(profileError.message);
+      }
+      
+      // Insert the new profile
+      const { error } = await supabase
+        .from('profiles')
+        .insert({
+          id: newUserId,
+          full_name: data.name,
+          role: data.role,
+          specialty: data.specialty,
+          email: data.email,
+          school_id: profileData.school_id,
+          school_name: profileData.school_name
+        });
+        
+      if (error) {
+        throw new Error(error.message);
+      }
+      
+      // Add to local state
+      const newMember = {
+        id: newUserId,
+        name: data.name,
+        role: data.role as 'directivo' | 'docente',
+        specialty: data.specialty,
+        email: data.email
+      };
 
-    setFacultyMembers([...facultyMembers, newMember]);
-    setOpenAddDialog(false);
-    addForm.reset();
+      setFacultyMembers([...facultyMembers, newMember]);
+      toast.success('Membro engadido correctamente');
+      setOpenAddDialog(false);
+      addForm.reset();
+    } catch (error: any) {
+      console.error('Error adding member:', error);
+      toast.error(`Error ao engadir membro: ${error.message}`);
+    }
   };
 
   // Handle deleting a faculty member
-  const handleDeleteMember = () => {
+  const handleDeleteMember = async () => {
     if (selectedMember) {
-      setFacultyMembers(facultyMembers.filter(member => member.id !== selectedMember.id));
-      setOpenConfirmDeleteDialog(false);
-      setSelectedMember(null);
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .delete()
+          .eq('id', selectedMember.id);
+          
+        if (error) {
+          throw new Error(error.message);
+        }
+        
+        setFacultyMembers(facultyMembers.filter(member => member.id !== selectedMember.id));
+        toast.success('Membro eliminado correctamente');
+        setOpenConfirmDeleteDialog(false);
+        setSelectedMember(null);
+      } catch (error: any) {
+        console.error('Error deleting member:', error);
+        toast.error(`Error ao eliminar membro: ${error.message}`);
+      }
     }
   };
 
   // Handle sending a message
   const handleSendMessage = (data: any) => {
     if (selectedMember) {
-      console.log(`Message sent to ${selectedMember.name}: ${data.content}`);
+      // This will be properly implemented in the MessagesPage
+      // For now, just show a toast message
+      toast.success(`Mensaxe enviada a ${selectedMember.name}`);
       setOpenNewMessageDialog(false);
       messageForm.reset();
       setSelectedMember(null);
     }
   };
+
+  // Check if user has director role
+  const isDirector = userRole === 'directivo';
 
   return (
     <DashboardLayout>
@@ -187,7 +254,13 @@ const FacultyPage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredMembers.length > 0 ? (
+                {isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={4} className="text-center py-6 text-gray-500">
+                      Cargando membros do claustro...
+                    </TableCell>
+                  </TableRow>
+                ) : filteredMembers.length > 0 ? (
                   filteredMembers.map((member) => (
                     <TableRow key={member.id}>
                       <TableCell className="font-medium">{member.name}</TableCell>
