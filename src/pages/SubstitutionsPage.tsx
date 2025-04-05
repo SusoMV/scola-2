@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Filter, Plus } from 'lucide-react';
+import { Calendar, Clock, Filter, Plus, UserX } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -205,7 +205,10 @@ const SubstitutionsPage = () => {
     <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
+          <div className="flex items-center gap-2">
+            <UserX className="h-6 w-6 text-[#0070C0]" />
+            <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
+          </div>
           <div className="w-32 h-1 mt-2 dotted-border"></div>
         </div>
         
@@ -404,7 +407,8 @@ const SubstitutionsPage = () => {
         <TabsContent value="current">
           <Card className="border border-scola-gray-dark">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg font-medium">
+              <CardTitle className="text-lg font-medium flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-[#0070C0]" /> 
                 Substitucións actuais
               </CardTitle>
             </CardHeader>
@@ -449,7 +453,8 @@ const SubstitutionsPage = () => {
         <TabsContent value="historical">
           <Card className="border border-scola-gray-dark">
             <CardHeader className="pb-2 flex flex-row justify-between items-center">
-              <CardTitle className="text-lg font-medium">
+              <CardTitle className="text-lg font-medium flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-[#0070C0]" />
                 Histórico de substitucións
               </CardTitle>
               

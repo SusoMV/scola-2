@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -7,16 +6,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
+import { Plus, Users } from 'lucide-react';
 
-// Import our new components
-import FacultyList from '@/components/faculty/FacultyList';
-import AddFacultyForm, { FacultyFormData } from '@/components/faculty/AddFacultyForm';
-import MessageForm from '@/components/faculty/MessageForm';
-import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
-import NewMessageDialog from '@/components/messages/NewMessageDialog';
-
-// Define the faculty member interface
 interface FacultyMember {
   id: string;
   name: string;
@@ -25,7 +16,6 @@ interface FacultyMember {
   email: string;
 }
 
-// Sample faculty members for testing
 const sampleFacultyMembers: FacultyMember[] = [
   {
     id: '1',
@@ -75,14 +65,12 @@ const FacultyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
 
-  // Load faculty members from Supabase or use sample data
   useEffect(() => {
     const fetchFacultyMembers = async () => {
       setIsLoading(true);
       
       if (user) {
         try {
-          // First, get current user's school_id and role
           const { data: profileData, error: profileError } = await supabase
             .from('profiles')
             .select('school_id, role')
@@ -90,14 +78,12 @@ const FacultyPage = () => {
             
           if (profileError) {
             console.error('Error fetching profile:', profileError);
-            // Usar un rol de prueba para demo
             setUserRole('directivo');
             setFacultyMembers(sampleFacultyMembers);
             toast.error('Error ao cargar o perfil, usando datos de proba');
           } else if (profileData && profileData.length > 0) {
             setUserRole(profileData[0].role);
             
-            // Then get all users from the same school
             const { data, error } = await supabase
               .from('profiles')
               .select('id, full_name, role, specialty, email')
@@ -118,12 +104,10 @@ const FacultyPage = () => {
               
               setFacultyMembers(formattedData);
             } else {
-              // No hay datos, usar los de prueba
               toast.info('Non hai membros do claustro, usando datos de proba');
               setFacultyMembers(sampleFacultyMembers);
             }
           } else {
-            // No se encontró el perfil, usar datos de prueba
             setUserRole('directivo');
             setFacultyMembers(sampleFacultyMembers);
             toast.info('Perfil non atopado, usando datos de proba');
@@ -135,7 +119,6 @@ const FacultyPage = () => {
           toast.error('Erro inesperado, usando datos de proba');
         }
       } else {
-        // No hay usuario, usar datos de prueba
         setUserRole('directivo');
         setFacultyMembers(sampleFacultyMembers);
       }
@@ -146,16 +129,10 @@ const FacultyPage = () => {
     fetchFacultyMembers();
   }, [user]);
 
-  // Handle adding a new faculty member
   const handleAddMember = async (data: FacultyFormData) => {
     try {
-      // In a real app, you'd create a user account here
-      // For this example, we're just adding a "fictional" profile
-      
-      // Generate a random ID for this fictional user
       const newUserId = crypto.randomUUID();
       
-      // Get current user's school info
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('school_id, school_name')
@@ -166,7 +143,6 @@ const FacultyPage = () => {
         throw new Error(profileError.message);
       }
       
-      // Insert the new profile
       const { error } = await supabase
         .from('profiles')
         .insert({
@@ -183,7 +159,6 @@ const FacultyPage = () => {
         throw new Error(error.message);
       }
       
-      // Add to local state
       const newMember = {
         id: newUserId,
         name: data.name,
@@ -201,7 +176,6 @@ const FacultyPage = () => {
     }
   };
 
-  // Handle deleting a faculty member
   const handleDeleteMember = async () => {
     if (selectedMember) {
       try {
@@ -225,25 +199,24 @@ const FacultyPage = () => {
     }
   };
 
-  // Handle sending a message
   const handleSendMessage = (data: { content: string }) => {
     if (selectedMember) {
-      // This will be properly implemented in the MessagesPage
-      // For now, just show a toast message
       toast.success(`Mensaxe enviada a ${selectedMember.name}`);
       setOpenNewMessageDialog(false);
       setSelectedMember(null);
     }
   };
 
-  // Check if user has director role
   const isDirector = userRole === 'directivo';
 
   return (
     <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
+          <div className="flex items-center gap-2">
+            <Users className="h-6 w-6 text-[#0070C0]" />
+            <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
+          </div>
           <div className="w-32 h-1 mt-2 dotted-border"></div>
         </div>
         
@@ -280,7 +253,6 @@ const FacultyPage = () => {
         </CardContent>
       </Card>
 
-      {/* Dialog to add new faculty member */}
       <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -293,7 +265,6 @@ const FacultyPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Dialog to confirm deletion */}
       <Dialog open={openConfirmDeleteDialog} onOpenChange={setOpenConfirmDeleteDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -307,7 +278,6 @@ const FacultyPage = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Dialog to send a new message */}
       <NewMessageDialog
         open={openNewMessageDialog}
         onOpenChange={setOpenNewMessageDialog}

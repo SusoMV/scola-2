@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Search, MessageSquare, Trash2 } from 'lucide-react';
+import { Search, MessageSquare, Trash2, Users } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
   Table,
@@ -48,7 +48,8 @@ const FacultyList = ({
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2">
-        <h3 className="text-lg font-medium">
+        <h3 className="text-lg font-medium flex items-center gap-2">
+          <Users className="h-5 w-5 text-[#0070C0]" />
           Membros do claustro
         </h3>
         <div className="w-full sm:w-64 relative">
