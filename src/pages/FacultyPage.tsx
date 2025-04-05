@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -12,7 +11,6 @@ import FacultyList from '@/components/faculty/FacultyList';
 import AddFacultyForm from '@/components/faculty/AddFacultyForm';
 import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
-
 interface FacultyMember {
   id: string;
   name: string;
@@ -28,47 +26,41 @@ interface FacultyFormData {
   specialty: string;
   email: string;
 }
-
-const sampleFacultyMembers: FacultyMember[] = [
-  {
-    id: '1',
-    name: 'Ana García Martínez',
-    role: 'directivo',
-    specialty: 'Matemáticas',
-    email: 'anagarcia@example.com'
-  },
-  {
-    id: '2',
-    name: 'Manuel López Fernández',
-    role: 'docente',
-    specialty: 'Lengua y Literatura',
-    email: 'manuellopez@example.com'
-  },
-  {
-    id: '3',
-    name: 'Carmen Rodríguez Vázquez',
-    role: 'docente',
-    specialty: 'Ciencias Naturales',
-    email: 'carmenrodriguez@example.com'
-  },
-  {
-    id: '4',
-    name: 'David Pérez Santos',
-    role: 'docente',
-    specialty: 'Inglés',
-    email: 'davidperez@example.com'
-  },
-  {
-    id: '5',
-    name: 'Elena Sánchez Gómez',
-    role: 'directivo',
-    specialty: 'Historia',
-    email: 'elenasanchez@example.com'
-  }
-];
-
+const sampleFacultyMembers: FacultyMember[] = [{
+  id: '1',
+  name: 'Ana García Martínez',
+  role: 'directivo',
+  specialty: 'Matemáticas',
+  email: 'anagarcia@example.com'
+}, {
+  id: '2',
+  name: 'Manuel López Fernández',
+  role: 'docente',
+  specialty: 'Lengua y Literatura',
+  email: 'manuellopez@example.com'
+}, {
+  id: '3',
+  name: 'Carmen Rodríguez Vázquez',
+  role: 'docente',
+  specialty: 'Ciencias Naturales',
+  email: 'carmenrodriguez@example.com'
+}, {
+  id: '4',
+  name: 'David Pérez Santos',
+  role: 'docente',
+  specialty: 'Inglés',
+  email: 'davidperez@example.com'
+}, {
+  id: '5',
+  name: 'Elena Sánchez Gómez',
+  role: 'directivo',
+  specialty: 'Historia',
+  email: 'elenasanchez@example.com'
+}];
 const FacultyPage = () => {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
@@ -77,18 +69,15 @@ const FacultyPage = () => {
   const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
-
   useEffect(() => {
     const fetchFacultyMembers = async () => {
       setIsLoading(true);
-      
       if (user) {
         try {
-          const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('school_id, role')
-            .eq('id', user.id);
-            
+          const {
+            data: profileData,
+            error: profileError
+          } = await supabase.from('profiles').select('school_id, role').eq('id', user.id);
           if (profileError) {
             console.error('Error fetching profile:', profileError);
             setUserRole('directivo');
@@ -96,12 +85,10 @@ const FacultyPage = () => {
             toast.error('Error ao cargar o perfil, usando datos de proba');
           } else if (profileData && profileData.length > 0) {
             setUserRole(profileData[0].role);
-            
-            const { data, error } = await supabase
-              .from('profiles')
-              .select('id, full_name, role, specialty, email')
-              .eq('school_id', profileData[0].school_id);
-              
+            const {
+              data,
+              error
+            } = await supabase.from('profiles').select('id, full_name, role, specialty, email').eq('school_id', profileData[0].school_id);
             if (error) {
               console.error('Error fetching faculty members:', error);
               toast.error('Error ao cargar os membros do claustro, usando datos de proba');
@@ -114,7 +101,6 @@ const FacultyPage = () => {
                 specialty: item.specialty,
                 email: item.email
               }));
-              
               setFacultyMembers(formattedData);
             } else {
               toast.info('Non hai membros do claustro, usando datos de proba');
@@ -135,43 +121,34 @@ const FacultyPage = () => {
         setUserRole('directivo');
         setFacultyMembers(sampleFacultyMembers);
       }
-      
       setIsLoading(false);
     };
-    
     fetchFacultyMembers();
   }, [user]);
-
   const handleAddMember = async (data: FacultyFormData) => {
     try {
       const newUserId = crypto.randomUUID();
-      
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .select('school_id, school_name')
-        .eq('id', user?.id)
-        .single();
-        
+      const {
+        data: profileData,
+        error: profileError
+      } = await supabase.from('profiles').select('school_id, school_name').eq('id', user?.id).single();
       if (profileError) {
         throw new Error(profileError.message);
       }
-      
-      const { error } = await supabase
-        .from('profiles')
-        .insert({
-          id: newUserId,
-          full_name: data.name,
-          role: data.role,
-          specialty: data.specialty,
-          email: data.email,
-          school_id: profileData.school_id,
-          school_name: profileData.school_name
-        });
-        
+      const {
+        error
+      } = await supabase.from('profiles').insert({
+        id: newUserId,
+        full_name: data.name,
+        role: data.role,
+        specialty: data.specialty,
+        email: data.email,
+        school_id: profileData.school_id,
+        school_name: profileData.school_name
+      });
       if (error) {
         throw new Error(error.message);
       }
-      
       const newMember = {
         id: newUserId,
         name: data.name,
@@ -179,7 +156,6 @@ const FacultyPage = () => {
         specialty: data.specialty,
         email: data.email
       };
-
       setFacultyMembers([...facultyMembers, newMember]);
       toast.success('Membro engadido correctamente');
       setOpenAddDialog(false);
@@ -188,19 +164,15 @@ const FacultyPage = () => {
       toast.error(`Error ao engadir membro: ${error.message}`);
     }
   };
-
   const handleDeleteMember = async () => {
     if (selectedMember) {
       try {
-        const { error } = await supabase
-          .from('profiles')
-          .delete()
-          .eq('id', selectedMember.id);
-          
+        const {
+          error
+        } = await supabase.from('profiles').delete().eq('id', selectedMember.id);
         if (error) {
           throw new Error(error.message);
         }
-        
         setFacultyMembers(facultyMembers.filter(member => member.id !== selectedMember.id));
         toast.success('Membro eliminado correctamente');
         setOpenConfirmDeleteDialog(false);
@@ -211,55 +183,40 @@ const FacultyPage = () => {
       }
     }
   };
-
-  const handleSendMessage = (data: { content: string }) => {
+  const handleSendMessage = (data: {
+    content: string;
+  }) => {
     if (selectedMember) {
       toast.success(`Mensaxe enviada a ${selectedMember.name}`);
       setOpenNewMessageDialog(false);
       setSelectedMember(null);
     }
   };
-
   const isDirector = userRole === 'directivo';
-
-  return (
-    <DashboardLayout>
+  return <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-[#0070C0]" />
+            
             <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
           </div>
           <div className="w-32 h-1 mt-2 dotted-border"></div>
         </div>
         
-        {isDirector && (
-          <Button 
-            className="bg-scola-primary hover:bg-scola-primary/90"
-            onClick={() => setOpenAddDialog(true)}
-          >
+        {isDirector && <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={() => setOpenAddDialog(true)}>
             <Plus className="mr-2 h-4 w-4" /> Engadir membro
-          </Button>
-        )}
+          </Button>}
       </div>
 
       <Card className="border border-scola-gray-dark">
         <CardHeader className="pb-2">
-          <FacultyList 
-            facultyMembers={facultyMembers}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-            isLoading={isLoading}
-            isDirector={isDirector}
-            onMessageClick={(member) => {
-              setSelectedMember(member);
-              setOpenNewMessageDialog(true);
-            }}
-            onDeleteClick={(member) => {
-              setSelectedMember(member);
-              setOpenConfirmDeleteDialog(true);
-            }}
-          />
+          <FacultyList facultyMembers={facultyMembers} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isLoading={isLoading} isDirector={isDirector} onMessageClick={member => {
+          setSelectedMember(member);
+          setOpenNewMessageDialog(true);
+        }} onDeleteClick={member => {
+          setSelectedMember(member);
+          setOpenConfirmDeleteDialog(true);
+        }} />
         </CardHeader>
         <CardContent>
           {/* Content is in the FacultyList component now */}
@@ -271,10 +228,7 @@ const FacultyPage = () => {
           <DialogHeader>
             <DialogTitle>Engadir novo membro</DialogTitle>
           </DialogHeader>
-          <AddFacultyForm 
-            onSubmit={handleAddMember}
-            onCancel={() => setOpenAddDialog(false)}
-          />
+          <AddFacultyForm onSubmit={handleAddMember} onCancel={() => setOpenAddDialog(false)} />
         </DialogContent>
       </Dialog>
 
@@ -283,30 +237,19 @@ const FacultyPage = () => {
           <DialogHeader>
             <DialogTitle>Confirmar eliminación</DialogTitle>
           </DialogHeader>
-          <DeleteConfirmation 
-            memberName={selectedMember?.name}
-            onConfirm={handleDeleteMember}
-            onCancel={() => setOpenConfirmDeleteDialog(false)}
-          />
+          <DeleteConfirmation memberName={selectedMember?.name} onConfirm={handleDeleteMember} onCancel={() => setOpenConfirmDeleteDialog(false)} />
         </DialogContent>
       </Dialog>
 
-      <NewMessageDialog
-        open={openNewMessageDialog}
-        onOpenChange={setOpenNewMessageDialog}
-        facultyMembers={facultyMembers.map(member => ({
-          id: member.id,
-          name: member.name,
-          role: member.role
-        }))}
-        onSubmit={(data) => {
-          toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
-          setOpenNewMessageDialog(false);
-          setSelectedMember(null);
-        }}
-      />
-    </DashboardLayout>
-  );
+      <NewMessageDialog open={openNewMessageDialog} onOpenChange={setOpenNewMessageDialog} facultyMembers={facultyMembers.map(member => ({
+      id: member.id,
+      name: member.name,
+      role: member.role
+    }))} onSubmit={data => {
+      toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
+      setOpenNewMessageDialog(false);
+      setSelectedMember(null);
+    }} />
+    </DashboardLayout>;
 };
-
 export default FacultyPage;
