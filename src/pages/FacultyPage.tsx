@@ -14,6 +14,7 @@ import FacultyList from '@/components/faculty/FacultyList';
 import AddFacultyForm, { FacultyFormData } from '@/components/faculty/AddFacultyForm';
 import MessageForm from '@/components/faculty/MessageForm';
 import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
+import NewMessageDialog from '@/components/messages/NewMessageDialog';
 
 // Define the faculty member interface
 interface FacultyMember {
@@ -23,6 +24,45 @@ interface FacultyMember {
   specialty: string;
   email: string;
 }
+
+// Sample faculty members for testing
+const sampleFacultyMembers: FacultyMember[] = [
+  {
+    id: '1',
+    name: 'Ana García Martínez',
+    role: 'directivo',
+    specialty: 'Matemáticas',
+    email: 'anagarcia@example.com'
+  },
+  {
+    id: '2',
+    name: 'Manuel López Fernández',
+    role: 'docente',
+    specialty: 'Lengua y Literatura',
+    email: 'manuellopez@example.com'
+  },
+  {
+    id: '3',
+    name: 'Carmen Rodríguez Vázquez',
+    role: 'docente',
+    specialty: 'Ciencias Naturales',
+    email: 'carmenrodriguez@example.com'
+  },
+  {
+    id: '4',
+    name: 'David Pérez Santos',
+    role: 'docente',
+    specialty: 'Inglés',
+    email: 'davidperez@example.com'
+  },
+  {
+    id: '5',
+    name: 'Elena Sánchez Gómez',
+    role: 'directivo',
+    specialty: 'Historia',
+    email: 'elenasanchez@example.com'
+  }
+];
 
 const FacultyPage = () => {
   const { user } = useAuth();
@@ -35,48 +75,69 @@ const FacultyPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
 
-  // Load faculty members from Supabase
+  // Load faculty members from Supabase or use sample data
   useEffect(() => {
     const fetchFacultyMembers = async () => {
       setIsLoading(true);
       
       if (user) {
-        // First, get current user's school_id and role
-        const { data: profileData, error: profileError } = await supabase
-          .from('profiles')
-          .select('school_id, role')
-          .eq('id', user.id)
-          .single();
-          
-        if (profileError) {
-          console.error('Error fetching profile:', profileError);
-          toast.error('Error ao cargar o perfil');
-          setIsLoading(false);
-          return;
+        try {
+          // First, get current user's school_id and role
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('school_id, role')
+            .eq('id', user.id);
+            
+          if (profileError) {
+            console.error('Error fetching profile:', profileError);
+            // Usar un rol de prueba para demo
+            setUserRole('directivo');
+            setFacultyMembers(sampleFacultyMembers);
+            toast.error('Error ao cargar o perfil, usando datos de proba');
+          } else if (profileData && profileData.length > 0) {
+            setUserRole(profileData[0].role);
+            
+            // Then get all users from the same school
+            const { data, error } = await supabase
+              .from('profiles')
+              .select('id, full_name, role, specialty, email')
+              .eq('school_id', profileData[0].school_id);
+              
+            if (error) {
+              console.error('Error fetching faculty members:', error);
+              toast.error('Error ao cargar os membros do claustro, usando datos de proba');
+              setFacultyMembers(sampleFacultyMembers);
+            } else if (data && data.length > 0) {
+              const formattedData: FacultyMember[] = data.map(item => ({
+                id: item.id,
+                name: item.full_name,
+                role: item.role as 'directivo' | 'docente',
+                specialty: item.specialty,
+                email: item.email
+              }));
+              
+              setFacultyMembers(formattedData);
+            } else {
+              // No hay datos, usar los de prueba
+              toast.info('Non hai membros do claustro, usando datos de proba');
+              setFacultyMembers(sampleFacultyMembers);
+            }
+          } else {
+            // No se encontró el perfil, usar datos de prueba
+            setUserRole('directivo');
+            setFacultyMembers(sampleFacultyMembers);
+            toast.info('Perfil non atopado, usando datos de proba');
+          }
+        } catch (error) {
+          console.error('Error in fetchFacultyMembers:', error);
+          setUserRole('directivo');
+          setFacultyMembers(sampleFacultyMembers);
+          toast.error('Erro inesperado, usando datos de proba');
         }
-        
-        setUserRole(profileData.role);
-        
-        // Then get all users from the same school
-        const { data, error } = await supabase
-          .from('profiles')
-          .select('id, full_name, role, specialty, email')
-          .eq('school_id', profileData.school_id);
-          
-        if (error) {
-          console.error('Error fetching faculty members:', error);
-          toast.error('Error ao cargar os membros do claustro');
-        } else if (data) {
-          const formattedData: FacultyMember[] = data.map(item => ({
-            id: item.id,
-            name: item.full_name,
-            role: item.role as 'directivo' | 'docente',
-            specialty: item.specialty,
-            email: item.email
-          }));
-          
-          setFacultyMembers(formattedData);
-        }
+      } else {
+        // No hay usuario, usar datos de prueba
+        setUserRole('directivo');
+        setFacultyMembers(sampleFacultyMembers);
       }
       
       setIsLoading(false);
@@ -247,18 +308,20 @@ const FacultyPage = () => {
       </Dialog>
 
       {/* Dialog to send a new message */}
-      <Dialog open={openNewMessageDialog} onOpenChange={setOpenNewMessageDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Nova mensaxe</DialogTitle>
-          </DialogHeader>
-          <MessageForm 
-            recipient={selectedMember ? { id: selectedMember.id, name: selectedMember.name } : null}
-            onSubmit={handleSendMessage}
-            onCancel={() => setOpenNewMessageDialog(false)}
-          />
-        </DialogContent>
-      </Dialog>
+      <NewMessageDialog
+        open={openNewMessageDialog}
+        onOpenChange={setOpenNewMessageDialog}
+        facultyMembers={facultyMembers.map(member => ({
+          id: member.id,
+          name: member.name,
+          role: member.role
+        }))}
+        onSubmit={(data) => {
+          toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
+          setOpenNewMessageDialog(false);
+          setSelectedMember(null);
+        }}
+      />
     </DashboardLayout>
   );
 };

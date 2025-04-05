@@ -40,6 +40,87 @@ interface Conversation {
   };
 }
 
+// Sample faculty members for testing
+const sampleFacultyMembers: Participant[] = [
+  { id: '1', name: 'Ana García Martínez', role: 'directivo' },
+  { id: '2', name: 'Manuel López Fernández', role: 'docente' },
+  { id: '3', name: 'Carmen Rodríguez Vázquez', role: 'docente' },
+  { id: '4', name: 'David Pérez Santos', role: 'docente' },
+  { id: '5', name: 'Elena Sánchez Gómez', role: 'directivo' }
+];
+
+// Sample conversations for testing
+const sampleConversations: Conversation[] = [
+  {
+    id: '1',
+    name: 'Ana García Martínez',
+    isGroup: false,
+    participants: [sampleFacultyMembers[0]],
+    messages: [
+      {
+        id: '1',
+        sender: 'Ana García Martínez',
+        senderId: '1',
+        content: 'Bos días, como vai todo?',
+        timestamp: new Date(Date.now() - 86400000), // Yesterday
+        read: true
+      },
+      {
+        id: '2',
+        sender: 'Usuario Actual',
+        senderId: 'current',
+        content: 'Moi ben, grazas! E ti?',
+        timestamp: new Date(Date.now() - 85000000),
+        read: true
+      }
+    ],
+    lastMessage: {
+      content: 'Moi ben, grazas! E ti?',
+      timestamp: new Date(Date.now() - 85000000)
+    }
+  },
+  {
+    id: '2',
+    name: 'Grupo de Ciencias',
+    isGroup: true,
+    participants: [
+      sampleFacultyMembers[0],
+      sampleFacultyMembers[2],
+      sampleFacultyMembers[4]
+    ],
+    messages: [
+      {
+        id: '1',
+        sender: 'Carmen Rodríguez Vázquez',
+        senderId: '3',
+        content: 'Lembrarvos que mañá temos reunión de departamento',
+        timestamp: new Date(Date.now() - 6400000),
+        read: true
+      },
+      {
+        id: '2',
+        sender: 'Ana García Martínez',
+        senderId: '1',
+        content: 'A que hora era?',
+        timestamp: new Date(Date.now() - 5000000),
+        read: true
+      },
+      {
+        id: '3',
+        sender: 'Elena Sánchez Gómez',
+        senderId: '5',
+        content: 'Ás 16:00h na sala de profesores',
+        timestamp: new Date(Date.now() - 4000000),
+        read: true
+      }
+    ],
+    lastMessage: {
+      content: 'Ás 16:00h na sala de profesores',
+      timestamp: new Date(Date.now() - 4000000)
+    }
+  }
+];
+
 const MessagesPage = () => {
   const { user } = useAuth();
   const [openNewMessageDialog, setOpenNewMessageDialog] = useState(false);
@@ -48,7 +129,7 @@ const MessagesPage = () => {
   const [facultyMembers, setFacultyMembers] = useState<Participant[]>([]);
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentUserName, setCurrentUserName] = useState('');
+  const [currentUserName, setCurrentUserName] = useState('Usuario Actual');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,79 +141,152 @@ const MessagesPage = () => {
           const { data: currentUserData, error: currentUserError } = await supabase
             .from('profiles')
             .select('full_name, school_id')
-            .eq('id', user.id)
-            .single();
+            .eq('id', user.id);
             
-          if (currentUserError) throw currentUserError;
+          if (currentUserError) {
+            throw currentUserError;
+          }
           
-          setCurrentUserName(currentUserData.full_name);
-          
-          // Then get all faculty members from the same school
-          const { data: facultyData, error: facultyError } = await supabase
-            .from('profiles')
-            .select('id, full_name, role')
-            .eq('school_id', currentUserData.school_id)
-            .neq('id', user.id); // Exclude current user
+          if (currentUserData && currentUserData.length > 0) {
+            setCurrentUserName(currentUserData[0].full_name);
             
-          if (facultyError) throw facultyError;
-          
-          const formattedFaculty: Participant[] = facultyData.map(member => ({
-            id: member.id,
-            name: member.full_name,
-            role: member.role
-          }));
-          
-          setFacultyMembers(formattedFaculty);
-          
-          // For now, we're using mock data for conversations
-          // In a real app, you would fetch this from a messages table in Supabase
-          setConversations([
-            {
-              id: '1',
-              name: facultyData[0]?.full_name || 'Usuario',
-              isGroup: false,
-              participants: [
-                {
-                  id: facultyData[0]?.id || '1',
-                  name: facultyData[0]?.full_name || 'Usuario',
-                  role: facultyData[0]?.role || 'docente'
-                }
-              ],
-              messages: [
-                {
-                  id: '1',
-                  sender: facultyData[0]?.full_name || 'Usuario',
-                  senderId: facultyData[0]?.id || '1',
-                  content: 'Bos días, como vai todo?',
-                  timestamp: new Date(Date.now() - 86400000), // Yesterday
-                  read: true
-                },
-                {
-                  id: '2',
-                  sender: currentUserData.full_name,
-                  senderId: 'current',
-                  content: 'Moi ben, grazas! E ti?',
-                  timestamp: new Date(Date.now() - 85000000),
-                  read: true
-                }
-              ],
-              lastMessage: {
-                content: 'Moi ben, grazas! E ti?',
-                timestamp: new Date(Date.now() - 85000000)
-              }
+            // Then get all faculty members from the same school
+            const { data: facultyData, error: facultyError } = await supabase
+              .from('profiles')
+              .select('id, full_name, role')
+              .eq('school_id', currentUserData[0].school_id)
+              .neq('id', user.id); // Exclude current user
+              
+            if (facultyError) {
+              throw facultyError;
             }
-          ]);
+            
+            if (facultyData && facultyData.length > 0) {
+              const formattedFaculty: Participant[] = facultyData.map(member => ({
+                id: member.id,
+                name: member.full_name,
+                role: member.role
+              }));
+              
+              setFacultyMembers(formattedFaculty);
+              
+              // For a real app, you would fetch conversations from Supabase
+              // Create sample conversations using real faculty members
+              setConversations(createSampleConversationsWithRealFaculty(formattedFaculty, currentUserData[0].full_name));
+            } else {
+              // No faculty members found, use sample data
+              toast.info('Non se atoparon membros do claustro, usando datos de proba');
+              setFacultyMembers(sampleFacultyMembers);
+              setConversations(sampleConversations);
+            }
+          } else {
+            // User not found, use sample data
+            toast.info('Perfil non atopado, usando datos de proba');
+            setFacultyMembers(sampleFacultyMembers);
+            setConversations(sampleConversations);
+          }
         } catch (error) {
           console.error('Error fetching data:', error);
-          toast.error('Erro ao cargar os datos');
+          toast.error('Erro ao cargar os datos, usando datos de proba');
+          
+          // Use sample data in case of error
+          setFacultyMembers(sampleFacultyMembers);
+          setConversations(sampleConversations);
         } finally {
           setIsLoading(false);
         }
+      } else {
+        // No user logged in, use sample data
+        setFacultyMembers(sampleFacultyMembers);
+        setConversations(sampleConversations);
+        setIsLoading(false);
       }
     };
     
     fetchData();
   }, [user]);
+
+  // Helper function to create sample conversations with real faculty members
+  const createSampleConversationsWithRealFaculty = (faculty: Participant[], userName: string): Conversation[] => {
+    if (faculty.length === 0) return sampleConversations;
+    
+    const conversations: Conversation[] = [];
+    
+    // Create a direct conversation with the first faculty member
+    if (faculty.length > 0) {
+      conversations.push({
+        id: '1',
+        name: faculty[0].name,
+        isGroup: false,
+        participants: [faculty[0]],
+        messages: [
+          {
+            id: '1',
+            sender: faculty[0].name,
+            senderId: faculty[0].id,
+            content: 'Bos días, como vai todo?',
+            timestamp: new Date(Date.now() - 86400000),
+            read: true
+          },
+          {
+            id: '2',
+            sender: userName,
+            senderId: 'current',
+            content: 'Moi ben, grazas! E ti?',
+            timestamp: new Date(Date.now() - 85000000),
+            read: true
+          }
+        ],
+        lastMessage: {
+          content: 'Moi ben, grazas! E ti?',
+          timestamp: new Date(Date.now() - 85000000)
+        }
+      });
+    }
+    
+    // Create a group conversation if we have at least 3 faculty members
+    if (faculty.length >= 3) {
+      const groupParticipants = [faculty[0], faculty[1], faculty[2]];
+      conversations.push({
+        id: '2',
+        name: 'Grupo de Profesores',
+        isGroup: true,
+        participants: groupParticipants,
+        messages: [
+          {
+            id: '1',
+            sender: faculty[1].name,
+            senderId: faculty[1].id,
+            content: 'Lembrarvos que mañá temos reunión de departamento',
+            timestamp: new Date(Date.now() - 6400000),
+            read: true
+          },
+          {
+            id: '2',
+            sender: faculty[0].name,
+            senderId: faculty[0].id,
+            content: 'A que hora era?',
+            timestamp: new Date(Date.now() - 5000000),
+            read: true
+          },
+          {
+            id: '3',
+            sender: faculty[2].name,
+            senderId: faculty[2].id,
+            content: 'Ás 16:00h na sala de profesores',
+            timestamp: new Date(Date.now() - 4000000),
+            read: true
+          }
+        ],
+        lastMessage: {
+          content: 'Ás 16:00h na sala de profesores',
+          timestamp: new Date(Date.now() - 4000000)
+        }
+      });
+    }
+    
+    return conversations;
+  };
 
   // Format date
   const formatDate = (date: Date) => {
