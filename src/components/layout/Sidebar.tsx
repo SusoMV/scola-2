@@ -8,7 +8,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   LayoutDashboard, 
-  UserRound, 
   CalendarDays, 
   Building2, 
   Users, 
@@ -17,7 +16,8 @@ import {
   X,
   LogOut,
   GraduationCap,
-  Settings
+  Settings,
+  ChevronsLeftRight
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -33,7 +33,7 @@ const navItems = [
   { 
     name: 'Substitucións', 
     path: '/substitutions', 
-    icon: <UserRound className="h-5 w-5" /> 
+    icon: <ChevronsLeftRight className="h-5 w-5" /> 
   },
   { 
     name: 'Axenda', 

@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Calendar, Users, MessageSquare, Bell } from 'lucide-react';
+import { Calendar, Users, MessageSquare, Bell, ChevronsLeftRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const SummaryCards = () => {
@@ -15,7 +15,7 @@ const SummaryCards = () => {
 
   const cards = [
     {
-      icon: <Users className="h-6 w-6 text-scola-primary" />,
+      icon: <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />,
       title: "Ausencias",
       value: summaryData.absences,
       link: "/substitutions"
