@@ -81,8 +81,8 @@ const MonthView: React.FC<MonthViewProps> = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid md:grid-cols-7 lg:grid-cols-3 gap-6">
-          <div className="md:col-span-3 lg:col-span-1">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+          <div className="md:col-span-2">
             <div className="border rounded-md p-4">
               <CalendarComponent
                 mode="single"
@@ -100,7 +100,7 @@ const MonthView: React.FC<MonthViewProps> = ({
               />
             </div>
           </div>
-          <div className="md:col-span-4 lg:col-span-2">
+          <div className="md:col-span-3">
             <div className="border rounded-md p-4 h-full">
               <h3 className="text-lg font-medium mb-4">Eventos do mes</h3>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
