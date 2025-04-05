@@ -168,7 +168,7 @@ const SubstitutionsPage = () => {
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
-            <UserX className="h-6 w-6 text-[#0070C0]" />
+            
             <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
           </div>
           
