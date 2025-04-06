@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Building, Plus, Calendar, Search } from 'lucide-react';
@@ -14,21 +13,61 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 // Datos de ejemplo para espacios
-const MOCK_SPACES = [
-  { id: 1, name: 'Biblioteca', capacity: 40, equipment: 'Proxector, Ordenador', status: 'Disponible' },
-  { id: 2, name: 'Sala de profesores', capacity: 25, equipment: 'Proxector, Ordenador, Impresora', status: 'Disponible' },
-  { id: 3, name: 'Aula de Música', capacity: 30, equipment: 'Equipo de son, Piano, Instrumentos', status: 'Ocupado' },
-  { id: 4, name: 'Salón de actos', capacity: 120, equipment: 'Escenario, Equipo de son, Luces', status: 'Ocupado' },
-  { id: 5, name: 'Laboratorio', capacity: 35, equipment: 'Material de laboratorio', status: 'Mantemento' },
-];
+const MOCK_SPACES = [{
+  id: 1,
+  name: 'Biblioteca',
+  capacity: 40,
+  equipment: 'Proxector, Ordenador',
+  status: 'Disponible'
+}, {
+  id: 2,
+  name: 'Sala de profesores',
+  capacity: 25,
+  equipment: 'Proxector, Ordenador, Impresora',
+  status: 'Disponible'
+}, {
+  id: 3,
+  name: 'Aula de Música',
+  capacity: 30,
+  equipment: 'Equipo de son, Piano, Instrumentos',
+  status: 'Ocupado'
+}, {
+  id: 4,
+  name: 'Salón de actos',
+  capacity: 120,
+  equipment: 'Escenario, Equipo de son, Luces',
+  status: 'Ocupado'
+}, {
+  id: 5,
+  name: 'Laboratorio',
+  capacity: 35,
+  equipment: 'Material de laboratorio',
+  status: 'Mantemento'
+}];
 
 // Datos de ejemplo para reservas
-const MOCK_RESERVATIONS = [
-  { id: 1, space: 'Biblioteca', date: '2025-04-15', timeStart: '10:00', timeEnd: '12:00', purpose: 'Actividade de lectura' },
-  { id: 2, space: 'Sala de profesores', date: '2025-04-16', timeStart: '15:00', timeEnd: '17:00', purpose: 'Reunión de departamento' },
-  { id: 3, space: 'Salón de actos', date: '2025-04-20', timeStart: '17:00', timeEnd: '19:00', purpose: 'Actuación teatral' },
-];
-
+const MOCK_RESERVATIONS = [{
+  id: 1,
+  space: 'Biblioteca',
+  date: '2025-04-15',
+  timeStart: '10:00',
+  timeEnd: '12:00',
+  purpose: 'Actividade de lectura'
+}, {
+  id: 2,
+  space: 'Sala de profesores',
+  date: '2025-04-16',
+  timeStart: '15:00',
+  timeEnd: '17:00',
+  purpose: 'Reunión de departamento'
+}, {
+  id: 3,
+  space: 'Salón de actos',
+  date: '2025-04-20',
+  timeStart: '17:00',
+  timeEnd: '19:00',
+  purpose: 'Actuación teatral'
+}];
 const SpacesPage = () => {
   const [openSpaceDialog, setOpenSpaceDialog] = useState(false);
   const [openReservationDialog, setOpenReservationDialog] = useState(false);
@@ -56,7 +95,6 @@ const SpacesPage = () => {
       purpose: ''
     }
   });
-
   const handleSpaceSubmit = (data: any) => {
     const newSpace = {
       id: Date.now(),
@@ -70,7 +108,6 @@ const SpacesPage = () => {
     setOpenSpaceDialog(false);
     spaceForm.reset();
   };
-
   const handleReservationSubmit = (data: any) => {
     const newReservation = {
       id: Date.now(),
@@ -85,22 +122,14 @@ const SpacesPage = () => {
     setOpenReservationDialog(false);
     reservationForm.reset();
   };
-
-  const filteredSpaces = spaces.filter(space => 
-    space.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    space.equipment.toLowerCase().includes(searchText.toLowerCase())
-  );
-
-  return (
-    <DashboardLayout>
+  const filteredSpaces = spaces.filter(space => space.name.toLowerCase().includes(searchText.toLowerCase()) || space.equipment.toLowerCase().includes(searchText.toLowerCase()));
+  return <DashboardLayout>
       <div className="mb-6">
         <div className="flex items-center gap-2">
           <Building className="h-6 w-6 text-scola-primary" />
           <h1 className="text-2xl font-bold">Espazos</h1>
         </div>
-        <p className="text-gray-600 mt-2">
-          Reserva e xestiona os espazos do centro
-        </p>
+        
       </div>
       
       <Tabs defaultValue="spaces">
@@ -120,13 +149,7 @@ const SpacesPage = () => {
               <div className="flex items-center space-x-2">
                 <div className="relative">
                   <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
-                    type="text"
-                    placeholder="Buscar espazo..."
-                    className="pl-8 w-[200px]"
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                  />
+                  <Input type="text" placeholder="Buscar espazo..." className="pl-8 w-[200px]" value={searchText} onChange={e => setSearchText(e.target.value)} />
                 </div>
                 
                 <Dialog open={openSpaceDialog} onOpenChange={setOpenSpaceDialog}>
@@ -141,53 +164,39 @@ const SpacesPage = () => {
                     </DialogHeader>
                     <Form {...spaceForm}>
                       <form onSubmit={spaceForm.handleSubmit(handleSpaceSubmit)} className="space-y-4">
-                        <FormField
-                          control={spaceForm.control}
-                          name="name"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={spaceForm.control} name="name" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Nome do espazo</FormLabel>
                               <FormControl>
                                 <Input placeholder="Ex: Biblioteca" {...field} />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                         
-                        <FormField
-                          control={spaceForm.control}
-                          name="capacity"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={spaceForm.control} name="capacity" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Capacidade</FormLabel>
                               <FormControl>
                                 <Input type="number" placeholder="Número de persoas" {...field} />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                         
-                        <FormField
-                          control={spaceForm.control}
-                          name="equipment"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={spaceForm.control} name="equipment" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Equipamento</FormLabel>
                               <FormControl>
                                 <Textarea placeholder="Descripción do equipamento" {...field} />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                         
-                        <FormField
-                          control={spaceForm.control}
-                          name="status"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={spaceForm.control} name="status" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Estado</FormLabel>
                               <Select onValueChange={field.onChange} defaultValue={field.value}>
                                 <FormControl>
@@ -202,9 +211,7 @@ const SpacesPage = () => {
                                 </SelectContent>
                               </Select>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                         
                         <div className="flex justify-end space-x-2 pt-2">
                           <DialogClose asChild>
@@ -230,9 +237,7 @@ const SpacesPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredSpaces.length > 0 ? (
-                      filteredSpaces.map((space) => (
-                        <tr key={space.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
+                    {filteredSpaces.length > 0 ? filteredSpaces.map(space => <tr key={space.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
                           <td className="py-3 px-2 font-medium">{space.name}</td>
                           <td className="py-3 px-2">{space.capacity} persoas</td>
                           <td className="py-3 px-2 max-w-xs">
@@ -241,23 +246,15 @@ const SpacesPage = () => {
                             </div>
                           </td>
                           <td className="py-3 px-2">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              space.status === 'Disponible' ? 'bg-green-100 text-green-700' :
-                              space.status === 'Ocupado' ? 'bg-red-100 text-red-700' :
-                              'bg-yellow-100 text-yellow-700'
-                            }`}>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${space.status === 'Disponible' ? 'bg-green-100 text-green-700' : space.status === 'Ocupado' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
                               {space.status}
                             </span>
                           </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
+                        </tr>) : <tr>
                         <td colSpan={4} className="py-6 text-center text-gray-500">
                           Non se atoparon espazos
                         </td>
-                      </tr>
-                    )}
+                      </tr>}
                   </tbody>
                 </table>
               </div>
@@ -285,11 +282,9 @@ const SpacesPage = () => {
                   </DialogHeader>
                   <Form {...reservationForm}>
                     <form onSubmit={reservationForm.handleSubmit(handleReservationSubmit)} className="space-y-4">
-                      <FormField
-                        control={reservationForm.control}
-                        name="space"
-                        render={({ field }) => (
-                          <FormItem>
+                      <FormField control={reservationForm.control} name="space" render={({
+                      field
+                    }) => <FormItem>
                             <FormLabel>Espazo</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
@@ -298,26 +293,17 @@ const SpacesPage = () => {
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                {spaces
-                                  .filter(space => space.status === 'Disponible')
-                                  .map(space => (
-                                    <SelectItem key={space.id} value={space.name}>
+                                {spaces.filter(space => space.status === 'Disponible').map(space => <SelectItem key={space.id} value={space.name}>
                                       {space.name}
-                                    </SelectItem>
-                                  ))
-                                }
+                                    </SelectItem>)}
                               </SelectContent>
                             </Select>
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                       
-                      <FormField
-                        control={reservationForm.control}
-                        name="date"
-                        render={({ field }) => (
-                          <FormItem>
+                      <FormField control={reservationForm.control} name="date" render={({
+                      field
+                    }) => <FormItem>
                             <FormLabel>Data</FormLabel>
                             <FormControl>
                               <div className="flex items-center">
@@ -326,53 +312,39 @@ const SpacesPage = () => {
                               </div>
                             </FormControl>
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                       
                       <div className="grid grid-cols-2 gap-4">
-                        <FormField
-                          control={reservationForm.control}
-                          name="timeStart"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={reservationForm.control} name="timeStart" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Hora de inicio</FormLabel>
                               <FormControl>
                                 <Input type="time" {...field} />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                         
-                        <FormField
-                          control={reservationForm.control}
-                          name="timeEnd"
-                          render={({ field }) => (
-                            <FormItem>
+                        <FormField control={reservationForm.control} name="timeEnd" render={({
+                        field
+                      }) => <FormItem>
                               <FormLabel>Hora de fin</FormLabel>
                               <FormControl>
                                 <Input type="time" {...field} />
                               </FormControl>
                               <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                            </FormItem>} />
                       </div>
                       
-                      <FormField
-                        control={reservationForm.control}
-                        name="purpose"
-                        render={({ field }) => (
-                          <FormItem>
+                      <FormField control={reservationForm.control} name="purpose" render={({
+                      field
+                    }) => <FormItem>
                             <FormLabel>Motivo</FormLabel>
                             <FormControl>
                               <Textarea placeholder="Describa o motivo da reserva" {...field} />
                             </FormControl>
                             <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                          </FormItem>} />
                       
                       <div className="flex justify-end space-x-2 pt-2">
                         <DialogClose asChild>
@@ -397,9 +369,7 @@ const SpacesPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {reservations.length > 0 ? (
-                      reservations.map((reservation) => (
-                        <tr key={reservation.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
+                    {reservations.length > 0 ? reservations.map(reservation => <tr key={reservation.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
                           <td className="py-3 px-2 font-medium">{reservation.space}</td>
                           <td className="py-3 px-2">{reservation.date}</td>
                           <td className="py-3 px-2">{reservation.timeStart} - {reservation.timeEnd}</td>
@@ -408,15 +378,11 @@ const SpacesPage = () => {
                               {reservation.purpose}
                             </div>
                           </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
+                        </tr>) : <tr>
                         <td colSpan={4} className="py-6 text-center text-gray-500">
                           Non hai reservas
                         </td>
-                      </tr>
-                    )}
+                      </tr>}
                   </tbody>
                 </table>
               </div>
@@ -424,8 +390,6 @@ const SpacesPage = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </DashboardLayout>
-  );
+    </DashboardLayout>;
 };
-
 export default SpacesPage;
