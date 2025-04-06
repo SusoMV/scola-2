@@ -9,11 +9,13 @@ import ConversationList from '@/components/messages/ConversationList';
 import ChatArea from '@/components/messages/ChatArea';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
 import NewGroupDialog from '@/components/messages/NewGroupDialog';
+
 interface Participant {
   id: string;
   name: string;
   role: string;
 }
+
 interface Message {
   id: string;
   sender: string;
@@ -22,6 +24,7 @@ interface Message {
   timestamp: Date;
   read: boolean;
 }
+
 interface Conversation {
   id: string;
   name: string;
@@ -33,6 +36,7 @@ interface Conversation {
     timestamp: Date;
   };
 }
+
 const sampleFacultyMembers: Participant[] = [{
   id: '1',
   name: 'Ana García',
@@ -50,6 +54,7 @@ const sampleFacultyMembers: Participant[] = [{
   name: 'David Pérez',
   role: 'docente'
 }];
+
 const sampleConversations: Conversation[] = [{
   id: '1',
   name: 'Ana García',
@@ -106,6 +111,7 @@ const sampleConversations: Conversation[] = [{
     timestamp: new Date(Date.now() - 4000000)
   }
 }];
+
 const MessagesPage = () => {
   const {
     user
@@ -117,6 +123,7 @@ const MessagesPage = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserName, setCurrentUserName] = useState('Usuario Actual');
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -172,6 +179,7 @@ const MessagesPage = () => {
     };
     fetchData();
   }, [user]);
+
   const createSampleConversationsWithRealFaculty = (faculty: Participant[], userName: string): Conversation[] => {
     if (faculty.length === 0) return sampleConversations;
     const conversations: Conversation[] = [];
@@ -239,12 +247,14 @@ const MessagesPage = () => {
     }
     return conversations;
   };
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString('es-ES', {
       hour: '2-digit',
       minute: '2-digit'
     });
   };
+
   const handleNewMessage = (data: {
     recipient: string;
     content: string;
@@ -304,6 +314,7 @@ const MessagesPage = () => {
     }
     setOpenNewMessageDialog(false);
   };
+
   const handleNewGroup = (data: {
     name: string;
     participants: string[];
@@ -320,6 +331,7 @@ const MessagesPage = () => {
     setSelectedConversation(newGroup);
     setOpenNewGroupDialog(false);
   };
+
   const handleSendMessage = (messageInput: string) => {
     if (!messageInput.trim() || !selectedConversation) return;
     const newMessage: Message = {
@@ -348,11 +360,12 @@ const MessagesPage = () => {
       }
     });
   };
+
   return <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
-            
+            <MessageSquare className="h-6 w-6 text-scola-primary" />
             <h1 className="text-2xl font-bold text-gray-800">Mensaxes</h1>
           </div>
           
@@ -379,4 +392,5 @@ const MessagesPage = () => {
       <NewGroupDialog open={openNewGroupDialog} onOpenChange={setOpenNewGroupDialog} facultyMembers={facultyMembers} onSubmit={handleNewGroup} />
     </DashboardLayout>;
 };
+
 export default MessagesPage;

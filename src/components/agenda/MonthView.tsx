@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
-import { format, startOfMonth, endOfMonth, isSameDay } from 'date-fns';
+import { format, startOfMonth, endOfMonth, isSameDay, isWeekend } from 'date-fns';
 import { es } from 'date-fns/locale';
 import EventCard from './EventCard';
 import { Event } from '@/types/agenda';
@@ -37,6 +37,15 @@ const MonthView: React.FC<MonthViewProps> = ({
   // Get dates that have events in the current month
   const getDatesWithEvents = () => {
     return events.map(event => event.date);
+  };
+
+  // Get weekend dates
+  const getWeekendDates = () => {
+    return Array.from({ length: 31 }, (_, i) => {
+      const date = new Date(currentDate);
+      date.setDate(i + 1);
+      return isWeekend(date) ? date : null;
+    }).filter(Boolean) as Date[];
   };
 
   return (
@@ -90,12 +99,20 @@ const MonthView: React.FC<MonthViewProps> = ({
                 onSelect={setSelectedDate}
                 month={currentDate}
                 onMonthChange={setCurrentDate}
-                className="w-full pointer-events-auto"
+                className="w-full mx-auto pointer-events-auto"
                 modifiers={{
-                  hasEvent: getDatesWithEvents()
+                  hasEvent: getDatesWithEvents(),
+                  weekend: getWeekendDates()
                 }}
                 modifiersStyles={{
-                  hasEvent: { backgroundColor: '#E1F0FA' }
+                  hasEvent: { backgroundColor: '#E1F0FA' },
+                  weekend: { backgroundColor: '#FEF7CD' }
+                }}
+                styles={{
+                  month: { width: '100%' },
+                  table: { width: '100%' },
+                  cell: { width: '40px', height: '40px' },
+                  day: { width: '40px', height: '40px' }
                 }}
               />
             </div>

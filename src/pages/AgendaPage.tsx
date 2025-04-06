@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import WeekView from '@/components/agenda/WeekView';
 import MonthView from '@/components/agenda/MonthView';
 import CreateEventDialog from '@/components/agenda/CreateEventDialog';
 import { Event } from '@/types/agenda';
+
 const AgendaPage = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
@@ -69,12 +68,14 @@ const AgendaPage = () => {
     timeEnd: '18:00',
     mandatory: true
   }]);
+
   const handleAddEvent = (day?: Date) => {
     if (day) {
       setSelectedDay(day);
     }
     setOpenDialog(true);
   };
+
   const handleSubmitEvent = (data: Omit<Event, 'id'>) => {
     const newEvent: Event = {
       ...data,
@@ -84,11 +85,15 @@ const AgendaPage = () => {
     setOpenDialog(false);
     setSelectedDay(undefined);
   };
-  return <DashboardLayout>
+
+  return (
+    <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Axenda</h1>
-          
+          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
+            <CalendarIcon className="h-6 w-6 text-scola-primary mr-2" />
+            Axenda
+          </h1>
         </div>
         
         <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={() => handleAddEvent()}>
@@ -113,6 +118,8 @@ const AgendaPage = () => {
 
       {/* Dialog to create a new event */}
       <CreateEventDialog open={openDialog} onOpenChange={setOpenDialog} onSubmitEvent={handleSubmitEvent} defaultDate={selectedDay} />
-    </DashboardLayout>;
+    </DashboardLayout>
+  );
 };
+
 export default AgendaPage;

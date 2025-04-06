@@ -11,6 +11,7 @@ import FacultyList from '@/components/faculty/FacultyList';
 import AddFacultyForm from '@/components/faculty/AddFacultyForm';
 import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
+
 interface FacultyMember {
   id: string;
   name: string;
@@ -19,13 +20,13 @@ interface FacultyMember {
   email: string;
 }
 
-// Define the FacultyFormData interface here to fix the reference error
 interface FacultyFormData {
   name: string;
   role: 'directivo' | 'docente';
   specialty: string;
   email: string;
 }
+
 const sampleFacultyMembers: FacultyMember[] = [{
   id: '1',
   name: 'Ana García Martínez',
@@ -57,6 +58,7 @@ const sampleFacultyMembers: FacultyMember[] = [{
   specialty: 'Historia',
   email: 'elenasanchez@example.com'
 }];
+
 const FacultyPage = () => {
   const {
     user
@@ -69,6 +71,7 @@ const FacultyPage = () => {
   const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [userRole, setUserRole] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchFacultyMembers = async () => {
       setIsLoading(true);
@@ -125,6 +128,7 @@ const FacultyPage = () => {
     };
     fetchFacultyMembers();
   }, [user]);
+
   const handleAddMember = async (data: FacultyFormData) => {
     try {
       const newUserId = crypto.randomUUID();
@@ -164,6 +168,7 @@ const FacultyPage = () => {
       toast.error(`Error ao engadir membro: ${error.message}`);
     }
   };
+
   const handleDeleteMember = async () => {
     if (selectedMember) {
       try {
@@ -183,6 +188,7 @@ const FacultyPage = () => {
       }
     }
   };
+
   const handleSendMessage = (data: {
     content: string;
   }) => {
@@ -192,12 +198,14 @@ const FacultyPage = () => {
       setSelectedMember(null);
     }
   };
+
   const isDirector = userRole === 'directivo';
+
   return <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
-            
+            <Users className="h-6 w-6 text-scola-primary" />
             <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
           </div>
           
@@ -252,4 +260,5 @@ const FacultyPage = () => {
     }} />
     </DashboardLayout>;
 };
+
 export default FacultyPage;

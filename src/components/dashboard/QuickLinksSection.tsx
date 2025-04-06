@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
-import { ExternalLink, CalendarDays, Globe, FileText, Clock } from 'lucide-react';
+import { ExternalLink, CalendarDays, Globe, FileText, Clock, Link2, Brain } from 'lucide-react';
 
 const QuickLinksSection = () => {
   const quickLinks = [
@@ -43,12 +43,18 @@ const QuickLinksSection = () => {
       icon: <FileText className="h-6 w-6 text-scola-primary" />,
       link: '/documents',
     },
+    {
+      name: 'IA',
+      icon: <Brain className="h-6 w-6 text-scola-primary" />,
+      link: '/ai',
+    },
   ];
 
   return (
     <Card className="border-0 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-medium">
+        <CardTitle className="text-lg font-medium flex items-center">
+          <Link2 className="h-5 w-5 mr-2 text-scola-primary" />
           Enlaces rápidos
         </CardTitle>
       </CardHeader>
