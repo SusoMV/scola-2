@@ -202,18 +202,12 @@ const FacultyPage = () => {
   const isDirector = userRole === 'directivo';
 
   return <DashboardLayout>
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-scola-primary" />
-            <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
-          </div>
-          
+      <div className="mb-6">
+        <div className="flex items-center gap-2">
+          <Users className="h-6 w-6 text-scola-primary" />
+          <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
         </div>
-        
-        {isDirector && <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={() => setOpenAddDialog(true)}>
-            <Plus className="mr-2 h-4 w-4" /> Engadir membro
-          </Button>}
+        <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
       <Card className="border border-scola-gray-dark">

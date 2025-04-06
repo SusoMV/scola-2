@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Shield } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 const ProfileInfo = () => {
   const { user } = useAuth();
@@ -58,15 +59,15 @@ const ProfileInfo = () => {
     <Card className="p-8 bg-white rounded-lg shadow-sm">
       <div className="flex flex-col md:flex-row gap-8">
         <div className="flex flex-col items-center">
-          <Avatar className="w-32 h-32 border-2 border-scola-primary">
+          <Avatar className="w-32 h-32 border-2 border-[#0070C0]">
             <AvatarImage src={profileData.profile_image_url || ''} alt="Foto de perfil" />
-            <AvatarFallback className="text-2xl bg-scola-primary text-white">
-              {profileData.full_name?.split(' ').map(name => name[0]).join('') || 'U'}
+            <AvatarFallback className="text-2xl bg-[#0070C0] text-white">
+              {profileData.full_name?.split(' ').map((name: string) => name[0]).join('') || 'U'}
             </AvatarFallback>
           </Avatar>
           
           {profileData.role === 'directivo' && (
-            <div className="mt-4 flex items-center gap-1 text-scola-primary">
+            <div className="mt-4 flex items-center gap-1 text-[#0070C0]">
               <Shield className="h-4 w-4" />
               <span className="text-sm font-medium">Directivo</span>
             </div>
