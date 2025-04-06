@@ -15,7 +15,6 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
-
 interface Substitution {
   id: string;
   absentTeacher: string;
@@ -26,16 +25,13 @@ interface Substitution {
   seen: boolean;
   date: string;
 }
-
 const SubstitutionsPage = () => {
   const {
     user
   } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
-
   const isDirector = true;
-
   const [substitutions, setSubstitutions] = useState<Substitution[]>([{
     id: '1',
     absentTeacher: 'Carlos Rodríguez',
@@ -64,7 +60,6 @@ const SubstitutionsPage = () => {
     seen: false,
     date: '2025-04-04'
   }]);
-
   const [historicalSubstitutions, setHistoricalSubstitutions] = useState<Substitution[]>([{
     id: '4',
     absentTeacher: 'Carlos Rodríguez',
@@ -102,14 +97,12 @@ const SubstitutionsPage = () => {
     seen: true,
     date: '2025-03-20'
   }]);
-
   const handleToggleSeen = (id: string) => {
     setSubstitutions(substitutions.map(sub => sub.id === id ? {
       ...sub,
       seen: !sub.seen
     } : sub));
   };
-
   const form = useForm({
     defaultValues: {
       absentTeacher: '',
@@ -133,7 +126,6 @@ const SubstitutionsPage = () => {
       seen: false,
       date: data.date
     };
-
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
       setSubstitutions([...substitutions, newSubstitution]);
     } else {
@@ -142,7 +134,6 @@ const SubstitutionsPage = () => {
     setOpenDialog(false);
     form.reset();
   };
-
   const handleFilter = (filterType: string, value: string) => {
     console.log(`Filter applied: ${filterType} - ${value}`);
     setActiveFilter(`${filterType}: ${value}`);
@@ -150,12 +141,10 @@ const SubstitutionsPage = () => {
   const clearFilter = () => {
     setActiveFilter(null);
   };
-
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
   const months = ['Xaneiro', 'Febreiro', 'Marzo', 'Abril', 'Maio', 'Xuño', 'Setembro', 'Outubro', 'Novembro', 'Decembro'];
   const weeks = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
-
   return <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
@@ -315,7 +304,7 @@ const SubstitutionsPage = () => {
 
       <Tabs defaultValue="current">
         <TabsList className="mb-4">
-          <TabsTrigger value="current">Actuais</TabsTrigger>
+          <TabsTrigger value="current">Hoxe</TabsTrigger>
           <TabsTrigger value="historical">Histórico</TabsTrigger>
         </TabsList>
         
@@ -452,5 +441,4 @@ const SubstitutionsPage = () => {
       </Tabs>
     </DashboardLayout>;
 };
-
 export default SubstitutionsPage;
