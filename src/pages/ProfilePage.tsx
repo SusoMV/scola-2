@@ -1,8 +1,10 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import ProfileForm from '@/components/profile/ProfileForm';
 import { UserCircle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import ProfileForm from '@/components/profile/ProfileForm';
+import ProfileInfo from '@/components/profile/ProfileInfo';
 
 const ProfilePage = () => {
   return (
@@ -15,7 +17,20 @@ const ProfilePage = () => {
       </div>
       
       <div className="container max-w-4xl mx-auto px-4">
-        <ProfileForm />
+        <Tabs defaultValue="info" className="w-full">
+          <TabsList className="mb-6 bg-scola-gray/30">
+            <TabsTrigger value="info">Datos actuais</TabsTrigger>
+            <TabsTrigger value="edit">Editar perfil</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="info">
+            <ProfileInfo />
+          </TabsContent>
+          
+          <TabsContent value="edit">
+            <ProfileForm />
+          </TabsContent>
+        </Tabs>
       </div>
     </DashboardLayout>
   );
