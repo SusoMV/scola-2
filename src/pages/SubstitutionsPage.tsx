@@ -337,7 +337,7 @@ const SubstitutionsPage = () => {
         
         <TabsContent value="historical">
           <Card className="border border-scola-gray-dark">
-            <CardHeader className="pb-2 flex flex-row justify-between items-center py-0">
+            <CardHeader className="pb-2 flex flex-row justify-between items-center py-0 my-[12px]">
               <CardTitle className="text-lg font-medium flex items-center gap-2 px-0 py-0">
                 <Calendar className="h-5 w-5 text-[#0070C0]" />
                 Histórico de substitucións
