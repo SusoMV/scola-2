@@ -9,8 +9,8 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const DashboardPage = () => {
   const { user } = useAuth();
-  // Use the user's name from auth context if available, otherwise use 'Fresa' as requested
-  const userName = user?.user_metadata?.full_name || 'Fresa';
+  // Use the user's name from auth context if available, otherwise use 'Suso' as in the design
+  const userName = user?.user_metadata?.full_name || 'Suso';
 
   return (
     <DashboardLayout>

@@ -13,7 +13,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
   className 
 }) => {
   return (
-    <div className="min-h-screen bg-scola-gray flex">
+    <div className="min-h-screen bg-gray-100 flex">
       <Sidebar />
       
       <main className={cn(

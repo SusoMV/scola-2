@@ -82,10 +82,10 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   };
 
   const userData = {
-    name: user?.user_metadata?.full_name || 'Usuario',
+    name: user?.user_metadata?.full_name || 'Suso',
     avatar: user?.user_metadata?.avatar_url || '',
-    role: user?.user_metadata?.role || 'Docente',
-    specialty: user?.user_metadata?.specialty || 'Educación'
+    role: user?.user_metadata?.role || 'directivo',
+    specialty: user?.user_metadata?.specialization || 'Música'
   };
 
   const isActive = (path: string) => {
@@ -111,21 +111,21 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
 
       <div 
         className={cn(
-          "fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-lg transform transition-transform duration-300 lg:translate-x-0 flex flex-col",
+          "fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 lg:translate-x-0 flex flex-col",
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full",
           className
         )}
       >
-        <div className="p-4 border-b border-gray-200">
+        <div className="p-4 flex justify-center">
           <ScolaLogo size="md" />
         </div>
 
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
-            <Avatar>
+            <Avatar className="h-10 w-10 bg-scola-primary text-white">
               <AvatarImage src={userData.avatar} alt={userData.name} />
-              <AvatarFallback className="bg-scola-primary text-white">
-                {userData.name.split(' ').map(name => name[0]).join('')}
+              <AvatarFallback>
+                {userData.name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">

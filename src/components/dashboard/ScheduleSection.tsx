@@ -40,7 +40,7 @@ const ScheduleSection = () => {
   ];
 
   return (
-    <Card className="mt-6 border border-scola-gray-dark">
+    <Card className="border-0 shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium flex items-center">
           <Clock className="h-5 w-5 mr-2 text-scola-primary" />
@@ -52,7 +52,7 @@ const ScheduleSection = () => {
           {scheduleItems.map((item, index) => (
             <div 
               key={index} 
-              className="p-3 bg-white rounded-md border border-scola-gray-dark flex flex-col md:flex-row md:items-center md:justify-between"
+              className="p-4 bg-white rounded-md border border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between"
             >
               <div className="flex items-center">
                 <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md w-32 text-center">
