@@ -1,9 +1,10 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import AttendanceControl from '@/components/tutoring/AttendanceControl';
 import TutoringSessions from '@/components/tutoring/TutoringSessions';
+import NotesSection from '@/components/tutoring/NotesSection';
 import { GraduationCap } from 'lucide-react';
 
 const TutoringPage = () => {
@@ -20,6 +21,7 @@ const TutoringPage = () => {
         <TabsList className="mb-4">
           <TabsTrigger value="attendance">Control de asistencia</TabsTrigger>
           <TabsTrigger value="sessions">Titorías solicitadas</TabsTrigger>
+          <TabsTrigger value="notes">Anotacións</TabsTrigger>
         </TabsList>
         
         <TabsContent value="attendance">
@@ -28,6 +30,10 @@ const TutoringPage = () => {
         
         <TabsContent value="sessions">
           <TutoringSessions />
+        </TabsContent>
+        
+        <TabsContent value="notes">
+          <NotesSection />
         </TabsContent>
       </Tabs>
     </DashboardLayout>

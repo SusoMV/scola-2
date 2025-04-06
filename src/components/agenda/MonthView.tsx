@@ -90,8 +90,8 @@ const MonthView: React.FC<MonthViewProps> = ({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-          <div className="md:col-span-2">
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
+          <div className="md:col-span-3">
             <div className="border rounded-md p-4">
               <CalendarComponent
                 mode="single"
@@ -99,7 +99,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                 onSelect={setSelectedDate}
                 month={currentDate}
                 onMonthChange={setCurrentDate}
-                className="w-full mx-auto pointer-events-auto"
+                className="max-w-[320px] mx-auto pointer-events-auto"
                 modifiers={{
                   hasEvent: getDatesWithEvents(),
                   weekend: getWeekendDates()
@@ -109,15 +109,12 @@ const MonthView: React.FC<MonthViewProps> = ({
                   weekend: { backgroundColor: '#FEF7CD' }
                 }}
                 styles={{
-                  month: { width: '100%' },
-                  table: { width: '100%' },
-                  cell: { width: '40px', height: '40px' },
-                  day: { width: '40px', height: '40px' }
+                  day: { width: '38px', height: '38px' }
                 }}
               />
             </div>
           </div>
-          <div className="md:col-span-3">
+          <div className="md:col-span-4">
             <div className="border rounded-md p-4 h-full">
               <h3 className="text-lg font-medium mb-4">Eventos do mes</h3>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">

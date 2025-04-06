@@ -1,20 +1,19 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
-import { Calendar, Clock, Filter, Plus, ChevronsLeftRight } from 'lucide-react';
+import { Calendar, Clock, Search, Plus, ChevronsLeftRight } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
+
 interface Substitution {
   id: string;
   absentTeacher: string;
@@ -25,13 +24,13 @@ interface Substitution {
   seen: boolean;
   date: string;
 }
+
 const SubstitutionsPage = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const [openDialog, setOpenDialog] = useState(false);
-  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
   const isDirector = true;
+  
   const [substitutions, setSubstitutions] = useState<Substitution[]>([{
     id: '1',
     absentTeacher: 'Carlos Rodríguez',
@@ -60,6 +59,7 @@ const SubstitutionsPage = () => {
     seen: false,
     date: '2025-04-04'
   }]);
+
   const [historicalSubstitutions, setHistoricalSubstitutions] = useState<Substitution[]>([{
     id: '4',
     absentTeacher: 'Carlos Rodríguez',
@@ -97,12 +97,14 @@ const SubstitutionsPage = () => {
     seen: true,
     date: '2025-03-20'
   }]);
+
   const handleToggleSeen = (id: string) => {
     setSubstitutions(substitutions.map(sub => sub.id === id ? {
       ...sub,
       seen: !sub.seen
     } : sub));
   };
+
   const form = useForm({
     defaultValues: {
       absentTeacher: '',
@@ -114,8 +116,8 @@ const SubstitutionsPage = () => {
       substituteTeacher: ''
     }
   });
+
   const onSubmit = (data: any) => {
-    console.log("New substitution data:", data);
     const newSubstitution: Substitution = {
       id: Date.now().toString(),
       absentTeacher: data.absentTeacher,
@@ -126,36 +128,43 @@ const SubstitutionsPage = () => {
       seen: false,
       date: data.date
     };
+    
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
       setSubstitutions([...substitutions, newSubstitution]);
     } else {
       setHistoricalSubstitutions([...historicalSubstitutions, newSubstitution]);
     }
+    
     setOpenDialog(false);
     form.reset();
   };
-  const handleFilter = (filterType: string, value: string) => {
-    console.log(`Filter applied: ${filterType} - ${value}`);
-    setActiveFilter(`${filterType}: ${value}`);
-  };
-  const clearFilter = () => {
-    setActiveFilter(null);
-  };
+
+  const filteredHistoricalSubstitutions = historicalSubstitutions.filter(sub => {
+    const searchLower = searchQuery.toLowerCase();
+    return (
+      sub.absentTeacher.toLowerCase().includes(searchLower) ||
+      sub.substituteTeacher.toLowerCase().includes(searchLower) ||
+      sub.course.toLowerCase().includes(searchLower) ||
+      sub.date.includes(searchQuery) ||
+      sub.reason.toLowerCase().includes(searchLower)
+    );
+  });
+
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
-  const months = ['Xaneiro', 'Febreiro', 'Marzo', 'Abril', 'Maio', 'Xuño', 'Setembro', 'Outubro', 'Novembro', 'Decembro'];
-  const weeks = ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'];
-  return <DashboardLayout>
+
+  return (
+    <DashboardLayout>
       <div className="mb-6 flex justify-between items-center">
         <div>
           <div className="flex items-center gap-2">
             <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
             <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
           </div>
-          
         </div>
         
-        {isDirector && <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        {isDirector && (
+          <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>
               <Button className="bg-scola-primary hover:bg-scola-primary/90">
                 <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
@@ -170,9 +179,11 @@ const SubstitutionsPage = () => {
               </DialogHeader>
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField control={form.control} name="absentTeacher" render={({
-                field
-              }) => <FormItem>
+                  <FormField
+                    control={form.control}
+                    name="absentTeacher"
+                    render={({ field }) => (
+                      <FormItem>
                         <FormLabel>Profesor ausente</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
@@ -181,15 +192,21 @@ const SubstitutionsPage = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {absentTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
+                            {absentTeachers.map(teacher => (
+                              <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>} />
+                      </FormItem>
+                    )}
+                  />
                   
-                  <FormField control={form.control} name="course" render={({
-                field
-              }) => <FormItem>
+                  <FormField
+                    control={form.control}
+                    name="course"
+                    render={({ field }) => (
+                      <FormItem>
                         <FormLabel>Curso</FormLabel>
                         <FormControl>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -207,11 +224,15 @@ const SubstitutionsPage = () => {
                           </Select>
                         </FormControl>
                         <FormMessage />
-                      </FormItem>} />
+                      </FormItem>
+                    )}
+                  />
                   
-                  <FormField control={form.control} name="reason" render={({
-                field
-              }) => <FormItem>
+                  <FormField
+                    control={form.control}
+                    name="reason"
+                    render={({ field }) => (
+                      <FormItem>
                         <FormLabel>Motivo</FormLabel>
                         <FormControl>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -228,12 +249,16 @@ const SubstitutionsPage = () => {
                           </Select>
                         </FormControl>
                         <FormMessage />
-                      </FormItem>} />
+                      </FormItem>
+                    )}
+                  />
                   
                   <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="date" render={({
-                  field
-                }) => <FormItem>
+                    <FormField
+                      control={form.control}
+                      name="date"
+                      render={({ field }) => (
+                        <FormItem>
                           <FormLabel>Data</FormLabel>
                           <FormControl>
                             <div className="flex items-center">
@@ -242,13 +267,17 @@ const SubstitutionsPage = () => {
                             </div>
                           </FormControl>
                           <FormMessage />
-                        </FormItem>} />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="startTime" render={({
-                  field
-                }) => <FormItem>
+                    <FormField
+                      control={form.control}
+                      name="startTime"
+                      render={({ field }) => (
+                        <FormItem>
                           <FormLabel>Hora de inicio</FormLabel>
                           <FormControl>
                             <div className="flex items-center">
@@ -257,11 +286,15 @@ const SubstitutionsPage = () => {
                             </div>
                           </FormControl>
                           <FormMessage />
-                        </FormItem>} />
+                        </FormItem>
+                      )}
+                    />
                     
-                    <FormField control={form.control} name="endTime" render={({
-                  field
-                }) => <FormItem>
+                    <FormField
+                      control={form.control}
+                      name="endTime"
+                      render={({ field }) => (
+                        <FormItem>
                           <FormLabel>Hora de fin</FormLabel>
                           <FormControl>
                             <div className="flex items-center">
@@ -270,12 +303,16 @@ const SubstitutionsPage = () => {
                             </div>
                           </FormControl>
                           <FormMessage />
-                        </FormItem>} />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                   
-                  <FormField control={form.control} name="substituteTeacher" render={({
-                field
-              }) => <FormItem>
+                  <FormField
+                    control={form.control}
+                    name="substituteTeacher"
+                    render={({ field }) => (
+                      <FormItem>
                         <FormLabel>Profesor substituto</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
@@ -284,11 +321,15 @@ const SubstitutionsPage = () => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {substituteTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
+                            {substituteTeachers.map(teacher => (
+                              <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                         <FormMessage />
-                      </FormItem>} />
+                      </FormItem>
+                    )}
+                  />
                   
                   <DialogFooter>
                     <Button type="button" variant="outline" onClick={() => setOpenDialog(false)} className="mr-2">
@@ -299,7 +340,8 @@ const SubstitutionsPage = () => {
                 </form>
               </Form>
             </DialogContent>
-          </Dialog>}
+          </Dialog>
+        )}
       </div>
 
       <Tabs defaultValue="current">
@@ -317,7 +359,8 @@ const SubstitutionsPage = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {substitutions.length > 0 ? <div className="overflow-x-auto">
+              {substitutions.length > 0 ? (
+                <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-scola-gray-dark">
@@ -329,7 +372,8 @@ const SubstitutionsPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {substitutions.map(substitution => <tr key={substitution.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
+                      {substitutions.map(substitution => (
+                        <tr key={substitution.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
                           <td className="py-3 px-2">{substitution.absentTeacher}</td>
                           <td className="py-3 px-2">{substitution.course}</td>
                           <td className="py-3 px-2">{substitution.time}</td>
@@ -337,10 +381,14 @@ const SubstitutionsPage = () => {
                           <td className="py-3 px-2">
                             <Checkbox checked={substitution.seen} onCheckedChange={() => handleToggleSeen(substitution.id)} />
                           </td>
-                        </tr>)}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
-                </div> : <p className="text-center py-4 text-gray-500">Non hai substitucións actuais</p>}
+                </div>
+              ) : (
+                <p className="text-center py-4 text-gray-500">Non hai substitucións actuais</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -353,67 +401,20 @@ const SubstitutionsPage = () => {
                 Histórico de substitucións
               </CardTitle>
               
-              <div className="flex items-center">
-                {activeFilter && <div className="flex items-center mr-2">
-                    <Badge variant="outline" className="mr-1 px-3 py-1">
-                      {activeFilter}
-                      <button onClick={clearFilter} className="ml-2 text-gray-400 hover:text-gray-800">
-                        ×
-                      </button>
-                    </Badge>
-                  </div>}
-                
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4 mr-1" /> Filtrar
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <ScrollArea className="h-80">
-                      <DropdownMenuLabel>Filtros</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel className="text-xs text-gray-500">Por profesor ausente</DropdownMenuLabel>
-                        {absentTeachers.map(teacher => <DropdownMenuItem key={teacher} onClick={() => handleFilter('Ausente', teacher)}>
-                            {teacher}
-                          </DropdownMenuItem>)}
-                      </DropdownMenuGroup>
-                      
-                      <DropdownMenuSeparator />
-                      
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel className="text-xs text-gray-500">Por profesor substituto</DropdownMenuLabel>
-                        {substituteTeachers.map(teacher => <DropdownMenuItem key={teacher} onClick={() => handleFilter('Substituto', teacher)}>
-                            {teacher}
-                          </DropdownMenuItem>)}
-                      </DropdownMenuGroup>
-                      
-                      <DropdownMenuSeparator />
-                      
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel className="text-xs text-gray-500">Por mes</DropdownMenuLabel>
-                        {months.map(month => <DropdownMenuItem key={month} onClick={() => handleFilter('Mes', month)}>
-                            {month}
-                          </DropdownMenuItem>)}
-                      </DropdownMenuGroup>
-                      
-                      <DropdownMenuSeparator />
-                      
-                      <DropdownMenuGroup>
-                        <DropdownMenuLabel className="text-xs text-gray-500">Por semana</DropdownMenuLabel>
-                        {weeks.map(week => <DropdownMenuItem key={week} onClick={() => handleFilter('Semana', week)}>
-                            {week}
-                          </DropdownMenuItem>)}
-                      </DropdownMenuGroup>
-                    </ScrollArea>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                <Input
+                  type="text"
+                  placeholder="Buscar por nome ou data..."
+                  className="pl-8 w-[250px]"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
             </CardHeader>
             <CardContent>
-              {historicalSubstitutions.length > 0 ? <div className="overflow-x-auto">
+              {filteredHistoricalSubstitutions.length > 0 ? (
+                <div className="overflow-x-auto">
                   <table className="w-full">
                     <thead>
                       <tr className="border-b border-scola-gray-dark">
@@ -425,20 +426,27 @@ const SubstitutionsPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {historicalSubstitutions.map(substitution => <tr key={substitution.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
+                      {filteredHistoricalSubstitutions.map(substitution => (
+                        <tr key={substitution.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
                           <td className="py-3 px-2">{format(new Date(substitution.date), 'dd/MM/yyyy')}</td>
                           <td className="py-3 px-2">{substitution.absentTeacher}</td>
                           <td className="py-3 px-2">{substitution.course}</td>
                           <td className="py-3 px-2">{substitution.time}</td>
                           <td className="py-3 px-2 font-medium">{substitution.substituteTeacher}</td>
-                        </tr>)}
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
-                </div> : <p className="text-center py-4 text-gray-500">Non hai histórico de substitucións</p>}
+                </div>
+              ) : (
+                <p className="text-center py-4 text-gray-500">Non hai resultados que coincidan coa búsqueda</p>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
       </Tabs>
-    </DashboardLayout>;
+    </DashboardLayout>
+  );
 };
+
 export default SubstitutionsPage;
