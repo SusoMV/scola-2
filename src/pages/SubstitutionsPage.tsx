@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/contexts/AuthContext';
 import { useForm } from 'react-hook-form';
 import { format } from 'date-fns';
+
 interface Substitution {
   id: string;
   absentTeacher: string;
@@ -22,6 +24,7 @@ interface Substitution {
   seen: boolean;
   date: string;
 }
+
 const SubstitutionsPage = () => {
   const {
     user
@@ -137,166 +140,167 @@ const SubstitutionsPage = () => {
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
   return <DashboardLayout>
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <div className="flex items-center gap-2">
-            <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
-            <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
-          </div>
+      <div className="mb-2">
+        <div className="flex items-center gap-2">
+          <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
+          <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
         </div>
-        
-        {isDirector && <Dialog open={openDialog} onOpenChange={setOpenDialog}>
-            <DialogTrigger asChild>
-              <Button className="bg-scola-primary hover:bg-scola-primary/90">
-                <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Crear Nova Ausencia</DialogTitle>
-                <DialogDescription>
-                  Complete os datos da nova ausencia e substitución.
-                </DialogDescription>
-              </DialogHeader>
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <FormField control={form.control} name="absentTeacher" render={({
-                field
-              }) => <FormItem>
-                        <FormLabel>Profesor ausente</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar profesor" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {absentTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>} />
-                  
-                  <FormField control={form.control} name="course" render={({
-                field
-              }) => <FormItem>
-                        <FormLabel>Curso</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar curso" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1º Primaria">1º Primaria</SelectItem>
-                              <SelectItem value="2º Primaria">2º Primaria</SelectItem>
-                              <SelectItem value="3º Primaria">3º Primaria</SelectItem>
-                              <SelectItem value="4º Primaria">4º Primaria</SelectItem>
-                              <SelectItem value="5º Primaria">5º Primaria</SelectItem>
-                              <SelectItem value="6º Primaria">6º Primaria</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>} />
-                  
-                  <FormField control={form.control} name="reason" render={({
-                field
-              }) => <FormItem>
-                        <FormLabel>Motivo</FormLabel>
-                        <FormControl>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar motivo" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Cita médica">Cita médica</SelectItem>
-                              <SelectItem value="Formación">Formación</SelectItem>
-                              <SelectItem value="Persoal">Persoal</SelectItem>
-                              <SelectItem value="Enfermidade">Enfermidade</SelectItem>
-                              <SelectItem value="Outro">Outro</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>} />
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="date" render={({
+        <div className="dotted-border w-full h-1 mt-2"></div>
+      </div>
+
+      <Tabs defaultValue="current">
+        <div className="flex justify-between items-center mb-4">
+          <TabsList>
+            <TabsTrigger value="current">Hoxe</TabsTrigger>
+            <TabsTrigger value="historical">Histórico</TabsTrigger>
+          </TabsList>
+          
+          {isDirector && <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+              <DialogTrigger asChild>
+                <Button className="bg-scola-primary hover:bg-scola-primary/90">
+                  <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Crear Nova Ausencia</DialogTitle>
+                  <DialogDescription>
+                    Complete os datos da nova ausencia e substitución.
+                  </DialogDescription>
+                </DialogHeader>
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <FormField control={form.control} name="absentTeacher" render={({
                   field
                 }) => <FormItem>
-                          <FormLabel>Data</FormLabel>
-                          <FormControl>
-                            <div className="flex items-center">
-                              <Calendar className="h-4 w-4 mr-2 text-gray-500" />
-                              <Input type="date" {...field} />
-                            </div>
-                          </FormControl>
+                          <FormLabel>Profesor ausente</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar profesor" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {absentTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>} />
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <FormField control={form.control} name="startTime" render={({
+                    
+                    <FormField control={form.control} name="course" render={({
                   field
                 }) => <FormItem>
-                          <FormLabel>Hora de inicio</FormLabel>
+                          <FormLabel>Curso</FormLabel>
                           <FormControl>
-                            <div className="flex items-center">
-                              <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                              <Input type="time" {...field} />
-                            </div>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar curso" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="1º Primaria">1º Primaria</SelectItem>
+                                <SelectItem value="2º Primaria">2º Primaria</SelectItem>
+                                <SelectItem value="3º Primaria">3º Primaria</SelectItem>
+                                <SelectItem value="4º Primaria">4º Primaria</SelectItem>
+                                <SelectItem value="5º Primaria">5º Primaria</SelectItem>
+                                <SelectItem value="6º Primaria">6º Primaria</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </FormControl>
                           <FormMessage />
                         </FormItem>} />
                     
-                    <FormField control={form.control} name="endTime" render={({
+                    <FormField control={form.control} name="reason" render={({
                   field
                 }) => <FormItem>
-                          <FormLabel>Hora de fin</FormLabel>
+                          <FormLabel>Motivo</FormLabel>
                           <FormControl>
-                            <div className="flex items-center">
-                              <Clock className="h-4 w-4 mr-2 text-gray-500" />
-                              <Input type="time" {...field} />
-                            </div>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar motivo" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Cita médica">Cita médica</SelectItem>
+                                <SelectItem value="Formación">Formación</SelectItem>
+                                <SelectItem value="Persoal">Persoal</SelectItem>
+                                <SelectItem value="Enfermidade">Enfermidade</SelectItem>
+                                <SelectItem value="Outro">Outro</SelectItem>
+                              </SelectContent>
+                            </Select>
                           </FormControl>
                           <FormMessage />
                         </FormItem>} />
-                  </div>
-                  
-                  <FormField control={form.control} name="substituteTeacher" render={({
-                field
-              }) => <FormItem>
-                        <FormLabel>Profesor substituto</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Seleccionar substituto" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {substituteTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>} />
-                  
-                  <DialogFooter>
-                    <Button type="button" variant="outline" onClick={() => setOpenDialog(false)} className="mr-2">
-                      Cancelar
-                    </Button>
-                    <Button type="submit">Gardar</Button>
-                  </DialogFooter>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>}
-      </div>
-
-      <Tabs defaultValue="current">
-        <TabsList className="mb-4">
-          <TabsTrigger value="current">Hoxe</TabsTrigger>
-          <TabsTrigger value="historical">Histórico</TabsTrigger>
-        </TabsList>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField control={form.control} name="date" render={({
+                    field
+                  }) => <FormItem>
+                            <FormLabel>Data</FormLabel>
+                            <FormControl>
+                              <div className="flex items-center">
+                                <Calendar className="h-4 w-4 mr-2 text-gray-500" />
+                                <Input type="date" {...field} />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>} />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <FormField control={form.control} name="startTime" render={({
+                    field
+                  }) => <FormItem>
+                            <FormLabel>Hora de inicio</FormLabel>
+                            <FormControl>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                                <Input type="time" {...field} />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>} />
+                      
+                      <FormField control={form.control} name="endTime" render={({
+                    field
+                  }) => <FormItem>
+                            <FormLabel>Hora de fin</FormLabel>
+                            <FormControl>
+                              <div className="flex items-center">
+                                <Clock className="h-4 w-4 mr-2 text-gray-500" />
+                                <Input type="time" {...field} />
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>} />
+                    </div>
+                    
+                    <FormField control={form.control} name="substituteTeacher" render={({
+                  field
+                }) => <FormItem>
+                          <FormLabel>Profesor substituto</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Seleccionar substituto" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {substituteTeachers.map(teacher => <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>} />
+                    
+                    <DialogFooter>
+                      <Button type="button" variant="outline" onClick={() => setOpenDialog(false)} className="mr-2">
+                        Cancelar
+                      </Button>
+                      <Button type="submit">Gardar</Button>
+                    </DialogFooter>
+                  </form>
+                </Form>
+              </DialogContent>
+            </Dialog>}
+        </div>
         
         <TabsContent value="current">
           <Card className="border border-scola-gray-dark">
@@ -377,4 +381,5 @@ const SubstitutionsPage = () => {
       </Tabs>
     </DashboardLayout>;
 };
+
 export default SubstitutionsPage;

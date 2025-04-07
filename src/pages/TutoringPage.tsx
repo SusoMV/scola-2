@@ -10,11 +10,12 @@ import { GraduationCap } from 'lucide-react';
 const TutoringPage = () => {
   return (
     <DashboardLayout>
-      <div className="mb-6">
+      <div className="mb-2">
         <div className="flex items-center gap-2">
           <GraduationCap className="h-6 w-6 text-scola-primary" />
           <h1 className="text-2xl font-bold">Titorías</h1>
         </div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
       <Tabs defaultValue="attendance" className="w-full">

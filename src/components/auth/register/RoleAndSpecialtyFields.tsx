@@ -11,7 +11,10 @@ interface RoleAndSpecialtyFieldsProps {
   showSpecialty: boolean;
 }
 
-const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ form, showSpecialty }) => {
+const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ 
+  form,
+  showSpecialty 
+}) => {
   return (
     <>
       <FormField
@@ -20,28 +23,28 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ form, s
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-lg font-medium">Rol</FormLabel>
-            <Select 
-              onValueChange={field.onChange} 
-              defaultValue={field.value}
-            >
-              <FormControl>
+            <FormControl>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+              >
                 <SelectTrigger className="h-12">
-                  <SelectValue placeholder="Selecciona o teu rol no centro" />
+                  <SelectValue placeholder="Selecciona o teu rol" />
                 </SelectTrigger>
-              </FormControl>
-              <SelectContent>
-                {ROLES.map((role) => (
-                  <SelectItem key={role} value={role}>
-                    {role.charAt(0).toUpperCase() + role.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                <SelectContent>
+                  {ROLES.filter(role => role.value !== 'alumnado').map((role) => (
+                    <SelectItem key={role.value} value={role.value}>
+                      {role.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-      
+
       {showSpecialty && (
         <FormField
           control={form.control}
@@ -49,23 +52,23 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ form, s
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg font-medium">Especialidade</FormLabel>
-              <Select 
-                onValueChange={field.onChange} 
-                defaultValue={field.value}
-              >
-                <FormControl>
+              <FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecciona a túa especialidade" />
                   </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {SPECIALTIES.map((specialty) => (
-                    <SelectItem key={specialty} value={specialty}>
-                      {specialty}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <SelectContent>
+                    {SPECIALTIES.map((specialty) => (
+                      <SelectItem key={specialty.value} value={specialty.value}>
+                        {specialty.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

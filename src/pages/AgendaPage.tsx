@@ -1,123 +1,98 @@
+
 import React, { useState } from 'react';
-import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Plus, Calendar as CalendarIcon } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import WeekView from '@/components/agenda/WeekView';
+import { Plus } from 'lucide-react';
 import MonthView from '@/components/agenda/MonthView';
+import WeekView from '@/components/agenda/WeekView';
 import CreateEventDialog from '@/components/agenda/CreateEventDialog';
 import { Event } from '@/types/agenda';
 
-const AgendaPage = () => {
-  const { user } = useAuth();
-  const [openDialog, setOpenDialog] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
-  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
+export const AgendaPage = () => {
+  const [events, setEvents] = useState<Event[]>([
+    {
+      id: "1",
+      title: "Reunión de claustro",
+      start: new Date(2025, 3, 10, 9, 0),
+      end: new Date(2025, 3, 10, 11, 0),
+      type: "meeting",
+      description: "Reunión mensual do claustro para tratar temas académicos",
+      location: "Sala de reunións",
+    },
+    {
+      id: "2",
+      title: "Titoría con familia",
+      start: new Date(2025, 3, 12, 16, 0),
+      end: new Date(2025, 3, 12, 17, 0),
+      type: "tutoring",
+      description: "Titoría coa familia de Martín González",
+      location: "Aula 4B",
+    },
+    {
+      id: "3",
+      title: "Actividade deportiva",
+      start: new Date(2025, 3, 15, 10, 0),
+      end: new Date(2025, 3, 15, 12, 0),
+      type: "activity",
+      description: "Xornada deportiva interescolar",
+      location: "Pavillón deportivo",
+    },
+  ]);
 
-  // Mock data for events
-  const [events, setEvents] = useState<Event[]>([{
-    id: '1',
-    date: new Date(2025, 3, 8),
-    title: 'Claustro extraordinario',
-    eventType: 'claustro',
-    recipients: 'Todo o claustro',
-    space: 'Sala de profesores',
-    timeStart: '16:00',
-    timeEnd: '17:30',
-    mandatory: true
-  }, {
-    id: '2',
-    date: new Date(2025, 3, 9),
-    title: 'Formación LOMLOE',
-    eventType: 'formación',
-    recipients: 'Todo o claustro',
-    space: 'Biblioteca',
-    timeStart: '17:00',
-    timeEnd: '19:00',
-    mandatory: false
-  }, {
-    id: '3',
-    date: new Date(2025, 3, 10),
-    title: 'Reunión ciclo',
-    eventType: 'reunión',
-    recipients: 'Profesorado 1º ciclo',
-    space: 'Aula 12',
-    timeStart: '14:00',
-    timeEnd: '15:00',
-    mandatory: true
-  }, {
-    id: '4',
-    date: new Date(2025, 3, 15),
-    title: 'Charla educativa',
-    eventType: 'charla',
-    recipients: 'Todo o claustro',
-    space: 'Salón de actos',
-    timeStart: '18:00',
-    timeEnd: '19:30',
-    mandatory: false
-  }, {
-    id: '5',
-    date: new Date(2025, 3, 22),
-    title: 'Consello escolar',
-    eventType: 'consello escolar',
-    recipients: 'Membros do consello',
-    space: 'Sala de xuntas',
-    timeStart: '16:30',
-    timeEnd: '18:00',
-    mandatory: true
-  }]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleAddEvent = (day?: Date) => {
-    if (day) {
-      setSelectedDay(day);
-    }
-    setOpenDialog(true);
-  };
-
-  const handleSubmitEvent = (data: Omit<Event, 'id'>) => {
-    const newEvent: Event = {
-      ...data,
-      id: Date.now().toString()
+  const handleCreateEvent = (newEvent: Omit<Event, "id">) => {
+    const event: Event = {
+      ...newEvent,
+      id: Date.now().toString(),
     };
-    setEvents([...events, newEvent]);
-    setOpenDialog(false);
-    setSelectedDay(undefined);
+    setEvents([...events, event]);
+    setIsDialogOpen(false);
   };
 
   return (
     <DashboardLayout>
-      <div className="mb-6 flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-800 flex items-center">
-            <CalendarIcon className="h-6 w-6 text-scola-primary mr-2" />
-            Axenda
-          </h1>
+      <div className="mb-2">
+        <div className="flex items-center gap-2">
+          <CalendarIcon className="h-6 w-6 text-scola-primary" />
+          <h1 className="text-2xl font-bold">Axenda</h1>
         </div>
-        
-        <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={() => handleAddEvent()}>
-          <Plus className="mr-2 h-4 w-4" /> Crear evento
-        </Button>
+        <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
-      <Tabs defaultValue="week">
-        <TabsList className="mb-4">
-          <TabsTrigger value="week">Vista semanal</TabsTrigger>
-          <TabsTrigger value="month">Vista mensual</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="week">
-          <WeekView events={events} currentDate={currentDate} setCurrentDate={setCurrentDate} onAddEvent={handleAddEvent} />
-        </TabsContent>
-        
-        <TabsContent value="month">
-          <MonthView events={events} currentDate={currentDate} setCurrentDate={setCurrentDate} selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        </TabsContent>
-      </Tabs>
+      <div className="flex justify-between items-center mb-4">
+        <Tabs defaultValue="month" className="w-full">
+          <div className="flex justify-between items-center mb-4">
+            <TabsList>
+              <TabsTrigger value="month">Mes</TabsTrigger>
+              <TabsTrigger value="week">Semana</TabsTrigger>
+            </TabsList>
 
-      {/* Dialog to create a new event */}
-      <CreateEventDialog open={openDialog} onOpenChange={setOpenDialog} onSubmitEvent={handleSubmitEvent} defaultDate={selectedDay} />
+            <Button 
+              onClick={() => setIsDialogOpen(true)} 
+              className="bg-scola-primary hover:bg-scola-primary/90"
+            >
+              <Plus className="mr-2 h-4 w-4" /> Engadir evento
+            </Button>
+          </div>
+
+          <TabsContent value="month">
+            <MonthView events={events} />
+          </TabsContent>
+          
+          <TabsContent value="week">
+            <WeekView events={events} />
+          </TabsContent>
+        </Tabs>
+      </div>
+
+      <CreateEventDialog 
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onCreateEvent={handleCreateEvent}
+      />
     </DashboardLayout>
   );
 };

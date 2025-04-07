@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,17 +11,21 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import ScolaLogo from '@/components/ScolaLogo';
 import { toast } from 'sonner';
+
 const loginSchema = z.object({
   email: z.string().email('Introduce un email válido'),
   password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres')
 });
+
 type LoginFormValues = z.infer<typeof loginSchema>;
+
 const LoginForm = () => {
   const {
     signIn
   } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -28,6 +33,7 @@ const LoginForm = () => {
       password: ''
     }
   });
+
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
@@ -40,16 +46,17 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
+
   return <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-[67px]">
-      <Card className="w-full max-w-lg border border-blue-300 border-dashed rounded-none py-6 px-[66px]">
+      <Card className="w-full max-w-xl border border-blue-300 border-dashed rounded-none py-6 px-[66px]">
         <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
           <ScolaLogo className="mb-4" size="lg" />
           <CardTitle className="text-2xl font-bold">
             <div className="flex space-x-10 border-b">
-              <div className="pb-2 border-b-2 border-[#0070C0] font-semibold">
+              <div className="pb-2 border-b-2 border-[#0070C0] font-medium text-base">
                 Iniciar sesión
               </div>
-              <Link to="/register" className="text-gray-500 font-semibold text-base">
+              <Link to="/register" className="text-gray-500 font-medium text-base">
                 Rexistrarse
               </Link>
             </div>
@@ -90,4 +97,5 @@ const LoginForm = () => {
       </Card>
     </div>;
 };
+
 export default LoginForm;
