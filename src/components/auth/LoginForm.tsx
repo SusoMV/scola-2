@@ -41,7 +41,7 @@ const LoginForm = () => {
     }
   };
   return <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-[67px]">
-      <Card className="w-full max-w-lg border border-blue-300 border-dashed rounded-none px-8 py-6">
+      <Card className="w-full max-w-lg border border-blue-300 border-dashed rounded-none py-6 px-[66px]">
         <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
           <ScolaLogo className="mb-4" size="lg" />
           <CardTitle className="text-2xl font-bold">
@@ -57,7 +57,7 @@ const LoginForm = () => {
         </CardHeader>
         <CardContent className="px-0">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 px-0 mx-0 my-0 py-0">
               <FormField control={form.control} name="email" render={({
               field
             }) => <FormItem className="px-0">
