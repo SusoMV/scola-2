@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -141,19 +140,11 @@ const SubstitutionsPage = () => {
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
   return <DashboardLayout>
       <div className="mb-2">
-        <div className="flex items-center gap-2">
-          <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
-          <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
-        </div>
-        <div className="dotted-border w-full h-1 mt-2"></div>
-      </div>
-
-      <Tabs defaultValue="current">
-        <div className="flex justify-between items-center mb-4">
-          <TabsList>
-            <TabsTrigger value="current">Hoxe</TabsTrigger>
-            <TabsTrigger value="historical">Histórico</TabsTrigger>
-          </TabsList>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />
+            <h1 className="text-2xl font-bold text-gray-800">Substitucións</h1>
+          </div>
           
           {isDirector && <Dialog open={openDialog} onOpenChange={setOpenDialog}>
               <DialogTrigger asChild>
@@ -300,6 +291,16 @@ const SubstitutionsPage = () => {
                 </Form>
               </DialogContent>
             </Dialog>}
+        </div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
+      </div>
+
+      <Tabs defaultValue="current">
+        <div className="flex justify-between items-center mb-4">
+          <TabsList>
+            <TabsTrigger value="current">Hoxe</TabsTrigger>
+            <TabsTrigger value="historical">Histórico</TabsTrigger>
+          </TabsList>
         </div>
         
         <TabsContent value="current">

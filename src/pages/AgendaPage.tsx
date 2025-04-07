@@ -1,10 +1,8 @@
-
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, Plus } from 'lucide-react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 import MonthView from '@/components/agenda/MonthView';
 import WeekView from '@/components/agenda/WeekView';
 import CreateEventDialog from '@/components/agenda/CreateEventDialog';
@@ -61,49 +59,48 @@ export const AgendaPage = () => {
   return (
     <DashboardLayout>
       <div className="mb-2">
-        <div className="flex items-center gap-2">
-          <CalendarIcon className="h-6 w-6 text-scola-primary" />
-          <h1 className="text-2xl font-bold">Axenda</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <CalendarIcon className="h-6 w-6 text-scola-primary" />
+            <h1 className="text-2xl font-bold">Axenda</h1>
+          </div>
+          <Button 
+            onClick={handleAddEvent} 
+            className="bg-scola-primary hover:bg-scola-primary/90"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Engadir evento
+          </Button>
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
-      <div className="flex justify-between items-center mb-4">
-        <Tabs defaultValue="month" className="w-full">
-          <div className="flex justify-between items-center mb-4">
-            <TabsList>
-              <TabsTrigger value="month">Mes</TabsTrigger>
-              <TabsTrigger value="week">Semana</TabsTrigger>
-            </TabsList>
+      <Tabs defaultValue="month" className="w-full">
+        <div className="flex justify-between items-center mb-4">
+          <TabsList>
+            <TabsTrigger value="month">Mes</TabsTrigger>
+            <TabsTrigger value="week">Semana</TabsTrigger>
+          </TabsList>
+        </div>
 
-            <Button 
-              onClick={handleAddEvent} 
-              className="bg-scola-primary hover:bg-scola-primary/90"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Engadir evento
-            </Button>
-          </div>
-
-          <TabsContent value="month">
-            <MonthView 
-              events={events} 
-              currentDate={currentDate}
-              setCurrentDate={setCurrentDate}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-            />
-          </TabsContent>
-          
-          <TabsContent value="week">
-            <WeekView 
-              events={events} 
-              currentDate={currentDate}
-              setCurrentDate={setCurrentDate}
-              onAddEvent={handleAddEvent}
-            />
-          </TabsContent>
-        </Tabs>
-      </div>
+        <TabsContent value="month">
+          <MonthView 
+            events={events} 
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        </TabsContent>
+        
+        <TabsContent value="week">
+          <WeekView 
+            events={events} 
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            onAddEvent={handleAddEvent}
+          />
+        </TabsContent>
+      </Tabs>
 
       {isDialogOpen && (
         <CreateEventDialog 
