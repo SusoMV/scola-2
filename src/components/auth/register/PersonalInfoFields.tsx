@@ -11,35 +11,19 @@ interface PersonalInfoFieldsProps {
 
 const PersonalInfoFields: React.FC<PersonalInfoFieldsProps> = ({ form }) => {
   return (
-    <>
-      <FormField
-        control={form.control}
-        name="full_name"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Nome completo</FormLabel>
-            <FormControl>
-              <Input placeholder="Nome e apelidos" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      
-      <FormField
-        control={form.control}
-        name="phone"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Teléfono</FormLabel>
-            <FormControl>
-              <Input placeholder="Teléfono de contacto" {...field} />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </>
+    <FormField
+      control={form.control}
+      name="full_name"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel className="text-lg font-medium">Nome completo</FormLabel>
+          <FormControl>
+            <Input placeholder="Nome e apelidos" {...field} className="h-12" />
+          </FormControl>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 };
 

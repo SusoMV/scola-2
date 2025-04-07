@@ -20,7 +20,6 @@ export const useRegisterForm = () => {
       password: '',
       confirmPassword: '',
       full_name: '',
-      phone: '',
       role: 'docente',
       specialty: '',
       school_code: '',
@@ -39,7 +38,6 @@ export const useRegisterForm = () => {
       // Prepare user metadata
       const userData = {
         full_name: values.full_name,
-        phone: values.phone,
         role: values.role,
         specialty: values.specialty || null,
         school_code: values.school_code.split(' - ')[0] || null,

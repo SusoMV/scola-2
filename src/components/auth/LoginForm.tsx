@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -50,48 +49,49 @@ const LoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-scola-gray">
-      <Card className="w-full max-w-md px-0 my-0 mx-0 py-0">
-        <CardHeader className="flex flex-col items-center space-y-2">
-          <ScolaLogo className="mb-4" />
-          <CardTitle className="text-2xl font-bold">Iniciar sesión</CardTitle>
+      <Card className="w-full max-w-md border border-blue-300 border-dashed rounded-none px-8 py-6">
+        <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
+          <ScolaLogo className="mb-4" size="lg" />
+          <CardTitle className="text-2xl font-bold">
+            <div className="flex space-x-10 border-b">
+              <div className="pb-2 border-b-2 border-[#0070C0] font-semibold">
+                Iniciar sesión
+              </div>
+              <Link to="/register" className="text-gray-500 font-semibold">
+                Rexistrarse
+              </Link>
+            </div>
+          </CardTitle>
         </CardHeader>
-        <CardContent className="px-[25px] mx-[26px]">
+        <CardContent className="px-0">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField control={form.control} name="email" render={({
                 field
               }) => <FormItem className="px-0">
-                    <FormLabel>Correo electrónico</FormLabel>
+                    <FormLabel className="text-lg font-medium">Correo electrónico</FormLabel>
                     <FormControl>
-                      <Input placeholder="nome@escola.edu" type="email" autoComplete="email" disabled={isLoading} {...field} />
+                      <Input placeholder="nome@escola.edu" type="email" autoComplete="email" disabled={isLoading} {...field} className="h-12" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
               <FormField control={form.control} name="password" render={({
                 field
               }) => <FormItem className="px-0">
-                    <FormLabel>Contrasinal</FormLabel>
+                    <FormLabel className="text-lg font-medium">Contrasinal</FormLabel>
                     <FormControl>
-                      <Input placeholder="••••••••" type="password" autoComplete="current-password" disabled={isLoading} {...field} />
+                      <Input placeholder="••••••••" type="password" autoComplete="current-password" disabled={isLoading} {...field} className="h-12" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>} />
-              <div className="flex justify-end">
-                <Link to="/forgot-password" className="text-sm text-scola-primary hover:underline px-[58px]">
+              <div className="flex justify-center">
+                <Link to="/forgot-password" className="text-[#0070C0] hover:underline">
                   Esquecín o contrasinal
                 </Link>
               </div>
-              <Button type="submit" className="w-full bg-scola-primary hover:bg-scola-primary/90" disabled={isLoading}>
+              <Button type="submit" className="w-full bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 text-lg" disabled={isLoading}>
                 {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
-              <div className="text-center mt-4">
-                <p className="text-sm text-muted-foreground">
-                  ¿Non tes unha conta?{' '}
-                  <Link to="/register" className="text-scola-primary hover:underline">
-                    Rexístrate
-                  </Link>
-                </p>
-              </div>
             </form>
           </Form>
         </CardContent>

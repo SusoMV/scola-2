@@ -7,7 +7,6 @@ export const registerSchema = z.object({
   password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres'),
   confirmPassword: z.string(),
   full_name: z.string().min(3, 'O nome completo é obrigatorio'),
-  phone: z.string().min(9, 'O teléfono é obrigatorio'),
   role: z.string({
     required_error: 'Selecciona un rol',
   }),

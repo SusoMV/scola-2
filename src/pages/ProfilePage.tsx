@@ -13,7 +13,7 @@ const ProfilePage = () => {
       <div className="mb-6">
         <div className="flex items-center gap-2">
           <UserCircle className="w-6 h-6 text-[#0070C0]" />
-          <h3 className="text-xl font-semibold">Perfil de Usuario</h3>
+          <h1 className="text-xl font-semibold">Perfil de Usuario</h1>
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>

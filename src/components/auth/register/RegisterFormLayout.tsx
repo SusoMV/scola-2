@@ -19,14 +19,21 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
   onSubmit
 }) => {
   return (
-    <Card className="w-full max-w-md shadow-md border border-scola-gray-dark">
-      <CardHeader className="pb-2">
-        <div className="flex justify-center mb-4">
-          <ScolaLogo size="lg" />
-        </div>
-        <CardTitle className="text-xl text-center text-scola-primary">Crear conta</CardTitle>
+    <Card className="w-full max-w-md border border-blue-300 border-dashed rounded-none px-8 py-6">
+      <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
+        <ScolaLogo className="mb-4" size="lg" />
+        <CardTitle className="text-2xl font-bold">
+          <div className="flex space-x-10 border-b">
+            <Link to="/login" className="text-gray-500 font-semibold">
+              Iniciar sesión
+            </Link>
+            <div className="pb-2 border-b-2 border-[#0070C0] font-semibold">
+              Rexistrarse
+            </div>
+          </div>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-0">
         <form onSubmit={onSubmit} className="space-y-4">
           {children}
           
@@ -36,18 +43,11 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
           
           <Button 
             type="submit" 
-            className="w-full bg-scola-primary text-white"
+            className="w-full bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 text-lg"
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Rexistrando...' : 'Crear conta'}
           </Button>
-          
-          <div className="text-center text-sm mt-4">
-            <span className="text-muted-foreground">Xa tes unha conta?</span>
-            <Link to="/login" className="text-scola-primary hover:underline ml-1 font-medium">
-              Inicia sesión
-            </Link>
-          </div>
         </form>
       </CardContent>
     </Card>
