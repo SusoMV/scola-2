@@ -11,6 +11,10 @@ import CreateEventDialog from '@/components/agenda/CreateEventDialog';
 import { Event } from '@/types/agenda';
 
 export const AgendaPage = () => {
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  
   const [events, setEvents] = useState<Event[]>([
     {
       id: "1",
@@ -41,8 +45,6 @@ export const AgendaPage = () => {
     },
   ]);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
   const handleCreateEvent = (newEvent: Omit<Event, "id">) => {
     const event: Event = {
       ...newEvent,
@@ -50,6 +52,10 @@ export const AgendaPage = () => {
     };
     setEvents([...events, event]);
     setIsDialogOpen(false);
+  };
+  
+  const handleAddEvent = () => {
+    setIsDialogOpen(true);
   };
 
   return (
@@ -71,7 +77,7 @@ export const AgendaPage = () => {
             </TabsList>
 
             <Button 
-              onClick={() => setIsDialogOpen(true)} 
+              onClick={handleAddEvent} 
               className="bg-scola-primary hover:bg-scola-primary/90"
             >
               <Plus className="mr-2 h-4 w-4" /> Engadir evento
@@ -79,17 +85,28 @@ export const AgendaPage = () => {
           </div>
 
           <TabsContent value="month">
-            <MonthView events={events} />
+            <MonthView 
+              events={events} 
+              currentDate={currentDate}
+              setCurrentDate={setCurrentDate}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
           </TabsContent>
           
           <TabsContent value="week">
-            <WeekView events={events} />
+            <WeekView 
+              events={events} 
+              currentDate={currentDate}
+              setCurrentDate={setCurrentDate}
+              onAddEvent={handleAddEvent}
+            />
           </TabsContent>
         </Tabs>
       </div>
 
       <CreateEventDialog 
-        isOpen={isDialogOpen}
+        open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onCreateEvent={handleCreateEvent}
       />

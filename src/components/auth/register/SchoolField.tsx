@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 import { RegisterFormValues } from './types';
-import { SCHOOLS } from './constants';
+import { SCHOOL_CODES } from './constants';
 
 interface SchoolFieldProps {
   form: UseFormReturn<RegisterFormValues>;
@@ -16,9 +16,10 @@ const SchoolField: React.FC<SchoolFieldProps> = ({ form }) => {
 
   // Filter schools based on search query
   const filteredSchools = schoolSearchQuery.length > 0
-    ? SCHOOLS.filter(school => 
-        school.toLowerCase().includes(schoolSearchQuery.toLowerCase()))
-    : SCHOOLS;
+    ? SCHOOL_CODES.filter(school => 
+        school.label.toLowerCase().includes(schoolSearchQuery.toLowerCase()) ||
+        school.value.toLowerCase().includes(schoolSearchQuery.toLowerCase()))
+    : SCHOOL_CODES;
 
   return (
     <FormField
@@ -48,8 +49,8 @@ const SchoolField: React.FC<SchoolFieldProps> = ({ form }) => {
               <div className="max-h-[250px] overflow-y-auto">
                 {filteredSchools.length > 0 ? (
                   filteredSchools.map((school) => (
-                    <SelectItem key={school} value={school}>
-                      {school}
+                    <SelectItem key={school.value} value={school.value}>
+                      {school.label}
                     </SelectItem>
                   ))
                 ) : (

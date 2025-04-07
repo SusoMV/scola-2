@@ -19,15 +19,15 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
   onSubmit
 }) => {
   return (
-    <Card className="w-full max-w-xl border border-blue-300 border-dashed rounded-none px-8 py-6">
+    <Card className="w-full max-w-2xl border border-blue-300 border-dashed rounded-none px-8 py-6">
       <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
         <ScolaLogo className="mb-4" size="lg" />
         <CardTitle className="text-2xl font-bold">
           <div className="flex space-x-10 border-b">
-            <Link to="/login" className="text-gray-500 font-medium text-base">
+            <Link to="/login" className="text-gray-500 font-medium text-sm">
               Iniciar sesión
             </Link>
-            <div className="pb-2 border-b-2 border-[#0070C0] font-medium text-base">
+            <div className="pb-2 border-b-2 border-[#0070C0] font-medium text-sm">
               Rexistrarse
             </div>
           </div>
