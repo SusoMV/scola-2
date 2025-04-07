@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
-import { Mail, MessageSquarePlus, Users, Plus } from 'lucide-react';
+import { Mail, MessageSquarePlus, Users } from 'lucide-react';
 import ConversationList from '@/components/messages/ConversationList';
 import ChatArea from '@/components/messages/ChatArea';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';

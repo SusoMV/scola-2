@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Users } from 'lucide-react';
+import { format } from 'date-fns';
 
 interface Participant {
   id: string;
@@ -9,7 +10,7 @@ interface Participant {
   role: string;
 }
 
-interface Conversation {
+export interface Conversation {
   id: string;
   name: string;
   isGroup: boolean;
@@ -22,20 +23,65 @@ interface Conversation {
 }
 
 interface ConversationListProps {
-  conversations: Conversation[];
-  selectedConversation: Conversation | null;
-  setSelectedConversation: (conversation: Conversation) => void;
-  isLoading: boolean;
-  formatDate: (date: Date) => string;
+  onSelectConversation: (conversationId: string) => void;
+  selectedConversation: string | null;
 }
 
+// Datos de conversaciones de ejemplo
+const mockConversations: Conversation[] = [
+  {
+    id: '1',
+    name: 'Santiago López',
+    isGroup: false,
+    participants: [
+      { id: '1', name: 'Santiago López', role: 'docente' },
+      { id: '2', name: 'Usuario Actual', role: 'docente' }
+    ],
+    messages: [],
+    lastMessage: {
+      content: 'Bos días, teño unha dúbida sobre a clase de mañá',
+      timestamp: new Date('2025-04-06T10:30:00')
+    }
+  },
+  {
+    id: '2',
+    name: 'Departamento de Matemáticas',
+    isGroup: true,
+    participants: [
+      { id: '1', name: 'Ana García', role: 'docente' },
+      { id: '2', name: 'Carlos Rodríguez', role: 'docente' },
+      { id: '3', name: 'Usuario Actual', role: 'docente' }
+    ],
+    messages: [],
+    lastMessage: {
+      content: 'Lembrarvos a reunión do departamento o venres',
+      timestamp: new Date('2025-04-05T14:45:00')
+    }
+  },
+  {
+    id: '3',
+    name: 'Laura Fernández',
+    isGroup: false,
+    participants: [
+      { id: '3', name: 'Laura Fernández', role: 'docente' },
+      { id: '2', name: 'Usuario Actual', role: 'docente' }
+    ],
+    messages: [],
+    lastMessage: {
+      content: 'Xa está listo o informe de avaliación',
+      timestamp: new Date('2025-04-04T17:15:00')
+    }
+  }
+];
+
 const ConversationList: React.FC<ConversationListProps> = ({
-  conversations,
-  selectedConversation,
-  setSelectedConversation,
-  isLoading,
-  formatDate
+  onSelectConversation,
+  selectedConversation
 }) => {
+  const formatDate = (date: Date) => {
+    return format(date, 'HH:mm');
+  };
+
   return (
     <Card className="border border-scola-gray-dark md:col-span-1">
       <CardHeader className="pb-2">
@@ -45,19 +91,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </CardHeader>
       <CardContent className="p-0">
         <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
-          {isLoading ? (
-            <div className="p-4 text-center text-gray-500">
-              Cargando conversas...
-            </div>
-          ) : conversations.length > 0 ? (
+          {mockConversations.length > 0 ? (
             <ul className="divide-y divide-gray-200">
-              {conversations.map((conversation) => (
+              {mockConversations.map((conversation) => (
                 <li key={conversation.id}>
                   <button
                     className={`w-full px-4 py-3 text-left hover:bg-gray-50 ${
-                      selectedConversation?.id === conversation.id ? 'bg-gray-50' : ''
+                      selectedConversation === conversation.id ? 'bg-gray-50' : ''
                     }`}
-                    onClick={() => setSelectedConversation(conversation)}
+                    onClick={() => onSelectConversation(conversation.id)}
                   >
                     <div className="flex items-start">
                       <div className={`rounded-full w-10 h-10 flex items-center justify-center mr-3 ${
