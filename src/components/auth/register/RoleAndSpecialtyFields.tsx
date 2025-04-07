@@ -19,13 +19,13 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ form, s
         name="role"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Rol</FormLabel>
+            <FormLabel className="text-lg font-medium">Rol</FormLabel>
             <Select 
               onValueChange={field.onChange} 
               defaultValue={field.value}
             >
               <FormControl>
-                <SelectTrigger>
+                <SelectTrigger className="h-12">
                   <SelectValue placeholder="Selecciona o teu rol no centro" />
                 </SelectTrigger>
               </FormControl>
@@ -48,13 +48,13 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({ form, s
           name="specialty"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Especialidade</FormLabel>
+              <FormLabel className="text-lg font-medium">Especialidade</FormLabel>
               <Select 
                 onValueChange={field.onChange} 
                 defaultValue={field.value}
               >
                 <FormControl>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-12">
                     <SelectValue placeholder="Selecciona a túa especialidade" />
                   </SelectTrigger>
                 </FormControl>

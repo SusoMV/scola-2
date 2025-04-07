@@ -49,7 +49,7 @@ const LoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-scola-gray">
-      <Card className="w-full max-w-md border border-blue-300 border-dashed rounded-none px-8 py-6">
+      <Card className="w-full max-w-lg border border-blue-300 border-dashed rounded-none px-8 py-6">
         <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
           <ScolaLogo className="mb-4" size="lg" />
           <CardTitle className="text-2xl font-bold">
@@ -57,7 +57,7 @@ const LoginForm = () => {
               <div className="pb-2 border-b-2 border-[#0070C0] font-semibold">
                 Iniciar sesión
               </div>
-              <Link to="/register" className="text-gray-500 font-semibold">
+              <Link to="/register" className="text-gray-500 font-semibold text-base">
                 Rexistrarse
               </Link>
             </div>

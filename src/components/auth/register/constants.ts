@@ -1,26 +1,25 @@
-
-// Lista de roles que un usuario puede tener
+// Define the roles
 export const ROLES = [
   'docente',
-  'alumnado',
-  'directivo'
+  'directivo',
+  'administrativo',
 ];
 
-// Lista de especialidades
+// Define the specialties for teachers
 export const SPECIALTIES = [
   '597031 Infantil',
   '597032 Inglés',
   '597033 Francés',
   '597034 Educación Física',
-  '597035 Música',
   '597036 Pedagoxía Terapéutica',
+  '597035 Música',
   '597037 Audición e Linguaxe',
   '597038 Primaria',
   '597939 Orientación',
-  '000000 Relixión'
+  '000000 Relixión',
 ];
 
-// Lista de centros educativos
+// School codes and names
 export const SCHOOLS = [
   '15000016 - CEIP San Marcos',
   '15026637 - CEIP de Barouta',

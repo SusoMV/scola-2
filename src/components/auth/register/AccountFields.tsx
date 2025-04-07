@@ -17,9 +17,9 @@ const AccountFields: React.FC<AccountFieldsProps> = ({ form }) => {
         name="email"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Correo electrónico</FormLabel>
+            <FormLabel className="text-lg font-medium">Correo electrónico</FormLabel>
             <FormControl>
-              <Input placeholder="nome@exemplo.gal" {...field} />
+              <Input placeholder="nome@exemplo.gal" {...field} className="h-12" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -31,9 +31,9 @@ const AccountFields: React.FC<AccountFieldsProps> = ({ form }) => {
         name="password"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Contrasinal</FormLabel>
+            <FormLabel className="text-lg font-medium">Contrasinal</FormLabel>
             <FormControl>
-              <Input type="password" placeholder="Contrasinal" {...field} />
+              <Input type="password" placeholder="Contrasinal" {...field} className="h-12" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -45,9 +45,9 @@ const AccountFields: React.FC<AccountFieldsProps> = ({ form }) => {
         name="confirmPassword"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Confirmar contrasinal</FormLabel>
+            <FormLabel className="text-lg font-medium">Confirmar contrasinal</FormLabel>
             <FormControl>
-              <Input type="password" placeholder="Confirmar contrasinal" {...field} />
+              <Input type="password" placeholder="Confirmar contrasinal" {...field} className="h-12" />
             </FormControl>
             <FormMessage />
           </FormItem>

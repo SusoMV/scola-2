@@ -26,13 +26,13 @@ const SchoolField: React.FC<SchoolFieldProps> = ({ form }) => {
       name="school_code"
       render={({ field }) => (
         <FormItem>
-          <FormLabel>Centro educativo</FormLabel>
+          <FormLabel className="text-lg font-medium">Centro educativo</FormLabel>
           <Select 
             onValueChange={field.onChange} 
             defaultValue={field.value}
           >
             <FormControl>
-              <SelectTrigger>
+              <SelectTrigger className="h-12">
                 <SelectValue placeholder="Selecciona o teu centro educativo" />
               </SelectTrigger>
             </FormControl>
@@ -42,10 +42,10 @@ const SchoolField: React.FC<SchoolFieldProps> = ({ form }) => {
                   placeholder="Buscar por código ou nome"
                   value={schoolSearchQuery}
                   onChange={(e) => setSchoolSearchQuery(e.target.value)}
-                  className="mb-2"
+                  className="mb-2 h-12"
                 />
               </div>
-              <div className="max-h-[300px] overflow-y-auto">
+              <div className="max-h-[250px] overflow-y-auto">
                 {filteredSchools.length > 0 ? (
                   filteredSchools.map((school) => (
                     <SelectItem key={school} value={school}>
