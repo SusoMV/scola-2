@@ -3,7 +3,7 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { addDays, format, startOfWeek, endOfWeek } from 'date-fns';
+import { addDays, format, startOfWeek, endOfWeek, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import DayCell from './DayCell';
 import { Event } from '@/types/agenda';
@@ -24,9 +24,7 @@ const WeekView: React.FC<WeekViewProps> = ({ events, currentDate, setCurrentDate
   
   // Get events for a specific day
   const getEventsForDay = (day: Date) => {
-    return events.filter(event => 
-      format(event.date, 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd')
-    );
+    return events.filter(event => isSameDay(event.start, day));
   };
 
   return (

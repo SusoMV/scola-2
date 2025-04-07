@@ -22,34 +22,33 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
         <div className="flex items-center">
           <CalendarIcon className="h-4 w-4 mr-2 text-gray-500" />
-          <span className="font-medium">{format(event.date, 'EEEE d MMMM', { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}</span>
+          <span className="font-medium">
+            {format(event.start, 'EEEE d MMMM', { locale: es }).replace(/^\w/, (c) => c.toUpperCase())}
+          </span>
         </div>
         <div className="flex items-center">
           <Clock className="h-4 w-4 mr-2 text-gray-500" />
-          <span>{event.timeStart} - {event.timeEnd}</span>
+          <span>
+            {format(event.start, 'HH:mm')} - {format(event.end, 'HH:mm')}
+          </span>
         </div>
       </div>
       <div className="flex items-center justify-between mb-2">
         <h4 className="text-base font-medium">{event.title}</h4>
-        <Badge className={`${EventTypeColors[event.eventType]}`}>
-          {event.eventType}
+        <Badge className={`${EventTypeColors[event.type]}`}>
+          {event.type}
         </Badge>
       </div>
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-gray-600">
         <div className="flex items-center">
           <Users className="h-4 w-4 mr-2" />
-          <span>{event.recipients}</span>
+          <span>{event.description}</span>
         </div>
         <div className="flex items-center">
           <MapPin className="h-4 w-4 mr-2" />
-          <span>{event.space}</span>
+          <span>{event.location}</span>
         </div>
       </div>
-      {event.mandatory && (
-        <div className="mt-2">
-          <span className="text-xs text-red-500 font-medium">* Asistencia obrigatoria</span>
-        </div>
-      )}
     </div>
   );
 };

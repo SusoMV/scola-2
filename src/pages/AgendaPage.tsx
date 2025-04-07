@@ -105,11 +105,13 @@ export const AgendaPage = () => {
         </Tabs>
       </div>
 
-      <CreateEventDialog 
-        open={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
-        onCreateEvent={handleCreateEvent}
-      />
+      {isDialogOpen && (
+        <CreateEventDialog 
+          open={isDialogOpen}
+          onOpenChange={setIsDialogOpen}
+          onCreateEvent={handleCreateEvent}
+        />
+      )}
     </DashboardLayout>
   );
 };

@@ -2,9 +2,11 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
-import { format, isWeekend } from 'date-fns';
+import { format, isWeekend, isSameDay } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Event } from '@/types/agenda';
+import { Event, EventTypeColors } from '@/types/agenda';
+import { Badge } from '@/components/ui/badge';
+import { Clock, MapPin } from 'lucide-react';
 
 interface DayCellProps {
   day: Date;
@@ -17,6 +19,9 @@ const DayCell: React.FC<DayCellProps> = ({ day, events, onAddEvent }) => {
   const formatDayLabel = (day: Date) => {
     return format(day, 'EEEE d', { locale: es }).replace(/^\w/, (c) => c.toUpperCase());
   };
+
+  // Get events for this specific day
+  const eventsForDay = events.filter(event => isSameDay(event.start, day));
 
   return (
     <div className={`border rounded-md p-2 ${isWeekend(day) ? 'bg-gray-50' : ''}`}>
@@ -34,28 +39,25 @@ const DayCell: React.FC<DayCellProps> = ({ day, events, onAddEvent }) => {
           <span className="sr-only">Engadir evento</span>
         </Button>
         <div className="space-y-2 max-h-[200px] overflow-y-auto pr-6">
-          {events.length > 0 ? (
-            events.map((event) => (
+          {eventsForDay.length > 0 ? (
+            eventsForDay.map((event) => (
               <div 
                 key={event.id} 
                 className="p-2 border rounded-md text-xs"
               >
                 <div className="flex justify-between items-start mb-1">
-                  <Badge className={`${EventTypeColors[event.eventType]} text-[10px]`}>
-                    {event.eventType}
+                  <Badge className={`${EventTypeColors[event.type]} text-[10px]`}>
+                    {event.type}
                   </Badge>
-                  {event.mandatory && (
-                    <span className="text-red-500 text-[10px]">*</span>
-                  )}
                 </div>
                 <p className="font-medium line-clamp-2">{event.title}</p>
                 <div className="flex items-center text-gray-500 mt-1">
                   <Clock className="h-3 w-3 mr-1" />
-                  <span>{event.timeStart} - {event.timeEnd}</span>
+                  <span>{format(event.start, 'HH:mm')} - {format(event.end, 'HH:mm')}</span>
                 </div>
                 <div className="flex items-center text-gray-500 mt-1">
                   <MapPin className="h-3 w-3 mr-1" />
-                  <span className="truncate">{event.space}</span>
+                  <span className="truncate">{event.location}</span>
                 </div>
               </div>
             ))
@@ -67,9 +69,5 @@ const DayCell: React.FC<DayCellProps> = ({ day, events, onAddEvent }) => {
     </div>
   );
 };
-
-import { Badge } from '@/components/ui/badge';
-import { Clock, MapPin } from 'lucide-react';
-import { EventTypeColors } from '@/types/agenda';
 
 export default DayCell;
