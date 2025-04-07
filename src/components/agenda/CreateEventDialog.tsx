@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { CalendarIcon, Clock, MapPin, Users } from 'lucide-react';
@@ -27,7 +26,8 @@ import { format } from 'date-fns';
 interface CreateEventDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmitEvent: (data: Omit<Event, 'id'>) => void;
+  onSubmitEvent?: (data: Omit<Event, 'id'>) => void;
+  onCreateEvent?: (newEvent: Omit<Event, 'id'>) => void;
   defaultDate?: Date;
 }
 
@@ -35,6 +35,7 @@ const CreateEventDialog: React.FC<CreateEventDialogProps> = ({
   open, 
   onOpenChange, 
   onSubmitEvent,
+  onCreateEvent,
   defaultDate 
 }) => {
   // Form for adding a new event
@@ -52,18 +53,31 @@ const CreateEventDialog: React.FC<CreateEventDialogProps> = ({
   });
 
   const onSubmit = (data: any) => {
+    const start = new Date(data.date);
+    const [startHours, startMinutes] = data.timeStart.split(':').map(Number);
+    start.setHours(startHours, startMinutes);
+    
+    const end = new Date(data.date);
+    const [endHours, endMinutes] = data.timeEnd.split(':').map(Number);
+    end.setHours(endHours, endMinutes);
+    
     const newEvent: Omit<Event, 'id'> = {
-      date: new Date(data.date),
       title: data.title,
-      eventType: data.eventType,
-      recipients: data.recipients,
-      space: data.space,
-      timeStart: data.timeStart,
-      timeEnd: data.timeEnd,
-      mandatory: data.mandatory
+      start,
+      end,
+      type: data.eventType as any,
+      description: data.recipients || 'No description',
+      location: data.space || 'No location'
     };
     
-    onSubmitEvent(newEvent);
+    if (onSubmitEvent) {
+      onSubmitEvent(newEvent);
+    }
+    
+    if (onCreateEvent) {
+      onCreateEvent(newEvent);
+    }
+    
     form.reset();
   };
 
@@ -111,7 +125,10 @@ const CreateEventDialog: React.FC<CreateEventDialogProps> = ({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="reunión">Reunión</SelectItem>
+                        <SelectItem value="meeting">Reunión</SelectItem>
+                        <SelectItem value="tutoring">Titoría</SelectItem>
+                        <SelectItem value="activity">Actividade</SelectItem>
+                        <SelectItem value="reunion">Reunión</SelectItem>
                         <SelectItem value="claustro">Claustro</SelectItem>
                         <SelectItem value="consello escolar">Consello Escolar</SelectItem>
                         <SelectItem value="formación">Formación</SelectItem>

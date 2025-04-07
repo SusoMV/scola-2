@@ -15,15 +15,25 @@ interface Participant {
 interface NewMessageDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  facultyMembers: Participant[];
-  onSubmit: (data: { recipient: string, content: string }) => void;
+  facultyMembers?: Participant[];
+  onSubmit?: (data: { recipient: string, content: string }) => void;
+  onSelectRecipient?: (id: string) => void;
 }
+
+// Example faculty members in case none are provided
+const exampleFacultyMembers: Participant[] = [
+  { id: '1', name: 'Santiago López', role: 'docente' },
+  { id: '2', name: 'Ana García', role: 'docente' },
+  { id: '3', name: 'Carlos Rodríguez', role: 'docente' },
+  { id: '4', name: 'Laura Fernández', role: 'xefatura' }
+];
 
 const NewMessageDialog: React.FC<NewMessageDialogProps> = ({
   open,
   onOpenChange,
-  facultyMembers,
-  onSubmit
+  facultyMembers = exampleFacultyMembers,
+  onSubmit,
+  onSelectRecipient
 }) => {
   const form = useForm({
     defaultValues: {
@@ -44,10 +54,17 @@ const NewMessageDialog: React.FC<NewMessageDialogProps> = ({
 
   const handleSubmitForm = (data: { content: string }) => {
     if (selectedRecipientId) {
-      onSubmit({
-        recipient: selectedRecipientId,
-        content: data.content
-      });
+      if (onSubmit) {
+        onSubmit({
+          recipient: selectedRecipientId,
+          content: data.content
+        });
+      }
+      
+      if (onSelectRecipient) {
+        onSelectRecipient(selectedRecipientId);
+      }
+      
       form.reset();
       onOpenChange(false);
     }

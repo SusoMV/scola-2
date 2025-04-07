@@ -15,15 +15,25 @@ interface Participant {
 interface NewGroupDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  facultyMembers: Participant[];
-  onSubmit: (data: { name: string, participants: string[] }) => void;
+  facultyMembers?: Participant[];
+  onSubmit?: (data: { name: string, participants: string[] }) => void;
+  onCreateGroup?: (id: string) => void;
 }
+
+// Example faculty members in case none are provided
+const exampleFacultyMembers: Participant[] = [
+  { id: '1', name: 'Santiago López', role: 'docente' },
+  { id: '2', name: 'Ana García', role: 'docente' },
+  { id: '3', name: 'Carlos Rodríguez', role: 'docente' },
+  { id: '4', name: 'Laura Fernández', role: 'xefatura' }
+];
 
 const NewGroupDialog: React.FC<NewGroupDialogProps> = ({
   open,
   onOpenChange,
-  facultyMembers,
-  onSubmit
+  facultyMembers = exampleFacultyMembers,
+  onSubmit,
+  onCreateGroup
 }) => {
   const form = useForm({
     defaultValues: {
@@ -32,6 +42,22 @@ const NewGroupDialog: React.FC<NewGroupDialogProps> = ({
     }
   });
 
+  const handleSubmitForm = (data: { name: string, participants: string[] }) => {
+    if (onSubmit) {
+      onSubmit(data);
+    }
+    
+    if (onCreateGroup) {
+      // In a real app we'd create the group and then return the ID
+      // For now we'll simulate it with a random ID
+      const newGroupId = `group-${Math.random().toString(36).substr(2, 9)}`;
+      onCreateGroup(newGroupId);
+    }
+    
+    form.reset();
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -39,7 +65,7 @@ const NewGroupDialog: React.FC<NewGroupDialogProps> = ({
           <DialogTitle>Crear novo grupo</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(handleSubmitForm)} className="space-y-4">
             <FormField
               control={form.control}
               name="name"
