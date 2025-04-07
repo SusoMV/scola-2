@@ -26,15 +26,13 @@ import { format } from 'date-fns';
 interface CreateEventDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmitEvent?: (data: Omit<Event, 'id'>) => void;
-  onCreateEvent?: (newEvent: Omit<Event, 'id'>) => void;
+  onCreateEvent: (newEvent: Omit<Event, 'id'>) => void;
   defaultDate?: Date;
 }
 
 const CreateEventDialog: React.FC<CreateEventDialogProps> = ({ 
   open, 
   onOpenChange, 
-  onSubmitEvent,
   onCreateEvent,
   defaultDate 
 }) => {
@@ -42,7 +40,7 @@ const CreateEventDialog: React.FC<CreateEventDialogProps> = ({
   const form = useForm({
     defaultValues: {
       date: defaultDate ? format(defaultDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
-      eventType: 'reunión',
+      eventType: 'meeting',
       title: '',
       recipients: '',
       space: '',
@@ -70,14 +68,7 @@ const CreateEventDialog: React.FC<CreateEventDialogProps> = ({
       location: data.space || 'No location'
     };
     
-    if (onSubmitEvent) {
-      onSubmitEvent(newEvent);
-    }
-    
-    if (onCreateEvent) {
-      onCreateEvent(newEvent);
-    }
-    
+    onCreateEvent(newEvent);
     form.reset();
   };
 
