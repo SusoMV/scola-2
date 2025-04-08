@@ -30,7 +30,16 @@ export const AgendaPage = () => {
     <DashboardLayout>
       <Header onAddEvent={handleAddEvent} />
 
-      <ViewSelector defaultView="month">
+      <ViewSelector defaultView="week">
+        <TabsContent value="week">
+          <WeekView 
+            events={events} 
+            currentDate={currentDate}
+            setCurrentDate={setCurrentDate}
+            onAddEvent={handleAddEvent}
+          />
+        </TabsContent>
+        
         <TabsContent value="month">
           <MonthView 
             events={events} 
@@ -38,15 +47,6 @@ export const AgendaPage = () => {
             setCurrentDate={setCurrentDate}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-          />
-        </TabsContent>
-        
-        <TabsContent value="week">
-          <WeekView 
-            events={events} 
-            currentDate={currentDate}
-            setCurrentDate={setCurrentDate}
-            onAddEvent={handleAddEvent}
           />
         </TabsContent>
       </ViewSelector>

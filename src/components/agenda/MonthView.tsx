@@ -82,7 +82,7 @@ const MonthView: React.FC<MonthViewProps> = ({
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
           <div className="md:col-span-3">
-            <div className="border rounded-md p-4 my-0 py-[33px] mx-0 px-[83px]">
+            <div className="border rounded-md p-2 flex items-center justify-center">
               <CalendarComponent 
                 mode="single" 
                 selected={selectedDate} 
@@ -101,13 +101,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                     backgroundColor: '#FEF7CD'
                   }
                 }} 
-                styles={{
-                  day: {
-                    width: '38px',
-                    height: '38px'
-                  }
-                }} 
-                className="max-w-[320px] pointer-events-auto px-0 mx-0 py-[7px]" 
+                className="rounded-md mx-auto" 
               />
             </div>
           </div>

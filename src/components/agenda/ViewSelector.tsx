@@ -14,9 +14,19 @@ const ViewSelector: React.FC<ViewSelectorProps> = ({
   return (
     <Tabs defaultValue={defaultView} className="w-full">
       <div className="flex justify-between items-center mb-4">
-        <TabsList>
-          <TabsTrigger value="month">Mes</TabsTrigger>
-          <TabsTrigger value="week">Semana</TabsTrigger>
+        <TabsList className="mb-4 bg-muted">
+          <TabsTrigger 
+            value="week" 
+            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+          >
+            Semana
+          </TabsTrigger>
+          <TabsTrigger 
+            value="month"
+            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+          >
+            Mes
+          </TabsTrigger>
         </TabsList>
       </div>
       {children}

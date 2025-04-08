@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -5,8 +6,10 @@ import AttendanceControl from '@/components/tutoring/AttendanceControl';
 import TutoringSessions from '@/components/tutoring/TutoringSessions';
 import NotesSection from '@/components/tutoring/NotesSection';
 import { GraduationCap } from 'lucide-react';
+
 const TutoringPage = () => {
-  return <DashboardLayout>
+  return (
+    <DashboardLayout>
       <div className="mb-2">
         <div className="flex items-center gap-2">
           <GraduationCap className="h-6 w-6 text-scola-primary" />
@@ -16,10 +19,25 @@ const TutoringPage = () => {
       </div>
       
       <Tabs defaultValue="attendance" className="w-full">
-        <TabsList className="mb-4 py-[4px] my-[19px]">
-          <TabsTrigger value="attendance">Control de asistencia</TabsTrigger>
-          <TabsTrigger value="sessions">Titorías solicitadas</TabsTrigger>
-          <TabsTrigger value="notes">Anotacións</TabsTrigger>
+        <TabsList className="mb-4 bg-muted">
+          <TabsTrigger 
+            value="attendance"
+            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+          >
+            Control de asistencia
+          </TabsTrigger>
+          <TabsTrigger 
+            value="sessions"
+            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+          >
+            Titorías solicitadas
+          </TabsTrigger>
+          <TabsTrigger 
+            value="notes"
+            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+          >
+            Anotacións
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="attendance">
@@ -34,6 +52,8 @@ const TutoringPage = () => {
           <NotesSection />
         </TabsContent>
       </Tabs>
-    </DashboardLayout>;
+    </DashboardLayout>
+  );
 };
+
 export default TutoringPage;
