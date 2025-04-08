@@ -69,11 +69,17 @@ const MessageForm = ({ recipient, onSubmit, onCancel }: MessageFormProps) => {
     }
   };
 
+  const handleSubmit = (data: { content: string }) => {
+    onSubmit(data);
+    form.reset();
+    setCharacterCount(0);
+  };
+
   const isOverLimit = characterCount > MAX_MESSAGE_LENGTH;
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <div className="p-3 bg-gray-50 rounded-md">
           <p className="text-sm text-gray-500">Para:</p>
           <p className="font-medium">{recipient?.name}</p>

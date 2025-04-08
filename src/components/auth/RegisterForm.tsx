@@ -18,11 +18,15 @@ const RegisterForm = () => {
       onSubmit={onSubmit}
     >
       <Form {...form}>
-        <div className="space-y-4">
-          <AccountFields form={form} />
-          <PersonalInfoFields form={form} />
-          <RoleAndSpecialtyFields form={form} showSpecialty={showSpecialty} />
-          <SchoolField form={form} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-4">
+            <AccountFields form={form} />
+            <PersonalInfoFields form={form} />
+          </div>
+          <div className="space-y-4">
+            <RoleAndSpecialtyFields form={form} showSpecialty={showSpecialty} />
+            <SchoolField form={form} />
+          </div>
         </div>
       </Form>
     </RegisterFormLayout>

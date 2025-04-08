@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -135,10 +136,7 @@ const SubstitutionsPage = () => {
 
   return (
     <DashboardLayout>
-      <Header 
-        openCreateDialog={() => setOpenDialog(true)} 
-        isDirector={isDirector} 
-      />
+      <Header isDirector={isDirector} />
 
       <Tabs defaultValue="current">
         <div className="flex justify-between items-center mb-4">
@@ -152,6 +150,8 @@ const SubstitutionsPage = () => {
           <CurrentSubstitutionsTable 
             substitutions={substitutions}
             handleToggleSeen={handleToggleSeen}
+            openCreateDialog={() => setOpenDialog(true)}
+            isDirector={isDirector}
           />
         </TabsContent>
         

@@ -53,7 +53,7 @@ const NewMessageDialog: React.FC<NewMessageDialogProps> = ({
   };
 
   const handleSubmitForm = (data: { content: string }) => {
-    if (selectedRecipientId) {
+    if (selectedRecipientId && selectedRecipient) {
       if (onSubmit) {
         onSubmit({
           recipient: selectedRecipientId,

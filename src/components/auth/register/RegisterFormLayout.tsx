@@ -19,7 +19,7 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
   onSubmit
 }) => {
   return (
-    <Card className="w-full max-w-2xl border border-blue-300 border-dashed rounded-none px-8 py-6">
+    <Card className="w-full max-w-4xl border border-blue-300 border-dashed rounded-none px-8 py-6">
       <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
         <ScolaLogo className="mb-4" size="lg" />
         <CardTitle className="text-2xl font-bold">
@@ -35,7 +35,7 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
       </CardHeader>
       <CardContent className="px-0">
         <form onSubmit={onSubmit} className="space-y-4">
-          <div className="max-h-[calc(80vh-300px)] overflow-y-auto pr-2">
+          <div>
             {children}
           </div>
           
@@ -43,13 +43,15 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
             <div className="text-destructive text-sm font-medium">{serverError}</div>
           )}
           
-          <Button 
-            type="submit" 
-            className="w-full bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 text-lg"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Rexistrando...' : 'Crear conta'}
-          </Button>
+          <div className="flex justify-end">
+            <Button 
+              type="submit" 
+              className="bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 px-8 text-lg"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Rexistrando...' : 'Crear conta'}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

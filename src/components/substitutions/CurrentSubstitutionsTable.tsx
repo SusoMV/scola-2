@@ -2,25 +2,38 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Calendar } from 'lucide-react';
+import { Calendar, Plus } from 'lucide-react';
 import { Substitution } from '@/types/substitutions';
+import { Button } from '@/components/ui/button';
 
 interface CurrentSubstitutionsTableProps {
   substitutions: Substitution[];
   handleToggleSeen: (id: string) => void;
+  openCreateDialog: () => void;
+  isDirector: boolean;
 }
 
 const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
   substitutions,
-  handleToggleSeen
+  handleToggleSeen,
+  openCreateDialog,
+  isDirector
 }) => {
   return (
     <Card className="border border-scola-gray-dark">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-medium flex items-center gap-2">
-          <Calendar className="h-5 w-5 text-[#0070C0]" /> 
-          Substitucións actuais
-        </CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-lg font-medium flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-[#0070C0]" /> 
+            Substitucións actuais
+          </CardTitle>
+          
+          {isDirector && (
+            <Button className="bg-scola-primary hover:bg-scola-primary/90" onClick={openCreateDialog}>
+              <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
+            </Button>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         {substitutions.length > 0 ? (

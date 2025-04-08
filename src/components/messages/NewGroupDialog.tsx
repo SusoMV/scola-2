@@ -44,14 +44,15 @@ const NewGroupDialog: React.FC<NewGroupDialogProps> = ({
 
   const handleSubmitForm = (data: { name: string, participants: string[] }) => {
     if (onSubmit) {
-      onSubmit(data);
-    }
-    
-    if (onCreateGroup) {
-      // In a real app we'd create the group and then return the ID
-      // For now we'll simulate it with a random ID
-      const newGroupId = `group-${Math.random().toString(36).substr(2, 9)}`;
-      onCreateGroup(newGroupId);
+      const newGroupId = onSubmit(data);
+      
+      if (onCreateGroup && typeof newGroupId === 'string') {
+        onCreateGroup(newGroupId);
+      } else if (onCreateGroup) {
+        // Si onSubmit no devuelve un ID, generamos uno
+        const generatedId = `group-${Date.now()}`;
+        onCreateGroup(generatedId);
+      }
     }
     
     form.reset();
