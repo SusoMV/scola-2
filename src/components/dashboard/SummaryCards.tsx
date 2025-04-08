@@ -22,7 +22,7 @@ const SummaryCards = () => {
     },
     {
       icon: <Calendar className="h-6 w-6 text-scola-primary" />,
-      title: "Eventos do día",
+      title: "Próximos eventos",
       value: summaryData.events,
       link: "/agenda"
     },

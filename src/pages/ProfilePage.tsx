@@ -17,24 +17,26 @@ const ProfilePage = () => {
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
-      <Tabs defaultValue="info" className="w-full">
-        <TabsList className="mb-4 bg-muted">
-          <TabsTrigger value="info">
-            Datos actuais
-          </TabsTrigger>
-          <TabsTrigger value="edit">
-            Editar perfil
-          </TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="info">
-          <ProfileInfo />
-        </TabsContent>
-        
-        <TabsContent value="edit">
-          <ProfileForm />
-        </TabsContent>
-      </Tabs>
+      <div className="grid grid-cols-1 gap-6">
+        <Tabs defaultValue="info" className="w-full">
+          <TabsList className="mb-4 bg-muted">
+            <TabsTrigger value="info">
+              Datos actuais
+            </TabsTrigger>
+            <TabsTrigger value="edit">
+              Editar perfil
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="info" className="border rounded-lg p-6 bg-white">
+            <ProfileInfo />
+          </TabsContent>
+          
+          <TabsContent value="edit" className="border rounded-lg p-6 bg-white">
+            <ProfileForm />
+          </TabsContent>
+        </Tabs>
+      </div>
     </DashboardLayout>
   );
 };

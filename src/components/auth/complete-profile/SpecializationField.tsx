@@ -4,13 +4,25 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 import { CompleteProfileFormValues } from './types';
-import { SPECIALIZATIONS } from './constants';
 
 interface SpecializationFieldProps {
   form: UseFormReturn<CompleteProfileFormValues>;
 }
 
 const SpecializationField: React.FC<SpecializationFieldProps> = ({ form }) => {
+  const SPECIALIZATIONS = [
+    { id: '597031', name: 'Infantil' },
+    { id: '597032', name: 'Inglés' },
+    { id: '597033', name: 'Francés' },
+    { id: '597034', name: 'Educación Física' },
+    { id: '597036', name: 'Pedagoxía Terapéutica' },
+    { id: '597035', name: 'Música' },
+    { id: '597037', name: 'Audición e Linguaxe' },
+    { id: '597038', name: 'Primaria' },
+    { id: '597939', name: 'Orientación' },
+    { id: '000000', name: 'Relixión' }
+  ];
+  
   return (
     <FormField
       control={form.control}

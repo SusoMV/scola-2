@@ -9,8 +9,6 @@ import Header from '@/components/agenda/Header';
 import ViewSelector from '@/components/agenda/ViewSelector';
 import { Event } from '@/types/agenda';
 import { useAgendaEvents } from '@/hooks/useAgendaEvents';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 export const AgendaPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -30,12 +28,7 @@ export const AgendaPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="mb-6">
-        <div className="flex items-center gap-2">
-          <h1 className="text-2xl font-bold">Axenda</h1>
-        </div>
-        <div className="dotted-border w-full h-1 mt-2"></div>
-      </div>
+      <Header onAddEvent={handleAddEvent} />
 
       <ViewSelector defaultView="week">
         <TabsContent value="week">
@@ -63,6 +56,7 @@ export const AgendaPage = () => {
           open={isDialogOpen}
           onOpenChange={setIsDialogOpen}
           onCreateEvent={handleCreateEvent}
+          defaultDate={selectedDate}
         />
       )}
     </DashboardLayout>

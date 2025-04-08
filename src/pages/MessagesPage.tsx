@@ -204,12 +204,18 @@ const MessagesPage = () => {
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center">
           <div className="flex items-center gap-2">
             <Mail className="h-6 w-6 text-scola-primary" />
             <h1 className="text-2xl font-bold">Mensaxes</h1>
           </div>
-          <div className="flex space-x-2">
+        </div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)]">
+        <div className="md:col-span-1 border rounded-lg bg-white overflow-hidden">
+          <div className="p-3 border-b flex justify-end space-x-2">
             <Button
               variant="outline"
               onClick={() => setIsNewGroupOpen(true)}
@@ -227,12 +233,6 @@ const MessagesPage = () => {
               Nova mensaxe
             </Button>
           </div>
-        </div>
-        <div className="dotted-border w-full h-1 mt-2"></div>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)]">
-        <div className="md:col-span-1 border rounded-lg bg-white overflow-hidden">
           <ConversationList
             onSelectConversation={setSelectedConversation}
             selectedConversation={selectedConversation}
