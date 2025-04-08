@@ -14,10 +14,12 @@ const MessagesPage = () => {
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
   const [isNewGroupOpen, setIsNewGroupOpen] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [messageText, setMessageText] = useState('');
   const { toast } = useToast();
   
-  // Simulamos cargar conversaciones iniciales
+  // Load initial conversations
   useEffect(() => {
+    // Mock data for initial conversations
     setConversations([
       {
         id: '1',
@@ -27,7 +29,14 @@ const MessagesPage = () => {
           { id: '1', name: 'Santiago López', role: 'docente' },
           { id: '2', name: 'Usuario Actual', role: 'docente' }
         ],
-        messages: [],
+        messages: [
+          { 
+            id: '1', 
+            sender: { id: '1', name: 'Santiago López', role: 'docente' }, 
+            content: 'Bos días, teño unha dúbida sobre a clase de mañá',
+            timestamp: new Date('2025-04-06T10:30:00')
+          }
+        ],
         lastMessage: {
           content: 'Bos días, teño unha dúbida sobre a clase de mañá',
           timestamp: new Date('2025-04-06T10:30:00')
@@ -42,7 +51,14 @@ const MessagesPage = () => {
           { id: '2', name: 'Carlos Rodríguez', role: 'docente' },
           { id: '3', name: 'Usuario Actual', role: 'docente' }
         ],
-        messages: [],
+        messages: [
+          {
+            id: '1',
+            sender: { id: '1', name: 'Ana García', role: 'docente' },
+            content: 'Lembrarvos a reunión do departamento o venres',
+            timestamp: new Date('2025-04-05T14:45:00')
+          }
+        ],
         lastMessage: {
           content: 'Lembrarvos a reunión do departamento o venres',
           timestamp: new Date('2025-04-05T14:45:00')
@@ -51,28 +67,78 @@ const MessagesPage = () => {
     ]);
   }, []);
 
+  const handleSendMessage = () => {
+    if (!selectedConversation || !messageText.trim()) return;
+    
+    const newMessage = {
+      id: `msg-${Date.now()}`,
+      sender: { id: 'current-user', name: 'Usuario Actual', role: 'docente' },
+      content: messageText,
+      timestamp: new Date()
+    };
+    
+    setConversations(prevConversations => {
+      return prevConversations.map(conversation => {
+        if (conversation.id === selectedConversation) {
+          return {
+            ...conversation,
+            messages: [...conversation.messages, newMessage],
+            lastMessage: {
+              content: messageText,
+              timestamp: new Date()
+            }
+          };
+        }
+        return conversation;
+      });
+    });
+    
+    setMessageText('');
+    
+    toast({
+      title: "Mensaxe enviada",
+      description: "A túa mensaxe foi enviada correctamente",
+    });
+  };
+
   const handleNewMessage = (data: { recipient: string, content: string }) => {
     const recipientName = data.recipient.split(' - ')[0] || data.recipient;
     
-    // Verificar si ya existe una conversación con este destinatario
+    // Check if conversation already exists
     const existingConvIndex = conversations.findIndex(conv => 
       conv.id === data.recipient && !conv.isGroup
     );
     
     if (existingConvIndex >= 0) {
-      // Actualizar conversación existente
+      // Update existing conversation
+      const newMessage = {
+        id: `msg-${Date.now()}`,
+        sender: { id: 'current-user', name: 'Usuario Actual', role: 'docente' },
+        content: data.content,
+        timestamp: new Date()
+      };
+      
       const updatedConversations = [...conversations];
       updatedConversations[existingConvIndex] = {
         ...updatedConversations[existingConvIndex],
+        messages: [...updatedConversations[existingConvIndex].messages, newMessage],
         lastMessage: {
           content: data.content,
           timestamp: new Date()
         }
       };
+      
       setConversations(updatedConversations);
       setSelectedConversation(data.recipient);
     } else {
-      // Crear nueva conversación
+      // Create new conversation
+      const newMessage = {
+        id: `msg-${Date.now()}`,
+        sender: { id: 'current-user', name: 'Usuario Actual', role: 'docente' },
+        content: data.content,
+        timestamp: new Date()
+      };
+      
       const newConversation: Conversation = {
         id: data.recipient,
         name: recipientName,
@@ -81,12 +147,13 @@ const MessagesPage = () => {
           { id: data.recipient, name: recipientName, role: 'docente' },
           { id: 'current-user', name: 'Usuario Actual', role: 'docente' }
         ],
-        messages: [],
+        messages: [newMessage],
         lastMessage: {
           content: data.content,
           timestamp: new Date()
         }
       };
+      
       setConversations([newConversation, ...conversations]);
       setSelectedConversation(data.recipient);
     }
@@ -111,7 +178,12 @@ const MessagesPage = () => {
           role: parts[1] || 'docente' 
         };
       }),
-      messages: [],
+      messages: [{
+        id: `msg-${Date.now()}`,
+        sender: { id: 'system', name: 'Sistema', role: 'system' },
+        content: 'Grupo creado',
+        timestamp: new Date()
+      }],
       lastMessage: {
         content: 'Grupo creado',
         timestamp: new Date()
@@ -169,7 +241,13 @@ const MessagesPage = () => {
         </div>
         
         <div className="md:col-span-2 border rounded-lg bg-white overflow-hidden">
-          <ChatArea conversationId={selectedConversation} />
+          <ChatArea 
+            conversationId={selectedConversation}
+            conversations={conversations}
+            messageText={messageText}
+            setMessageText={setMessageText}
+            onSendMessage={handleSendMessage}
+          />
         </div>
       </div>
       

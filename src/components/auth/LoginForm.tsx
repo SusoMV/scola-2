@@ -47,8 +47,9 @@ const LoginForm = () => {
     }
   };
 
-  return <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-[67px]">
-      <Card className="w-full max-w-xl border border-blue-300 border-dashed rounded-none py-6 px-[66px]">
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-4 sm:px-6 md:px-8">
+      <Card className="w-full max-w-2xl border border-blue-300 border-dashed rounded-none py-6 px-8 sm:px-12">
         <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
           <ScolaLogo className="mb-4" size="lg" />
           <CardTitle className="text-2xl font-bold">
@@ -95,7 +96,8 @@ const LoginForm = () => {
           </Form>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
 
 export default LoginForm;

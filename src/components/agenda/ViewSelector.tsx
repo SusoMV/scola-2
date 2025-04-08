@@ -1,34 +1,38 @@
 
-import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { ReactNode } from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 interface ViewSelectorProps {
-  children: React.ReactNode;
-  defaultView?: 'month' | 'week';
+  children: ReactNode;
+  defaultView?: string;
+  onAddEvent?: () => void;
 }
 
 const ViewSelector: React.FC<ViewSelectorProps> = ({ 
   children, 
-  defaultView = 'month' 
+  defaultView = "week",
+  onAddEvent
 }) => {
   return (
-    <Tabs defaultValue={defaultView} className="w-full">
+    <Tabs defaultValue={defaultView}>
       <div className="flex justify-between items-center mb-4">
-        <TabsList className="mb-4 bg-muted">
-          <TabsTrigger 
-            value="week" 
-            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
-          >
-            Semana
-          </TabsTrigger>
-          <TabsTrigger 
-            value="month"
-            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
-          >
-            Mes
-          </TabsTrigger>
+        <TabsList>
+          <TabsTrigger value="week">Semana</TabsTrigger>
+          <TabsTrigger value="month">Mes</TabsTrigger>
         </TabsList>
+        
+        {onAddEvent && (
+          <Button 
+            onClick={onAddEvent} 
+            className="bg-scola-primary hover:bg-scola-primary/90"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Engadir evento
+          </Button>
+        )}
       </div>
+      
       {children}
     </Tabs>
   );
