@@ -15,7 +15,7 @@ const MessagesPage = () => {
   
   return (
     <DashboardLayout>
-      <div className="mb-2">
+      <div className="mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Mail className="h-6 w-6 text-scola-primary" />

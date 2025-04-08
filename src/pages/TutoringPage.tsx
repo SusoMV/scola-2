@@ -10,7 +10,7 @@ import { GraduationCap } from 'lucide-react';
 const TutoringPage = () => {
   return (
     <DashboardLayout>
-      <div className="mb-2">
+      <div className="mb-6">
         <div className="flex items-center gap-2">
           <GraduationCap className="h-6 w-6 text-scola-primary" />
           <h1 className="text-2xl font-bold">Titorías</h1>
@@ -22,19 +22,16 @@ const TutoringPage = () => {
         <TabsList className="mb-4 bg-muted">
           <TabsTrigger 
             value="attendance"
-            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
           >
             Control de asistencia
           </TabsTrigger>
           <TabsTrigger 
             value="sessions"
-            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
           >
             Titorías solicitadas
           </TabsTrigger>
           <TabsTrigger 
             value="notes"
-            className="data-[state=active]:bg-scola-primary data-[state=active]:text-white"
           >
             Anotacións
           </TabsTrigger>
