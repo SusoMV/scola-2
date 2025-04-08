@@ -3,20 +3,11 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Mail, MessageSquarePlus, Users } from 'lucide-react';
-import ConversationList from '@/components/messages/ConversationList';
+import ConversationList, { Conversation } from '@/components/messages/ConversationList';
 import ChatArea from '@/components/messages/ChatArea';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
 import NewGroupDialog from '@/components/messages/NewGroupDialog';
 import { useToast } from '@/hooks/use-toast';
-
-interface Conversation {
-  id: string;
-  name: string;
-  lastMessage: string;
-  timestamp: string;
-  unread: boolean;
-  isGroup: boolean;
-}
 
 const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -30,19 +21,32 @@ const MessagesPage = () => {
     setConversations([
       {
         id: '1',
-        name: 'Ana García',
-        lastMessage: 'Bos días! Podemos falar sobre o proxecto?',
-        timestamp: '10:30',
-        unread: true,
-        isGroup: false
+        name: 'Santiago López',
+        isGroup: false,
+        participants: [
+          { id: '1', name: 'Santiago López', role: 'docente' },
+          { id: '2', name: 'Usuario Actual', role: 'docente' }
+        ],
+        messages: [],
+        lastMessage: {
+          content: 'Bos días, teño unha dúbida sobre a clase de mañá',
+          timestamp: new Date('2025-04-06T10:30:00')
+        }
       },
       {
         id: '2',
-        name: 'Grupo de Titorías',
-        lastMessage: 'Carlos: Lembrádevos da reunión de mañá',
-        timestamp: 'Onte',
-        unread: false,
-        isGroup: true
+        name: 'Departamento de Matemáticas',
+        isGroup: true,
+        participants: [
+          { id: '1', name: 'Ana García', role: 'docente' },
+          { id: '2', name: 'Carlos Rodríguez', role: 'docente' },
+          { id: '3', name: 'Usuario Actual', role: 'docente' }
+        ],
+        messages: [],
+        lastMessage: {
+          content: 'Lembrarvos a reunión do departamento o venres',
+          timestamp: new Date('2025-04-05T14:45:00')
+        }
       }
     ]);
   }, []);
@@ -60,9 +64,10 @@ const MessagesPage = () => {
       const updatedConversations = [...conversations];
       updatedConversations[existingConvIndex] = {
         ...updatedConversations[existingConvIndex],
-        lastMessage: data.content,
-        timestamp: 'Agora',
-        unread: false
+        lastMessage: {
+          content: data.content,
+          timestamp: new Date()
+        }
       };
       setConversations(updatedConversations);
       setSelectedConversation(data.recipient);
@@ -71,10 +76,16 @@ const MessagesPage = () => {
       const newConversation: Conversation = {
         id: data.recipient,
         name: recipientName,
-        lastMessage: data.content,
-        timestamp: 'Agora',
-        unread: false,
-        isGroup: false
+        isGroup: false,
+        participants: [
+          { id: data.recipient, name: recipientName, role: 'docente' },
+          { id: 'current-user', name: 'Usuario Actual', role: 'docente' }
+        ],
+        messages: [],
+        lastMessage: {
+          content: data.content,
+          timestamp: new Date()
+        }
       };
       setConversations([newConversation, ...conversations]);
       setSelectedConversation(data.recipient);
@@ -91,10 +102,20 @@ const MessagesPage = () => {
     const newGroup: Conversation = {
       id: newGroupId,
       name: data.name,
-      lastMessage: 'Grupo creado',
-      timestamp: 'Agora',
-      unread: false,
-      isGroup: true
+      isGroup: true,
+      participants: data.participants.map(id => {
+        const parts = id.split(' - ');
+        return { 
+          id, 
+          name: parts[0] || id, 
+          role: parts[1] || 'docente' 
+        };
+      }),
+      messages: [],
+      lastMessage: {
+        content: 'Grupo creado',
+        timestamp: new Date()
+      }
     };
     
     setConversations([newGroup, ...conversations]);
