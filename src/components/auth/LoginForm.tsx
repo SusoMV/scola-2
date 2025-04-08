@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -11,21 +10,17 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import ScolaLogo from '@/components/ScolaLogo';
 import { toast } from 'sonner';
-
 const loginSchema = z.object({
   email: z.string().email('Introduce un email válido'),
   password: z.string().min(6, 'O contrasinal debe ter polo menos 6 caracteres')
 });
-
 type LoginFormValues = z.infer<typeof loginSchema>;
-
 const LoginForm = () => {
   const {
     signIn
   } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,7 +28,6 @@ const LoginForm = () => {
       password: ''
     }
   });
-
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
@@ -46,10 +40,8 @@ const LoginForm = () => {
       setIsLoading(false);
     }
   };
-
-  return (
-    <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-4 sm:px-6 md:px-8">
-      <Card className="w-full max-w-2xl border border-blue-300 border-dashed rounded-none py-6 px-8 sm:px-12">
+  return <div className="flex items-center justify-center min-h-screen bg-scola-gray py-0 px-4 sm:px-6 md:px-8">
+      <Card className="w-full max-w-2xl border border-blue-300 border-dashed rounded-none px-8 py-[18px] sm:px-[129px]">
         <CardHeader className="flex flex-col items-center space-y-2 px-0 pb-6">
           <ScolaLogo className="mb-4" size="lg" />
           <CardTitle className="text-2xl font-bold">
@@ -96,8 +88,6 @@ const LoginForm = () => {
           </Form>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default LoginForm;
