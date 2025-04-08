@@ -25,9 +25,10 @@ export interface Conversation {
 interface ConversationListProps {
   onSelectConversation: (conversationId: string) => void;
   selectedConversation: string | null;
+  conversations?: Conversation[]; // Add this prop to accept conversations from the parent component
 }
 
-// Datos de conversaciones de ejemplo
+// Mock conversations data to use as fallback if none are provided
 const mockConversations: Conversation[] = [
   {
     id: '1',
@@ -76,7 +77,8 @@ const mockConversations: Conversation[] = [
 
 const ConversationList: React.FC<ConversationListProps> = ({
   onSelectConversation,
-  selectedConversation
+  selectedConversation,
+  conversations = mockConversations // Use mockConversations as default if none provided
 }) => {
   const formatDate = (date: Date) => {
     return format(date, 'HH:mm');
@@ -91,9 +93,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </CardHeader>
       <CardContent className="p-0">
         <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
-          {mockConversations.length > 0 ? (
+          {conversations.length > 0 ? (
             <ul className="divide-y divide-gray-200">
-              {mockConversations.map((conversation) => (
+              {conversations.map((conversation) => (
                 <li key={conversation.id}>
                   <button
                     className={`w-full px-4 py-3 text-left hover:bg-gray-50 ${
