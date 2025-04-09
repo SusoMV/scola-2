@@ -34,7 +34,7 @@ const WeekView: React.FC<WeekViewProps> = ({
     return events.filter(event => isSameDay(event.start, day));
   };
   return <Card className="border border-scola-gray-dark">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 my-[6px]">
         <div className="flex justify-between items-center">
           <CardTitle className="text-lg font-medium flex items-center">
             <Calendar className="h-5 w-5 mr-2 text-scola-primary" />
