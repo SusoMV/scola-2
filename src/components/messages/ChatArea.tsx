@@ -34,7 +34,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       </CardHeader>
       <CardContent className="flex-1 flex flex-col p-0">
         {currentConversation ? <>
-            <div className="flex-1 p-4 overflow-y-auto">
+            <div className="flex-1 p-4 overflow-y-auto py-[11px] px-[18px]">
               <div className="space-y-4">
                 {currentConversation.messages.map(message => {
               const isCurrentUser = message.sender.id === 'current-user';
