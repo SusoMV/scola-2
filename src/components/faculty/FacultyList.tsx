@@ -44,7 +44,7 @@ const FacultyList = ({
           specialty: '',
           email: ''
         })}>
-              <span className="mr-2 text-lg text-center">+</span> Añadir membro
+              <span className="mr-2 text-center font-extralight text-2xl">+</span> Añadir membro
             </Button>}
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
