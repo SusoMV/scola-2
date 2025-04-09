@@ -47,30 +47,40 @@ const FacultyList = ({
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2">
-        <h3 className="text-lg font-medium flex items-center gap-2">
-          <Users className="h-5 w-5 text-[#0070C0]" />
-          Membros do claustro
-        </h3>
-        <div className="w-full sm:w-64 relative">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-          <Input
-            placeholder="Buscar profesor..."
-            className="pl-8"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
+        <div className="flex items-center gap-2 text-lg font-medium">
+          <Users className="h-6 w-6 text-scola-primary" />
+          <h3>Membros do claustro</h3>
+        </div>
+        <div className="flex gap-4 w-full sm:w-auto">
+          {isDirector && (
+            <Button 
+              className="bg-scola-primary hover:bg-scola-primary/90 text-white"
+              onClick={() => onMessageClick({ id: 'new', name: '', role: 'docente', specialty: '', email: '' })}
+            >
+              <span className="mr-2">+</span> Añadir membro
+            </Button>
+          )}
+          <div className="relative w-full sm:w-64">
+            <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
+            <Input
+              placeholder="Buscar profesor..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
-      <div className="overflow-x-auto max-h-[600px] overflow-y-auto">
+      <div className="rounded-lg border overflow-hidden">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Nome e apelidos</TableHead>
-              <TableHead>Cargo</TableHead>
-              <TableHead>Especialidade</TableHead>
-              <TableHead className="text-right">Accións</TableHead>
+            <TableRow className="bg-slate-50">
+              <TableHead className="py-3">Nome e apelidos</TableHead>
+              <TableHead className="py-3">Cargo</TableHead>
+              <TableHead className="py-3">Especialidade</TableHead>
+              <TableHead className="text-right py-3">Accións</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,7 +95,7 @@ const FacultyList = ({
                 <TableRow key={member.id}>
                   <TableCell className="font-medium">{member.name}</TableCell>
                   <TableCell>
-                    <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs ${
                       member.role === 'directivo' 
                         ? 'bg-blue-100 text-blue-800' 
                         : 'bg-green-100 text-green-800'

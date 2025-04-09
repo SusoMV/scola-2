@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { Plus, Users } from 'lucide-react';
+import { Users } from 'lucide-react';
 import FacultyList from '@/components/faculty/FacultyList';
 import AddFacultyForm from '@/components/faculty/AddFacultyForm';
 import DeleteConfirmation from '@/components/faculty/DeleteConfirmation';
@@ -81,26 +80,31 @@ const FacultyPage = () => {
       setIsLoading(true);
       if (user) {
         try {
-          const {
-            data: profileData,
-            error: profileError
-          } = await supabase.from('profiles').select('school_id, role').eq('id', user.id);
+          const { data: profileData, error: profileError } = await supabase
+            .from('profiles')
+            .select('school_id, role')
+            .eq('id', user.id);
+          
           if (profileError) {
             console.error('Error fetching profile:', profileError);
             setUserRole('directivo');
             setFacultyMembers(sampleFacultyMembers);
             toast.error('Error ao cargar o perfil, usando datos de proba');
-          } else if (profileData && profileData.length > 0) {
+          } 
+          else if (profileData && profileData.length > 0) {
             setUserRole(profileData[0].role);
-            const {
-              data,
-              error
-            } = await supabase.from('profiles').select('id, full_name, role, specialty, email').eq('school_id', profileData[0].school_id);
+            
+            const { data, error } = await supabase
+              .from('profiles')
+              .select('id, full_name, role, specialty, email')
+              .eq('school_id', profileData[0].school_id);
+            
             if (error) {
               console.error('Error fetching faculty members:', error);
               toast.error('Error ao cargar os membros do claustro, usando datos de proba');
               setFacultyMembers(sampleFacultyMembers);
-            } else if (data && data.length > 0) {
+            } 
+            else if (data && data.length > 0) {
               const formattedData: FacultyMember[] = data.map(item => ({
                 id: item.id,
                 name: item.full_name,
@@ -109,27 +113,32 @@ const FacultyPage = () => {
                 email: item.email
               }));
               setFacultyMembers(formattedData);
-            } else {
+            } 
+            else {
               toast.info('Non hai membros do claustro, usando datos de proba');
               setFacultyMembers(sampleFacultyMembers);
             }
-          } else {
+          } 
+          else {
             setUserRole('directivo');
             setFacultyMembers(sampleFacultyMembers);
             toast.info('Perfil non atopado, usando datos de proba');
           }
-        } catch (error) {
+        } 
+        catch (error) {
           console.error('Error in fetchFacultyMembers:', error);
           setUserRole('directivo');
           setFacultyMembers(sampleFacultyMembers);
           toast.error('Erro inesperado, usando datos de proba');
         }
-      } else {
+      } 
+      else {
         setUserRole('directivo');
         setFacultyMembers(sampleFacultyMembers);
       }
       setIsLoading(false);
     };
+
     fetchFacultyMembers();
   }, [user]);
 
@@ -208,45 +217,33 @@ const FacultyPage = () => {
   return (
     <DashboardLayout>
       <div className="mb-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Users className="h-6 w-6 text-scola-primary" />
-            <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
-          </div>
-          
-          {isDirector && (
-            <Button 
-              onClick={() => setOpenAddDialog(true)}
-              className="bg-scola-primary hover:bg-scola-primary/90"
-            >
-              <Plus className="mr-2 h-4 w-4" /> Añadir membro
-            </Button>
-          )}
+        <div className="flex items-center gap-2">
+          <Users className="h-6 w-6 text-scola-primary" />
+          <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
-      <Card className="border border-scola-gray-dark">
-        <CardHeader className="pb-2">
-          <FacultyList 
-            facultyMembers={facultyMembers} 
-            searchQuery={searchQuery} 
-            setSearchQuery={setSearchQuery} 
-            isLoading={isLoading} 
-            isDirector={isDirector} 
-            onMessageClick={member => {
+      <Card className="p-6 border-scola-gray-dark">
+        <FacultyList 
+          facultyMembers={facultyMembers} 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery} 
+          isLoading={isLoading} 
+          isDirector={isDirector} 
+          onMessageClick={(member) => {
+            if (member.id === 'new') {
+              setOpenAddDialog(true);
+            } else {
               setSelectedMember(member);
               setOpenNewMessageDialog(true);
-            }} 
-            onDeleteClick={member => {
-              setSelectedMember(member);
-              setOpenConfirmDeleteDialog(true);
-            }} 
-          />
-        </CardHeader>
-        <CardContent>
-          {/* Content is in the FacultyList component now */}
-        </CardContent>
+            }
+          }} 
+          onDeleteClick={(member) => {
+            setSelectedMember(member);
+            setOpenConfirmDeleteDialog(true);
+          }} 
+        />
       </Card>
 
       <Dialog open={openAddDialog} onOpenChange={setOpenAddDialog}>

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import ScolaLogo from '@/components/ScolaLogo';
@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronsLeftRight
 } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 interface SidebarProps {
   className?: string;
@@ -67,6 +68,46 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user, signOut } = useAuth();
+  const [userProfile, setUserProfile] = useState<{
+    full_name: string;
+    avatar_url: string;
+    role: string;
+    specialty: string;
+  }>({
+    full_name: '',
+    avatar_url: '',
+    role: '',
+    specialty: ''
+  });
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (user) {
+        try {
+          const { data, error } = await supabase
+            .from('profiles')
+            .select('full_name, profile_image_url, role, specialty')
+            .eq('id', user.id)
+            .single();
+
+          if (error) {
+            console.error('Error fetching user profile:', error);
+          } else if (data) {
+            setUserProfile({
+              full_name: data.full_name || user?.user_metadata?.full_name || 'Usuario',
+              avatar_url: data.profile_image_url || user?.user_metadata?.avatar_url || '',
+              role: data.role || user?.user_metadata?.role || 'docente',
+              specialty: data.specialty || user?.user_metadata?.specialization || ''
+            });
+          }
+        } catch (error) {
+          console.error('Error in fetchUserProfile:', error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [user]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -79,13 +120,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
-  };
-
-  const userData = {
-    name: user?.user_metadata?.full_name || 'Suso',
-    avatar: user?.user_metadata?.avatar_url || '',
-    role: user?.user_metadata?.role || 'directivo',
-    specialty: user?.user_metadata?.specialization || 'Música'
   };
 
   const isActive = (path: string) => {
@@ -123,14 +157,16 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
         <div className="p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <Avatar className="h-10 w-10 bg-scola-primary text-white">
-              <AvatarImage src={userData.avatar} alt={userData.name} />
+              <AvatarImage src={userProfile.avatar_url} alt={userProfile.full_name} />
               <AvatarFallback>
-                {userData.name.charAt(0).toUpperCase()}
+                {userProfile.full_name.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="font-medium">{userData.name}</span>
-              <span className="text-xs text-gray-500">{userData.role} - {userData.specialty}</span>
+              <span className="font-medium">{userProfile.full_name}</span>
+              <span className="text-xs text-gray-500">
+                {userProfile.role === 'directivo' ? 'Directivo' : 'Docente'} - {userProfile.specialty}
+              </span>
             </div>
           </div>
           <Link to="/profile">

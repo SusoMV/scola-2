@@ -18,7 +18,29 @@ import { Shield } from 'lucide-react';
 import { useProfileImage } from '@/hooks/use-profile-image';
 
 // Lista de especialidades predefinidas
-const SPECIALTIES = ['Matemáticas', 'Lingua e Literatura Galega', 'Lingua e Literatura Castelá', 'Inglés', 'Francés', 'Ciencias Naturais', 'Física e Química', 'Xeografía e Historia', 'Tecnoloxía', 'Educación Física', 'Música', 'Educación Plástica', 'Filosofía', 'Economía', 'Informática', 'Orientación Educativa', 'Pedagoxía Terapéutica', 'Audición e Linguaxe', 'Outro'];
+const SPECIALTIES = [
+  '597031 Infantil', 
+  '597032 Inglés', 
+  '597033 Francés', 
+  '597034 Educación Física', 
+  '597036 Pedagoxía Terapéutica', 
+  '597035 Música', 
+  '597037 Audición e Linguaxe', 
+  '597038 Primaria', 
+  '597939 Orientación', 
+  '000000 Relixión',
+  'Matemáticas', 
+  'Lingua e Literatura Galega', 
+  'Lingua e Literatura Castelá', 
+  'Ciencias Naturais', 
+  'Física e Química', 
+  'Xeografía e Historia', 
+  'Tecnoloxía', 
+  'Economía', 
+  'Informática', 
+  'Filosofía', 
+  'Outro'
+];
 
 // Lista de centros educativos
 const SCHOOLS = [
@@ -903,7 +925,6 @@ const ProfileForm = () => {
       }
 
       // Simular o envío de notificacións aos directores
-      // Nunha implementación real, isto enviaría notificacións a través dun sistema de notificacións
       console.log('Enviando solicitude aos directores:', directors);
       toast.success('Solicitude enviada aos directores do centro');
       setIsDirectorRequestOpen(false);

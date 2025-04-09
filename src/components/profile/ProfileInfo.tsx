@@ -1,21 +1,26 @@
 
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Shield, Mail, School, BookOpen, User } from 'lucide-react';
 
 const ProfileInfo = () => {
   const { user } = useAuth();
-  const [profileData, setProfileData] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [profileData, setProfileData] = useState({
+    full_name: '',
+    email: '',
+    school_name: '',
+    specialty: '',
+    role: '',
+    profile_image_url: ''
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
+    const fetchProfileData = async () => {
       if (user) {
         try {
-          setIsLoading(true);
           const { data, error } = await supabase
             .from('profiles')
             .select('*')
@@ -23,105 +28,78 @@ const ProfileInfo = () => {
             .single();
 
           if (error) {
-            throw error;
+            console.error('Error fetching profile data:', error);
+          } else if (data) {
+            setProfileData({
+              full_name: data.full_name || '',
+              email: data.email || user.email || '',
+              school_name: data.school_name || '',
+              specialty: data.specialty || '',
+              role: data.role || 'docente',
+              profile_image_url: data.profile_image_url || ''
+            });
           }
-
-          setProfileData(data);
         } catch (error) {
-          console.error('Error ao cargar o perfil:', error);
+          console.error('Error in fetchProfileData:', error);
         } finally {
-          setIsLoading(false);
+          setLoading(false);
         }
       }
     };
 
-    fetchUserProfile();
+    fetchProfileData();
   }, [user]);
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="flex justify-center items-center p-8">
-        <p>Cargando datos do perfil...</p>
-      </div>
-    );
-  }
-
-  if (!profileData) {
-    return (
-      <div className="flex justify-center items-center p-8">
-        <p>Non se atoparon datos do perfil.</p>
+      <div className="flex justify-center items-center h-48">
+        <div className="text-gray-500">Cargando información de perfil...</div>
       </div>
     );
   }
 
   return (
-    <Card className="p-6 bg-white rounded-lg shadow-sm">
+    <div className="w-full">
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center space-y-4">
           <Avatar className="w-32 h-32 border-2 border-scola-primary">
-            <AvatarImage src={profileData.profile_image_url || ''} alt="Foto de perfil" />
+            <AvatarImage src={profileData.profile_image_url} alt="Foto de perfil" />
             <AvatarFallback className="text-2xl bg-scola-primary text-white">
-              {profileData.full_name?.split(' ').map((name: string) => name[0]).join('') || 'U'}
+              {profileData.full_name?.split(' ').map(name => name[0]).join('') || 'U'}
             </AvatarFallback>
           </Avatar>
-          
-          {profileData.role === 'directivo' && (
-            <div className="mt-4 flex items-center gap-1 text-scola-primary">
-              <Shield className="h-4 w-4" />
-              <span className="text-sm font-medium">Directivo</span>
-            </div>
-          )}
         </div>
 
-        <div className="flex-1">
-          <div className="grid grid-cols-1 gap-6">
-            <div>
-              <h3 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Información personal</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <User className="h-5 w-5 text-scola-primary" />
-                  <div>
-                    <p className="text-sm text-gray-500">Nome completo</p>
-                    <p className="font-medium">{profileData.full_name || '-'}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <Mail className="h-5 w-5 text-scola-primary" />
-                  <div>
-                    <p className="text-sm text-gray-500">Correo electrónico</p>
-                    <p className="font-medium">{profileData.email || user?.email || '-'}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Información profesional</h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <School className="h-5 w-5 text-scola-primary" />
-                  <div>
-                    <p className="text-sm text-gray-500">Centro educativo</p>
-                    <p className="font-medium">{profileData.school_name || '-'}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-scola-primary" />
-                  <div>
-                    <p className="text-sm text-gray-500">Especialidade</p>
-                    <p className="font-medium">{profileData.specialty || '-'}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="flex-1 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="p-4 bg-white rounded-lg shadow-sm">
+              <p className="text-sm text-gray-500">Nome e apelidos</p>
+              <p className="font-medium text-lg">{profileData.full_name}</p>
+            </Card>
+
+            <Card className="p-4 bg-white rounded-lg shadow-sm">
+              <p className="text-sm text-gray-500">Cargo</p>
+              <p className="font-medium text-lg">{profileData.role === 'directivo' ? 'Directivo' : 'Docente'}</p>
+            </Card>
+
+            <Card className="p-4 bg-white rounded-lg shadow-sm">
+              <p className="text-sm text-gray-500">Email</p>
+              <p className="font-medium text-lg">{profileData.email}</p>
+            </Card>
+
+            <Card className="p-4 bg-white rounded-lg shadow-sm">
+              <p className="text-sm text-gray-500">Especialidade</p>
+              <p className="font-medium text-lg">{profileData.specialty}</p>
+            </Card>
           </div>
+
+          <Card className="p-4 bg-white rounded-lg shadow-sm">
+            <p className="text-sm text-gray-500">Centro educativo</p>
+            <p className="font-medium text-lg">{profileData.school_name}</p>
+          </Card>
         </div>
       </div>
-    </Card>
+    </div>
   );
 };
 

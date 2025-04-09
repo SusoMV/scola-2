@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -75,7 +76,7 @@ const MonthView: React.FC<MonthViewProps> = ({
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-7 gap-6">
           <div className="md:col-span-3">
-            <div className="border rounded-md p-2 flex items-center justify-center">
+            <div className="border rounded-md p-2 flex items-start justify-center h-full">
               <CalendarComponent mode="single" selected={selectedDate} onSelect={setSelectedDate} month={currentDate} onMonthChange={setCurrentDate} modifiers={{
               hasEvent: getDatesWithEvents(),
               weekend: getWeekendDates()
@@ -86,11 +87,11 @@ const MonthView: React.FC<MonthViewProps> = ({
               weekend: {
                 backgroundColor: '#FEF7CD'
               }
-            }} className="rounded-md mx-auto [&_.rdp-cell]:p-1 [&_.rdp-button]:p-2 [&_.rdp-day]:text-lg [&_.rdp]:max-w-full" />
+            }} className="rounded-md mx-auto [&_.rdp-cell]:p-1 [&_.rdp-button]:p-2 [&_.rdp-day]:text-lg [&_.rdp]:max-w-full [&_.rdp-button]:h-10 [&_.rdp-button]:w-10" />
             </div>
           </div>
           <div className="md:col-span-4">
-            <div className="border rounded-md p-4 h-full py-[17px] my-[10px]">
+            <div className="border rounded-md p-4 h-full">
               <h3 className="text-lg font-medium mb-4">Eventos do mes</h3>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
                 {getEventsForMonth().length > 0 ? getEventsForMonth().map(event => <EventCard key={event.id} event={event} isSelected={selectedDate && isSameDay(event.start, selectedDate)} />) : <p className="text-center text-gray-400 py-4">Non hai eventos para este mes</p>}
