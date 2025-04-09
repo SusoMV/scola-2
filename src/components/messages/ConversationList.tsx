@@ -93,7 +93,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
     return format(date, 'HH:mm');
   };
   return <Card className="border border-scola-gray-dark md:col-span-1">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 my-0 py-[18px]">
         <CardTitle className="font-medium py-0 my-0 text-xl">
           Conversas
         </CardTitle>
