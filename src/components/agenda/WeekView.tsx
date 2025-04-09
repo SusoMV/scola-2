@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from 'lucide-react';
@@ -31,8 +32,15 @@ const WeekView: React.FC<WeekViewProps> = ({
 
   // Get events for a specific day
   const getEventsForDay = (day: Date) => {
-    return events.filter(event => isSameDay(event.start, day));
+    const dayEvents = events.filter(event => isSameDay(event.start, day));
+    
+    // Mark events as mandatory based on type
+    return dayEvents.map(event => ({
+      ...event,
+      isMandatory: event.type === 'meeting' // Meetings are mandatory
+    }));
   };
+  
   return <Card className="border border-scola-gray-dark">
       <CardHeader className="pb-2 my-[8px]">
         <div className="flex justify-between items-center">

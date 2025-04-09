@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -25,7 +26,13 @@ const MonthView: React.FC<MonthViewProps> = ({
   const getEventsForMonth = () => {
     const start = startOfMonth(currentDate);
     const end = endOfMonth(currentDate);
-    return events.filter(event => event.start >= start && event.start <= end).sort((a, b) => a.start.getTime() - b.start.getTime());
+    return events
+      .filter(event => event.start >= start && event.start <= end)
+      .sort((a, b) => a.start.getTime() - b.start.getTime())
+      .map(event => ({
+        ...event,
+        isMandatory: event.type === 'meeting' // Meetings are mandatory
+      }));
   };
 
   // Get dates that have events in the current month
@@ -93,7 +100,7 @@ const MonthView: React.FC<MonthViewProps> = ({
             <div className="border rounded-md p-4 h-full">
               <h3 className="text-lg font-medium mb-4">Eventos do mes</h3>
               <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
-                {getEventsForMonth().length > 0 ? getEventsForMonth().map(event => <EventCard key={event.id} event={event} isSelected={selectedDate && isSameDay(event.start, selectedDate)} />) : <p className="text-center text-gray-400 py-4">Non hai eventos para este mes</p>}
+                {getEventsForMonth().length > 0 ? getEventsForMonth().map(event => <EventCard key={event.id} event={event} isSelected={selectedDate && isSameDay(event.start, selectedDate)} isMandatory={event.type === 'meeting'} />) : <p className="text-center text-gray-400 py-4">Non hai eventos para este mes</p>}
               </div>
             </div>
           </div>

@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const ProfileInfo = () => {
-  const { user } = useAuth();
+  const { user, session } = useAuth();
   const [profileData, setProfileData] = useState({
     full_name: '',
     email: '',
@@ -30,6 +30,7 @@ const ProfileInfo = () => {
           if (error) {
             console.error('Error fetching profile data:', error);
           } else if (data) {
+            // Set profile data from database
             setProfileData({
               full_name: data.full_name || '',
               email: data.email || user.email || '',
@@ -38,6 +39,29 @@ const ProfileInfo = () => {
               role: data.role || 'docente',
               profile_image_url: data.profile_image_url || ''
             });
+            
+            // Ensure metadata in auth is synchronized with profile
+            if (user && (
+              user.user_metadata?.full_name !== data.full_name || 
+              user.user_metadata?.role !== data.role ||
+              user.user_metadata?.specialty !== data.specialty ||
+              user.user_metadata?.school_name !== data.school_name ||
+              user.user_metadata?.avatar_url !== data.profile_image_url
+            )) {
+              try {
+                await supabase.auth.updateUser({
+                  data: {
+                    full_name: data.full_name,
+                    role: data.role,
+                    specialty: data.specialty,
+                    school_name: data.school_name,
+                    avatar_url: data.profile_image_url
+                  }
+                });
+              } catch (updateError) {
+                console.error('Error updating user metadata:', updateError);
+              }
+            }
           }
         } catch (error) {
           console.error('Error in fetchProfileData:', error);
