@@ -213,9 +213,9 @@ const MessagesPage = () => {
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)]">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)] relative">
         <div className="md:col-span-1 border rounded-lg bg-white overflow-hidden">
-          <div className="p-3 border-b flex justify-end space-x-2">
+          <div className="absolute top-0 right-0 pt-3 pr-3 space-x-2 z-10">
             <Button
               variant="outline"
               onClick={() => setIsNewGroupOpen(true)}
@@ -233,11 +233,13 @@ const MessagesPage = () => {
               Nova mensaxe
             </Button>
           </div>
-          <ConversationList
-            onSelectConversation={setSelectedConversation}
-            selectedConversation={selectedConversation}
-            conversations={conversations}
-          />
+          <div className="pt-16">
+            <ConversationList
+              onSelectConversation={setSelectedConversation}
+              selectedConversation={selectedConversation}
+              conversations={conversations}
+            />
+          </div>
         </div>
         
         <div className="md:col-span-2 border rounded-lg bg-white overflow-hidden">

@@ -28,9 +28,9 @@ export const AgendaPage = () => {
 
   return (
     <DashboardLayout>
-      <Header onAddEvent={handleAddEvent} />
+      <Header />
 
-      <ViewSelector defaultView="week">
+      <ViewSelector defaultView="week" onAddEvent={handleAddEvent}>
         <TabsContent value="week">
           <WeekView 
             events={events} 

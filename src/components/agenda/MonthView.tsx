@@ -101,7 +101,7 @@ const MonthView: React.FC<MonthViewProps> = ({
                     backgroundColor: '#FEF7CD'
                   }
                 }} 
-                className="rounded-md mx-auto" 
+                className="rounded-md mx-auto [&_.rdp-cell]:p-1 [&_.rdp-button]:p-2 [&_.rdp-day]:text-lg [&_.rdp]:max-w-full" 
               />
             </div>
           </div>
