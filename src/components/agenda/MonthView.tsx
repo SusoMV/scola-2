@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -45,7 +44,7 @@ const MonthView: React.FC<MonthViewProps> = ({
   };
   return <Card className="border border-scola-gray-dark">
       <CardHeader className="pb-2">
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center my-0 py-[8px]">
           <CardTitle className="text-lg font-medium flex items-center">
             <CalendarIcon className="h-5 w-5 mr-2 text-scola-primary" />
             {format(currentDate, 'MMMM yyyy', {
