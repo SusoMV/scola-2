@@ -94,7 +94,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
   return <Card className="border border-scola-gray-dark md:col-span-1">
       <CardHeader className="pb-2">
-        <CardTitle className="font-medium my-[5px] py-[10px] text-lg">
+        <CardTitle className="font-medium py-0 my-0 text-xl">
           Conversas
         </CardTitle>
       </CardHeader>
