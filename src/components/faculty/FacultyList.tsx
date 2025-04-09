@@ -1,17 +1,8 @@
-
 import React from 'react';
 import { Search, MessageSquare, Trash2, Users } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-
 interface FacultyMember {
   id: string;
   name: string;
@@ -19,7 +10,6 @@ interface FacultyMember {
   specialty: string;
   email: string;
 }
-
 interface FacultyListProps {
   facultyMembers: FacultyMember[];
   searchQuery: string;
@@ -29,7 +19,6 @@ interface FacultyListProps {
   onMessageClick: (member: FacultyMember) => void;
   onDeleteClick: (member: FacultyMember) => void;
 }
-
 const FacultyList = ({
   facultyMembers,
   searchQuery,
@@ -40,35 +29,26 @@ const FacultyList = ({
   onDeleteClick
 }: FacultyListProps) => {
   // Filter faculty members based on search query
-  const filteredMembers = facultyMembers.filter(member => 
-    member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    member.specialty.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  return (
-    <>
+  const filteredMembers = facultyMembers.filter(member => member.name.toLowerCase().includes(searchQuery.toLowerCase()) || member.specialty.toLowerCase().includes(searchQuery.toLowerCase()));
+  return <>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
         <div className="flex items-center gap-2 text-lg font-medium">
           <Users className="h-6 w-6 text-scola-primary" />
           <h3>Membros do claustro</h3>
         </div>
         <div className="flex gap-4 w-full sm:w-auto">
-          {isDirector && (
-            <Button 
-              className="bg-scola-primary hover:bg-scola-primary/90 text-white"
-              onClick={() => onMessageClick({ id: 'new', name: '', role: 'docente', specialty: '', email: '' })}
-            >
-              <span className="mr-2">+</span> Añadir membro
-            </Button>
-          )}
+          {isDirector && <Button className="bg-scola-primary hover:bg-scola-primary/90 text-white" onClick={() => onMessageClick({
+          id: 'new',
+          name: '',
+          role: 'docente',
+          specialty: '',
+          email: ''
+        })}>
+              <span className="mr-2 text-base">+</span> Añadir membro
+            </Button>}
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
-            <Input
-              placeholder="Buscar profesor..."
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            <Input placeholder="Buscar profesor..." className="pl-8" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
           </div>
         </div>
       </div>
@@ -84,65 +64,39 @@ const FacultyList = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {isLoading ? (
-              <TableRow>
+            {isLoading ? <TableRow>
                 <TableCell colSpan={4} className="text-center py-6 text-gray-500">
                   Cargando membros do claustro...
                 </TableCell>
-              </TableRow>
-            ) : filteredMembers.length > 0 ? (
-              filteredMembers.map((member) => (
-                <TableRow key={member.id}>
+              </TableRow> : filteredMembers.length > 0 ? filteredMembers.map(member => <TableRow key={member.id}>
                   <TableCell className="font-medium">{member.name}</TableCell>
                   <TableCell>
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs ${
-                      member.role === 'directivo' 
-                        ? 'bg-blue-100 text-blue-800' 
-                        : 'bg-green-100 text-green-800'
-                    }`}>
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs ${member.role === 'directivo' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'}`}>
                       {member.role === 'directivo' ? 'Directivo' : 'Docente'}
                     </span>
                   </TableCell>
                   <TableCell>{member.specialty}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        className="h-8 w-8 p-0 text-blue-600"
-                        onClick={() => onMessageClick(member)}
-                      >
+                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-600" onClick={() => onMessageClick(member)}>
                         <MessageSquare className="h-4 w-4" />
                         <span className="sr-only">Enviar mensaxe</span>
                       </Button>
                       
-                      {isDirector && (
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          className="h-8 w-8 p-0 text-red-600"
-                          onClick={() => onDeleteClick(member)}
-                        >
+                      {isDirector && <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600" onClick={() => onDeleteClick(member)}>
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Eliminar</span>
-                        </Button>
-                      )}
+                        </Button>}
                     </div>
                   </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
+                </TableRow>) : <TableRow>
                 <TableCell colSpan={4} className="text-center py-6 text-gray-500">
                   Non se atoparon resultados
                 </TableCell>
-              </TableRow>
-            )}
+              </TableRow>}
           </TableBody>
         </Table>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default FacultyList;
