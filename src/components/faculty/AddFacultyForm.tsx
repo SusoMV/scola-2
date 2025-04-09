@@ -19,6 +19,19 @@ export interface FacultyFormData {
   email: string;
 }
 
+const specialtyOptions = [
+  { value: '597031', label: '597031 Infantil' },
+  { value: '597032', label: '597032 Inglés' },
+  { value: '597033', label: '597033 Francés' },
+  { value: '597034', label: '597034 Educación Física' },
+  { value: '597036', label: '597036 Pedagoxía Terapéutica' },
+  { value: '597035', label: '597035 Música' },
+  { value: '597037', label: '597037 Audición e Linguaxe' },
+  { value: '597038', label: '597038 Primaria' },
+  { value: '597939', label: '597939 Orientación' },
+  { value: '000000', label: '000000 Relixión' },
+];
+
 const AddFacultyForm = ({ onSubmit, onCancel }: AddFacultyFormProps) => {
   const form = useForm<FacultyFormData>({
     defaultValues: {
@@ -74,9 +87,20 @@ const AddFacultyForm = ({ onSubmit, onCancel }: AddFacultyFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Especialidade</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar especialidade" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {specialtyOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
               <FormMessage />
             </FormItem>
           )}

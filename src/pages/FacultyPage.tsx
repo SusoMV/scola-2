@@ -27,42 +27,46 @@ interface FacultyFormData {
   email: string;
 }
 
-const sampleFacultyMembers: FacultyMember[] = [{
-  id: '1',
-  name: 'Ana García Martínez',
-  role: 'directivo',
-  specialty: 'Matemáticas',
-  email: 'anagarcia@example.com'
-}, {
-  id: '2',
-  name: 'Manuel López Fernández',
-  role: 'docente',
-  specialty: 'Lengua y Literatura',
-  email: 'manuellopez@example.com'
-}, {
-  id: '3',
-  name: 'Carmen Rodríguez Vázquez',
-  role: 'docente',
-  specialty: 'Ciencias Naturales',
-  email: 'carmenrodriguez@example.com'
-}, {
-  id: '4',
-  name: 'David Pérez Santos',
-  role: 'docente',
-  specialty: 'Inglés',
-  email: 'davidperez@example.com'
-}, {
-  id: '5',
-  name: 'Elena Sánchez Gómez',
-  role: 'directivo',
-  specialty: 'Historia',
-  email: 'elenasanchez@example.com'
-}];
+const sampleFacultyMembers: FacultyMember[] = [
+  {
+    id: '1',
+    name: 'Ana García Martínez',
+    role: 'directivo',
+    specialty: 'Matemáticas',
+    email: 'anagarcia@example.com'
+  },
+  {
+    id: '2',
+    name: 'Manuel López Fernández',
+    role: 'docente',
+    specialty: 'Lengua y Literatura',
+    email: 'manuellopez@example.com'
+  },
+  {
+    id: '3',
+    name: 'Carmen Rodríguez Vázquez',
+    role: 'docente',
+    specialty: 'Ciencias Naturales',
+    email: 'carmenrodriguez@example.com'
+  },
+  {
+    id: '4',
+    name: 'David Pérez Santos',
+    role: 'docente',
+    specialty: 'Inglés',
+    email: 'davidperez@example.com'
+  },
+  {
+    id: '5',
+    name: 'Elena Sánchez Gómez',
+    role: 'directivo',
+    specialty: 'Historia',
+    email: 'elenasanchez@example.com'
+  }
+];
 
 const FacultyPage = () => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
@@ -201,24 +205,44 @@ const FacultyPage = () => {
 
   const isDirector = userRole === 'directivo';
 
-  return <DashboardLayout>
+  return (
+    <DashboardLayout>
       <div className="mb-6">
-        <div className="flex items-center gap-2">
-          <Users className="h-6 w-6 text-scola-primary" />
-          <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Users className="h-6 w-6 text-scola-primary" />
+            <h1 className="text-2xl font-bold text-gray-800">Claustro</h1>
+          </div>
+          
+          {isDirector && (
+            <Button 
+              onClick={() => setOpenAddDialog(true)}
+              className="bg-scola-primary hover:bg-scola-primary/90"
+            >
+              <Plus className="mr-2 h-4 w-4" /> Añadir membro
+            </Button>
+          )}
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
       <Card className="border border-scola-gray-dark">
         <CardHeader className="pb-2">
-          <FacultyList facultyMembers={facultyMembers} searchQuery={searchQuery} setSearchQuery={setSearchQuery} isLoading={isLoading} isDirector={isDirector} onMessageClick={member => {
-          setSelectedMember(member);
-          setOpenNewMessageDialog(true);
-        }} onDeleteClick={member => {
-          setSelectedMember(member);
-          setOpenConfirmDeleteDialog(true);
-        }} />
+          <FacultyList 
+            facultyMembers={facultyMembers} 
+            searchQuery={searchQuery} 
+            setSearchQuery={setSearchQuery} 
+            isLoading={isLoading} 
+            isDirector={isDirector} 
+            onMessageClick={member => {
+              setSelectedMember(member);
+              setOpenNewMessageDialog(true);
+            }} 
+            onDeleteClick={member => {
+              setSelectedMember(member);
+              setOpenConfirmDeleteDialog(true);
+            }} 
+          />
         </CardHeader>
         <CardContent>
           {/* Content is in the FacultyList component now */}
@@ -239,20 +263,30 @@ const FacultyPage = () => {
           <DialogHeader>
             <DialogTitle>Confirmar eliminación</DialogTitle>
           </DialogHeader>
-          <DeleteConfirmation memberName={selectedMember?.name} onConfirm={handleDeleteMember} onCancel={() => setOpenConfirmDeleteDialog(false)} />
+          <DeleteConfirmation 
+            memberName={selectedMember?.name} 
+            onConfirm={handleDeleteMember} 
+            onCancel={() => setOpenConfirmDeleteDialog(false)} 
+          />
         </DialogContent>
       </Dialog>
 
-      <NewMessageDialog open={openNewMessageDialog} onOpenChange={setOpenNewMessageDialog} facultyMembers={facultyMembers.map(member => ({
-      id: member.id,
-      name: member.name,
-      role: member.role
-    }))} onSubmit={data => {
-      toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
-      setOpenNewMessageDialog(false);
-      setSelectedMember(null);
-    }} />
-    </DashboardLayout>;
+      <NewMessageDialog 
+        open={openNewMessageDialog} 
+        onOpenChange={setOpenNewMessageDialog} 
+        facultyMembers={facultyMembers.map(member => ({
+          id: member.id,
+          name: member.name,
+          role: member.role
+        }))} 
+        onSubmit={data => {
+          toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
+          setOpenNewMessageDialog(false);
+          setSelectedMember(null);
+        }} 
+      />
+    </DashboardLayout>
+  );
 };
 
 export default FacultyPage;

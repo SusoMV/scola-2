@@ -213,13 +213,13 @@ const MessagesPage = () => {
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)] relative">
-        <div className="md:col-span-1 border rounded-lg bg-white overflow-hidden">
-          <div className="absolute top-0 right-0 pt-3 pr-3 space-x-2 z-10">
+      <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-240px)]">
+        <div className="md:w-1/3 flex flex-col">
+          <div className="flex gap-3 mb-4">
             <Button
               variant="outline"
               onClick={() => setIsNewGroupOpen(true)}
-              className="border-scola-primary text-scola-primary hover:bg-scola-primary/10"
+              className="flex-1 border-scola-primary text-scola-primary hover:bg-scola-primary/10"
             >
               <Users className="mr-2 h-4 w-4" />
               Novo grupo
@@ -227,13 +227,17 @@ const MessagesPage = () => {
             
             <Button
               onClick={() => setIsNewMessageOpen(true)}
-              className="bg-scola-primary hover:bg-scola-primary/90"
+              className="flex-1 bg-scola-primary hover:bg-scola-primary/90"
             >
               <MessageSquarePlus className="mr-2 h-4 w-4" />
               Nova mensaxe
             </Button>
           </div>
-          <div className="pt-16">
+          
+          <div className="bg-white border rounded-lg flex-1 overflow-hidden">
+            <div className="p-4 border-b">
+              <h2 className="font-semibold text-gray-800">Conversas</h2>
+            </div>
             <ConversationList
               onSelectConversation={setSelectedConversation}
               selectedConversation={selectedConversation}
@@ -242,7 +246,7 @@ const MessagesPage = () => {
           </div>
         </div>
         
-        <div className="md:col-span-2 border rounded-lg bg-white overflow-hidden">
+        <div className="md:w-2/3 border rounded-lg bg-white overflow-hidden">
           <ChatArea 
             conversationId={selectedConversation}
             conversations={conversations}
