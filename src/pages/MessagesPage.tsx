@@ -215,23 +215,25 @@ const MessagesPage = () => {
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[calc(100vh-240px)]">
         <div className="md:col-span-1 border rounded-lg bg-white overflow-hidden">
-          <div className="p-3 border-b flex justify-end space-x-2">
-            <Button
-              variant="outline"
-              onClick={() => setIsNewGroupOpen(true)}
-              className="border-scola-primary text-scola-primary hover:bg-scola-primary/10"
-            >
-              <Users className="mr-2 h-4 w-4" />
-              Novo grupo
-            </Button>
-            
-            <Button
-              onClick={() => setIsNewMessageOpen(true)}
-              className="bg-scola-primary hover:bg-scola-primary/90"
-            >
-              <MessageSquarePlus className="mr-2 h-4 w-4" />
-              Nova mensaxe
-            </Button>
+          <div className="flex justify-end p-4">
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                onClick={() => setIsNewGroupOpen(true)}
+                className="border-scola-primary text-scola-primary hover:bg-scola-primary/10"
+              >
+                <Users className="mr-2 h-4 w-4" />
+                Novo grupo
+              </Button>
+              
+              <Button
+                onClick={() => setIsNewMessageOpen(true)}
+                className="bg-scola-primary hover:bg-scola-primary/90"
+              >
+                <MessageSquarePlus className="mr-2 h-4 w-4" />
+                Nova mensaxe
+              </Button>
+            </div>
           </div>
           <ConversationList
             onSelectConversation={setSelectedConversation}
