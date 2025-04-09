@@ -37,7 +37,7 @@ const WeekView: React.FC<WeekViewProps> = ({
     // Mark events as mandatory based on type
     return dayEvents.map(event => ({
       ...event,
-      isMandatory: event.type === 'meeting' // Meetings are mandatory
+      isMandatory: event.type === 'meeting' || event.type === 'claustro' || event.type === 'consello escolar'
     }));
   };
   

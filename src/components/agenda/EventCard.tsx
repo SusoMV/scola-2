@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
-import { CalendarIcon, Clock, MapPin, Users } from 'lucide-react';
+import { CalendarIcon, Clock, MapPin, Users, Star } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Event, EventTypeColors } from '@/types/agenda';
@@ -9,9 +9,10 @@ import { Event, EventTypeColors } from '@/types/agenda';
 interface EventCardProps {
   event: Event;
   isSelected?: boolean;
+  isMandatory?: boolean;
 }
 
-const EventCard: React.FC<EventCardProps> = ({ event, isSelected }) => {
+const EventCard: React.FC<EventCardProps> = ({ event, isSelected, isMandatory }) => {
   return (
     <div 
       key={event.id} 
@@ -34,7 +35,10 @@ const EventCard: React.FC<EventCardProps> = ({ event, isSelected }) => {
         </div>
       </div>
       <div className="flex items-center justify-between mb-2">
-        <h4 className="text-base font-medium">{event.title}</h4>
+        <h4 className="text-base font-medium flex items-center">
+          {isMandatory && <Star className="h-4 w-4 mr-1 text-amber-500 fill-amber-500" />}
+          {event.title}
+        </h4>
         <Badge className={`${EventTypeColors[event.type]}`}>
           {event.type}
         </Badge>
