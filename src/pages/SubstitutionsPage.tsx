@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -143,17 +142,11 @@ const SubstitutionsPage = () => {
       <div className="flex justify-between mb-6">
         <Tabs defaultValue="current" className="w-full">
           <div className="flex justify-between items-center mb-4">
-            <TabsList className="bg-white border border-gray-200 rounded-md p-1 h-auto">
-              <TabsTrigger 
-                value="current" 
-                className="px-4 py-2 data-[state=active]:bg-[#0070C0] data-[state=active]:text-white rounded-md"
-              >
+            <TabsList>
+              <TabsTrigger value="current">
                 Hoxe
               </TabsTrigger>
-              <TabsTrigger 
-                value="historical" 
-                className="px-4 py-2 data-[state=active]:bg-[#0070C0] data-[state=active]:text-white rounded-md"
-              >
+              <TabsTrigger value="historical">
                 Histórico
               </TabsTrigger>
             </TabsList>

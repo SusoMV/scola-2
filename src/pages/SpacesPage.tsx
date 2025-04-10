@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Building, Plus, Calendar, Search, Info, Trash2 } from 'lucide-react';
@@ -210,14 +209,11 @@ const SpacesPage = () => {
       
       <div className="flex justify-between items-center mb-4">
         <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-          <TabsList className="bg-white p-0 h-auto">
+          <TabsList>
             {SPACE_CATEGORIES.map(category => (
               <TabsTrigger 
                 key={category.id} 
                 value={category.id}
-                className={`px-4 py-2 ${activeCategory === category.id 
-                  ? 'bg-[#0070C0] text-white' 
-                  : 'text-gray-700 hover:bg-gray-100'}`}
               >
                 {category.name}
               </TabsTrigger>
