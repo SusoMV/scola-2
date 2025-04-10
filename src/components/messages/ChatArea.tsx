@@ -50,8 +50,8 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       <CardContent className="flex-1 flex flex-col p-0">
         {currentConversation ? (
           <>
-            <ScrollArea className="flex-1 px-[18px]">
-              <div className="space-y-4 py-[11px]">
+            <ScrollArea className="flex-1 px-4">
+              <div className="space-y-4 py-4 min-h-[calc(100vh-400px)]">
                 {currentConversation.messages.map(message => {
                   const isCurrentUser = message.sender.id === 'current-user';
                   return (
@@ -93,7 +93,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
             </div>
           </>
         ) : (
-          <div className="flex-1 flex items-center justify-center p-4 py-0 my-0 px-[31px]">
+          <div className="flex-1 flex items-center justify-center p-4">
             <p className="text-gray-500">Selecciona unha conversa para comezar</p>
           </div>
         )}
