@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 import Header from '@/components/substitutions/Header';
 import CurrentSubstitutionsTable from '@/components/substitutions/CurrentSubstitutionsTable';
@@ -138,31 +140,52 @@ const SubstitutionsPage = () => {
     <DashboardLayout>
       <Header isDirector={isDirector} />
 
-      <Tabs defaultValue="current">
-        <div className="flex justify-between items-center mb-4">
-          <TabsList>
-            <TabsTrigger value="current">Hoxe</TabsTrigger>
-            <TabsTrigger value="historical">Histórico</TabsTrigger>
-          </TabsList>
-        </div>
-        
-        <TabsContent value="current">
-          <CurrentSubstitutionsTable 
-            substitutions={substitutions}
-            handleToggleSeen={handleToggleSeen}
-            openCreateDialog={() => setOpenDialog(true)}
-            isDirector={isDirector}
-          />
-        </TabsContent>
-        
-        <TabsContent value="historical">
-          <HistoricalSubstitutionsTable
-            filteredHistoricalSubstitutions={filteredHistoricalSubstitutions}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-        </TabsContent>
-      </Tabs>
+      <div className="flex justify-between mb-6">
+        <Tabs defaultValue="current" className="w-full">
+          <div className="flex justify-between items-center mb-4">
+            <TabsList className="bg-white border border-gray-200 rounded-md p-1 h-auto">
+              <TabsTrigger 
+                value="current" 
+                className="px-4 py-2 data-[state=active]:bg-[#0070C0] data-[state=active]:text-white rounded-md"
+              >
+                Hoxe
+              </TabsTrigger>
+              <TabsTrigger 
+                value="historical" 
+                className="px-4 py-2 data-[state=active]:bg-[#0070C0] data-[state=active]:text-white rounded-md"
+              >
+                Histórico
+              </TabsTrigger>
+            </TabsList>
+            
+            {isDirector && (
+              <Button 
+                className="bg-[#0070C0] hover:bg-[#0070C0]/90 text-white"
+                onClick={() => setOpenDialog(true)}
+              >
+                <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
+              </Button>
+            )}
+          </div>
+          
+          <TabsContent value="current">
+            <CurrentSubstitutionsTable 
+              substitutions={substitutions}
+              handleToggleSeen={handleToggleSeen}
+              openCreateDialog={() => setOpenDialog(true)}
+              isDirector={isDirector}
+            />
+          </TabsContent>
+          
+          <TabsContent value="historical">
+            <HistoricalSubstitutionsTable
+              filteredHistoricalSubstitutions={filteredHistoricalSubstitutions}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
+            />
+          </TabsContent>
+        </Tabs>
+      </div>
 
       <CreateSubstitutionDialog
         open={openDialog}

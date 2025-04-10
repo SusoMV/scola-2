@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Building, Plus, Calendar, Search, Info, Trash2 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -12,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent } from '@/components/ui/card';
 
 // Categorías de espacios
 const SPACE_CATEGORIES = [
@@ -205,106 +204,103 @@ const SpacesPage = () => {
           <Building className="h-6 w-6 text-[#0070C0]" />
           <h1 className="text-2xl font-bold">Espazos</h1>
         </div>
-        <div className="dotted-border w-full h-1 mt-2"></div>
+        <div className="w-full h-[2px] mt-2 border-b border-dashed border-blue-300"></div>
       </div>
       
-      {/* Tabs para categorías de espacios */}
-      <Tabs defaultValue="salas" onValueChange={setActiveCategory} className="w-full">
-        <TabsList className="mb-4 bg-muted">
+      <div className="flex justify-between items-center mb-4">
+        <TabsList className="bg-white p-0 h-auto">
           {SPACE_CATEGORIES.map(category => (
             <TabsTrigger 
               key={category.id} 
               value={category.id}
-              className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white"
+              onClick={() => setActiveCategory(category.id)}
+              className={`px-4 py-2 ${activeCategory === category.id 
+                ? 'bg-[#0070C0] text-white' 
+                : 'text-gray-700 hover:bg-gray-100'}`}
             >
               {category.name}
             </TabsTrigger>
           ))}
         </TabsList>
         
-        {SPACE_CATEGORIES.map(category => (
-          <TabsContent key={category.id} value={category.id}>
-            <Card className="border border-scola-gray-dark">
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-2">
-                    <Building className="h-5 w-5 text-[#0070C0]" />
-                    <h2 className="text-xl font-bold">{category.name}</h2>
+        <Button 
+          className="bg-[#0070C0] hover:bg-[#0070C0]/90 flex gap-2 items-center"
+          onClick={() => {
+            spaceForm.setValue('category', activeCategory);
+            setOpenSpaceDialog(true);
+          }}
+        >
+          <Plus className="h-4 w-4" /> Novo espazo
+        </Button>
+      </div>
+      
+      <Card className="shadow-sm border-gray-200 rounded-md">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-2 mb-6">
+            <Building className="h-5 w-5 text-[#0070C0]" />
+            <h2 className="text-xl font-medium">
+              {SPACE_CATEGORIES.find(cat => cat.id === activeCategory)?.name}
+            </h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {spaces.filter(space => space.category === activeCategory).length > 0 ? 
+              spaces.filter(space => space.category === activeCategory).map(space => (
+                <div key={space.id} className="border rounded-md p-6 hover:shadow-md transition-shadow">
+                  <div className="border-l-4 border-[#0070C0] pl-3 mb-4">
+                    <h3 className="text-lg font-medium">{space.name}</h3>
                   </div>
                   
-                  <Button 
-                    className="bg-[#0070C0] hover:bg-[#0070C0]/90"
-                    onClick={() => {
-                      spaceForm.setValue('category', category.id);
-                      setOpenSpaceDialog(true);
-                    }}
-                  >
-                    <Plus className="mr-2 h-4 w-4" /> Novo espazo
-                  </Button>
+                  <div className="mb-3">
+                    <p className="text-gray-700">
+                      <span className="font-medium">Capacidade:</span> {space.capacity} persoas
+                    </p>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 mb-6">
+                    {space.equipment.map((item: string, index: number) => (
+                      <Badge key={index} variant="outline" className="bg-gray-100 text-gray-800 font-normal">
+                        {item}
+                      </Badge>
+                    ))}
+                  </div>
+                  
+                  <div className="grid grid-cols-[1fr,auto,auto] gap-2">
+                    <Button 
+                      className="bg-[#0070C0] hover:bg-[#0070C0]/90 flex gap-2 items-center"
+                      onClick={() => handleMakeReservation(space)}
+                    >
+                      <Calendar className="h-4 w-4" /> Reservar
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      onClick={() => handleShowSpaceInfo(space)}
+                      className="border-gray-200"
+                    >
+                      <Info className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      variant="outline" 
+                      size="icon"
+                      className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
                 </div>
-                
-                {/* Lista de espacios */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {spaces.filter(space => space.category === category.id).length > 0 ? 
-                    spaces.filter(space => space.category === category.id).map(space => (
-                      <div key={space.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="border-l-4 border-[#0070C0] pl-3 mb-3">
-                          <h3 className="text-lg font-semibold">{space.name}</h3>
-                        </div>
-                        
-                        <div className="mb-4">
-                          <p className="text-gray-700">
-                            <span className="font-medium">Capacidade:</span> {space.capacity} persoas
-                          </p>
-                        </div>
-                        
-                        <div className="flex flex-wrap gap-2 mb-4">
-                          {space.equipment.map((item: string, index: number) => (
-                            <Badge key={index} variant="outline" className="bg-gray-100">
-                              {item}
-                            </Badge>
-                          ))}
-                        </div>
-                        
-                        <div className="flex gap-2 mt-4">
-                          <Button 
-                            className="flex-1 bg-[#0070C0] hover:bg-[#0070C0]/90"
-                            onClick={() => handleMakeReservation(space)}
-                          >
-                            <Calendar className="mr-2 h-4 w-4" /> Reservar
-                          </Button>
-                          
-                          <Button 
-                            variant="outline" 
-                            size="icon"
-                            onClick={() => handleShowSpaceInfo(space)}
-                          >
-                            <Info className="h-4 w-4" />
-                          </Button>
-                          
-                          <Button 
-                            variant="outline" 
-                            size="icon"
-                            className="border-red-200 text-red-500 hover:bg-red-50 hover:text-red-600"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    )) : (
-                      <div className="col-span-full text-center py-10 text-gray-500">
-                        Non hai espazos nesta categoría. Engade un novo espazo.
-                      </div>
-                    )
-                  }
+              )) : (
+                <div className="col-span-full text-center py-10 text-gray-500">
+                  Non hai espazos nesta categoría. Engade un novo espazo.
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
-      </Tabs>
+              )
+            }
+          </div>
+        </CardContent>
+      </Card>
       
-      {/* Modal para engadir novo espazo */}
       <Dialog open={openSpaceDialog} onOpenChange={setOpenSpaceDialog}>
         <DialogContent>
           <DialogHeader>
@@ -396,7 +392,6 @@ const SpacesPage = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Modal para información do espazo */}
       <Dialog open={showSpaceInfoDialog} onOpenChange={setShowSpaceInfoDialog}>
         <DialogContent>
           <DialogHeader>
@@ -455,7 +450,6 @@ const SpacesPage = () => {
         </DialogContent>
       </Dialog>
       
-      {/* Modal para crear reserva */}
       <Dialog open={openReservationDialog} onOpenChange={setOpenReservationDialog}>
         <DialogContent>
           <DialogHeader>
