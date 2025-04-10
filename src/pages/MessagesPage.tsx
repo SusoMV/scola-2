@@ -7,6 +7,7 @@ import ChatArea from '@/components/messages/ChatArea';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
 import NewGroupDialog from '@/components/messages/NewGroupDialog';
 import { useToast } from '@/hooks/use-toast';
+
 const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
   const [isNewMessageOpen, setIsNewMessageOpen] = useState(false);
@@ -17,9 +18,7 @@ const MessagesPage = () => {
     toast
   } = useToast();
 
-  // Load initial conversations
   useEffect(() => {
-    // Mock data for initial conversations
     setConversations([{
       id: '1',
       name: 'Santiago López',
@@ -80,6 +79,7 @@ const MessagesPage = () => {
       }
     }]);
   }, []);
+
   const handleSendMessage = () => {
     if (!selectedConversation || !messageText.trim()) return;
     const newMessage = {
@@ -113,16 +113,17 @@ const MessagesPage = () => {
       description: "A túa mensaxe foi enviada correctamente"
     });
   };
+
   const handleNewMessage = (data: {
     recipient: string;
     content: string;
   }) => {
-    const recipientName = data.recipient.split(' - ')[0] || data.recipient;
+    const recipientParts = data.recipient.split(' - ');
+    const recipientName = recipientParts[0] || 'Usuario';
+    const recipientId = data.recipient;
 
-    // Check if conversation already exists
-    const existingConvIndex = conversations.findIndex(conv => conv.id === data.recipient && !conv.isGroup);
+    const existingConvIndex = conversations.findIndex(conv => conv.id === recipientId && !conv.isGroup);
     if (existingConvIndex >= 0) {
-      // Update existing conversation
       const newMessage = {
         id: `msg-${Date.now()}`,
         sender: {
@@ -133,6 +134,7 @@ const MessagesPage = () => {
         content: data.content,
         timestamp: new Date()
       };
+      
       const updatedConversations = [...conversations];
       updatedConversations[existingConvIndex] = {
         ...updatedConversations[existingConvIndex],
@@ -142,10 +144,10 @@ const MessagesPage = () => {
           timestamp: new Date()
         }
       };
+      
       setConversations(updatedConversations);
-      setSelectedConversation(data.recipient);
+      setSelectedConversation(recipientId);
     } else {
-      // Create new conversation
       const newMessage = {
         id: `msg-${Date.now()}`,
         sender: {
@@ -156,12 +158,13 @@ const MessagesPage = () => {
         content: data.content,
         timestamp: new Date()
       };
+      
       const newConversation: Conversation = {
-        id: data.recipient,
+        id: recipientId,
         name: recipientName,
         isGroup: false,
         participants: [{
-          id: data.recipient,
+          id: recipientId,
           name: recipientName,
           role: 'docente'
         }, {
@@ -175,14 +178,17 @@ const MessagesPage = () => {
           timestamp: new Date()
         }
       };
+      
       setConversations([newConversation, ...conversations]);
-      setSelectedConversation(data.recipient);
+      setSelectedConversation(recipientId);
     }
+    
     toast({
       title: "Mensaxe enviada",
       description: `Enviada mensaxe a ${recipientName}`
     });
   };
+
   const handleCreateGroup = (data: {
     name: string;
     participants: string[];
@@ -223,6 +229,7 @@ const MessagesPage = () => {
     });
     return newGroupId;
   };
+
   return <DashboardLayout>
       <div className="mb-6">
         <div className="flex items-center">
@@ -270,4 +277,5 @@ const MessagesPage = () => {
     }} />
     </DashboardLayout>;
 };
+
 export default MessagesPage;
