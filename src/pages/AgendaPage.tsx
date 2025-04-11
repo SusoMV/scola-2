@@ -22,8 +22,29 @@ export const AgendaPage = () => {
   };
 
   const handleCreateEvent = (newEvent: Omit<Event, "id">) => {
-    addEvent(newEvent);
+    // Translate event type to Galician before adding
+    const translatedEvent = {
+      ...newEvent,
+      type: translateEventType(newEvent.type)
+    };
+    
+    addEvent(translatedEvent);
     setIsDialogOpen(false);
+  };
+  
+  // Function to translate event types to Galician
+  const translateEventType = (type: string): string => {
+    const translations: Record<string, string> = {
+      'meeting': 'reunión',
+      'personal': 'persoal',
+      'work': 'traballo',
+      'class': 'clase',
+      'exam': 'exame',
+      'holiday': 'festivo',
+      'other': 'outro'
+    };
+    
+    return translations[type.toLowerCase()] || type;
   };
 
   return (

@@ -12,24 +12,22 @@ const RegisterForm = () => {
   const { form, isSubmitting, serverError, showSpecialty, onSubmit } = useRegisterForm();
 
   return (
-    <RegisterFormLayout
-      isSubmitting={isSubmitting}
-      serverError={serverError}
-      onSubmit={onSubmit}
-    >
-      <Form {...form}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="w-full max-w-md">
+      <RegisterFormLayout
+        isSubmitting={isSubmitting}
+        serverError={serverError}
+        onSubmit={onSubmit}
+      >
+        <Form {...form}>
           <div className="space-y-4">
             <AccountFields form={form} />
             <PersonalInfoFields form={form} />
-          </div>
-          <div className="space-y-4">
             <RoleAndSpecialtyFields form={form} showSpecialty={showSpecialty} />
             <SchoolField form={form} />
           </div>
-        </div>
-      </Form>
-    </RegisterFormLayout>
+        </Form>
+      </RegisterFormLayout>
+    </div>
   );
 };
 
