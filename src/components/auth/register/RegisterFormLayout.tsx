@@ -1,25 +1,21 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ScolaLogo from '@/components/ScolaLogo';
 import { Button } from '@/components/ui/button';
-
 interface RegisterFormLayoutProps {
   children: React.ReactNode;
   isSubmitting: boolean;
   serverError: string | null;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 }
-
 const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
   children,
   isSubmitting,
   serverError,
   onSubmit
 }) => {
-  return (
-    <Card className="border border-blue-300 border-dashed rounded-lg overflow-hidden">
+  return <Card className="border border-blue-300 border-dashed rounded-lg overflow-hidden">
       <CardHeader className="flex flex-col items-center justify-center pt-8 pb-6 px-6">
         <div className="flex justify-center w-full mb-6">
           <ScolaLogo className="w-full" size="lg" />
@@ -39,23 +35,15 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
             {children}
           </div>
           
-          {serverError && (
-            <div className="text-destructive text-sm font-medium">{serverError}</div>
-          )}
+          {serverError && <div className="text-destructive text-sm font-medium">{serverError}</div>}
           
           <div className="flex justify-center">
-            <Button 
-              type="submit" 
-              className="bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 px-8 text-lg"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" disabled={isSubmitting} className="bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 text-lg my-[9px] px-[144px]">
               {isSubmitting ? 'Rexistrando...' : 'Crear conta'}
             </Button>
           </div>
         </form>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default RegisterFormLayout;
