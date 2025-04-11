@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TabsContent } from '@/components/ui/tabs';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -22,29 +21,29 @@ export const AgendaPage = () => {
   };
 
   const handleCreateEvent = (newEvent: Omit<Event, "id">) => {
-    // Translate event type to Galician before adding
-    const translatedEvent = {
-      ...newEvent,
-      type: translateEventType(newEvent.type)
-    };
+    // Since we need to keep the event type as a valid literal type,
+    // we'll translate for display but keep the original type for the data model
+    const translatedDisplayName = translateEventType(newEvent.type);
     
-    addEvent(translatedEvent);
+    // Add the event with its original type (which matches the Event type)
+    addEvent(newEvent);
     setIsDialogOpen(false);
   };
   
-  // Function to translate event types to Galician
-  const translateEventType = (type: string): string => {
-    const translations: Record<string, string> = {
+  // Function to translate event types to Galician (used for display only)
+  const translateEventType = (type: Event['type']): string => {
+    const translations: Record<Event['type'], string> = {
       'meeting': 'reunión',
-      'personal': 'persoal',
-      'work': 'traballo',
-      'class': 'clase',
-      'exam': 'exame',
-      'holiday': 'festivo',
-      'other': 'outro'
+      'tutoring': 'titoría',
+      'activity': 'actividade',
+      'reunion': 'reunión',
+      'claustro': 'claustro',
+      'consello escolar': 'consello escolar',
+      'formación': 'formación',
+      'charla': 'charla'
     };
     
-    return translations[type.toLowerCase()] || type;
+    return translations[type] || type;
   };
 
   return (
