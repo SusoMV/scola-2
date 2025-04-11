@@ -22,7 +22,7 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
     <Card className="border border-blue-300 border-dashed rounded-lg overflow-hidden">
       <CardHeader className="flex flex-col items-center justify-center pt-8 pb-6 px-6">
         <div className="flex justify-center w-full mb-6">
-          <ScolaLogo className="w-64" size="lg" />
+          <ScolaLogo className="w-full" size="lg" />
         </div>
         <div className="w-full flex border-b mx-0 px-[64px] py-0">
           <Link to="/login" className="pb-2 px-6 text-gray-500 font-medium">

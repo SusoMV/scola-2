@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
@@ -70,6 +70,27 @@ const MessageForm = ({ recipient, onSubmit, onCancel }: MessageFormProps) => {
   };
 
   const handleSubmit = (data: { content: string }) => {
+    // Save message to localStorage for syncing with Mensaxes page
+    if (recipient) {
+      const facultyMessages = localStorage.getItem('faculty-messages') || '[]';
+      let messages = [];
+      
+      try {
+        messages = JSON.parse(facultyMessages);
+      } catch (error) {
+        console.error('Error parsing faculty messages:', error);
+      }
+      
+      messages.push({
+        recipientId: recipient.id,
+        recipientName: recipient.name,
+        content: data.content,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem('faculty-messages', JSON.stringify(messages));
+    }
+    
     onSubmit(data);
     form.reset();
     setCharacterCount(0);
