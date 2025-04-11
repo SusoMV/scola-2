@@ -80,10 +80,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
   };
   return <Card className="border-0 shadow-sm">
       <CardHeader className="pb-2">
-        <CardTitle className="text-lg font-medium flex items-center">
-          <FileText className="h-5 w-5 mr-2 text-scola-primary" />
-          {title}
-        </CardTitle>
+        
       </CardHeader>
       <CardContent>
         <div className="mb-6">
