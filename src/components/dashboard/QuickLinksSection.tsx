@@ -2,11 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
-import { ExternalLink, CalendarDays, Globe, FileText, Clock, Link2, Brain, ChevronsLeftRight } from 'lucide-react';
+import { ExternalLink, CalendarDays, Globe, FileText, Clock, Link2, Brain, ChevronsLeftRight, Edit, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '@/components/ui/dropdown-menu';
 
 const QuickLinksSection = () => {
   const [schoolWebUrl, setSchoolWebUrl] = useState('https://www.edu.xunta.gal/centros/ceipsanmarcos/');
@@ -47,7 +53,7 @@ const QuickLinksSection = () => {
       icon: <Globe className="h-6 w-6 text-scola-primary" />,
       link: schoolWebUrl,
       external: true,
-      editable: true,
+      customAction: true,
     },
     {
       name: 'Gardas',
@@ -89,28 +95,48 @@ const QuickLinksSection = () => {
           {quickLinks.map((link, index) => (
             <div key={index}>
               {link.external ? (
-                <a 
-                  href={link.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200"
-                  onClick={(e) => {
-                    if (link.editable) {
-                      e.preventDefault();
-                      setTempUrl(schoolWebUrl);
-                      setIsEditingUrl(true);
-                    }
-                  }}
-                >
-                  <div className="text-scola-primary mb-2">
-                    {link.icon}
-                  </div>
-                  <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
-                  {link.external && <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />}
-                  {link.editable && (
-                    <span className="text-xs text-gray-400 mt-1">(Clic para editar)</span>
-                  )}
-                </a>
+                link.customAction ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <div className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer">
+                        <div className="text-scola-primary mb-2">
+                          {link.icon}
+                        </div>
+                        <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
+                        <div className="flex items-center mt-1">
+                          <ExternalLink className="h-3 w-3 text-gray-400 mr-1" />
+                          <span className="text-xs text-gray-400">Opcións</span>
+                        </div>
+                      </div>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem onClick={() => window.open(link.link, '_blank')} className="cursor-pointer">
+                        <Share2 className="mr-2 h-4 w-4" />
+                        <span>Ir á web</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => {
+                        setTempUrl(schoolWebUrl);
+                        setIsEditingUrl(true);
+                      }} className="cursor-pointer">
+                        <Edit className="mr-2 h-4 w-4" />
+                        <span>Editar URL</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <a 
+                    href={link.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200"
+                  >
+                    <div className="text-scola-primary mb-2">
+                      {link.icon}
+                    </div>
+                    <span className="text-xs text-center text-gray-700 line-clamp-2">{link.name}</span>
+                    <ExternalLink className="h-3 w-3 text-gray-400 mt-1" />
+                  </a>
+                )
               ) : (
                 <Link 
                   to={link.link}

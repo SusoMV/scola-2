@@ -1,9 +1,12 @@
+
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { FileText } from 'lucide-react';
 import DocumentUploader from '@/components/documents/DocumentUploader';
+
 const DocumentsPage = () => {
-  return <DashboardLayout>
+  return (
+    <DashboardLayout>
       <div className="mb-6">
         <div className="flex items-center">
           <div className="flex items-center gap-2">
@@ -17,6 +20,8 @@ const DocumentsPage = () => {
       <div className="space-y-6">
         <DocumentUploader title="Documentos do centro" category="center" />
       </div>
-    </DashboardLayout>;
+    </DashboardLayout>
+  );
 };
+
 export default DocumentsPage;
