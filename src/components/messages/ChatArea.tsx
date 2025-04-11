@@ -42,7 +42,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   
   return (
     <Card className="h-full flex flex-col">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 sticky top-0 z-10 bg-white border-b">
         <CardTitle className="text-lg font-medium">
           {currentConversation ? currentConversation.name : 'Selecciona unha conversa'}
         </CardTitle>

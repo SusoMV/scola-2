@@ -22,6 +22,8 @@ import FacultyPage from "./pages/FacultyPage";
 import MessagesPage from "./pages/MessagesPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
+import DocumentsPage from "./pages/DocumentsPage";
+import SchedulesPage from "./pages/SchedulesPage";
 
 // Importamos componentes de placeholder para las rutas pendientes
 import PlaceholderPage from "./pages/PlaceholderPage";
@@ -97,6 +99,16 @@ const App = () => (
                 <ProfilePage />
               </ProtectedRoute>
             } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <DocumentsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/schedules" element={
+              <ProtectedRoute>
+                <SchedulesPage />
+              </ProtectedRoute>
+            } />
             {/* Añadimos las rutas pendientes */}
             <Route path="/notifications" element={
               <ProtectedRoute>
@@ -106,16 +118,6 @@ const App = () => (
             <Route path="/school-info" element={
               <ProtectedRoute>
                 <PlaceholderPage title="Datos do centro" />
-              </ProtectedRoute>
-            } />
-            <Route path="/schedules" element={
-              <ProtectedRoute>
-                <PlaceholderPage title="Horarios" />
-              </ProtectedRoute>
-            } />
-            <Route path="/documents" element={
-              <ProtectedRoute>
-                <PlaceholderPage title="Documentos" />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
