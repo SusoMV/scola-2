@@ -1,12 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function useSchoolWebUrl() {
   const [schoolWebUrl, setSchoolWebUrl] = useState('https://www.edu.xunta.gal/centros/ceipsanmarcos/');
   const [isEditingUrl, setIsEditingUrl] = useState(false);
   const [tempUrl, setTempUrl] = useState('');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const savedUrl = localStorage.getItem('schoolWebUrl');
@@ -40,6 +42,7 @@ export function useSchoolWebUrl() {
     tempUrl,
     setTempUrl,
     handleEditUrl,
-    handleSaveUrl
+    handleSaveUrl,
+    isMobile
   };
 }

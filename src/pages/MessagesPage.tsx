@@ -7,6 +7,7 @@ import ChatArea from '@/components/messages/ChatArea';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
 import NewGroupDialog from '@/components/messages/NewGroupDialog';
 import { useToast } from '@/hooks/use-toast';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
@@ -15,6 +16,7 @@ const MessagesPage = () => {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [messageText, setMessageText] = useState('');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const facultyMessages = localStorage.getItem('faculty-messages');
@@ -340,7 +342,7 @@ const MessagesPage = () => {
       </div>
       
       <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-240px)]">
-        <div className="md:w-1/3 flex flex-col">
+        <div className={`${isMobile ? 'w-full' : 'md:w-1/3'} flex flex-col`}>
           <div className="flex gap-3 mb-4">
             <Button variant="outline" onClick={() => setIsNewGroupOpen(true)} className="flex-1 border-scola-primary text-scola-primary hover:bg-scola-primary/10">
               <Users className="mr-2 h-4 w-4" />
@@ -363,7 +365,7 @@ const MessagesPage = () => {
           </div>
         </div>
         
-        <div className="md:w-2/3 border rounded-lg bg-white overflow-hidden">
+        <div className={`${isMobile ? 'w-full' : 'md:w-2/3'} border rounded-lg bg-white overflow-hidden`}>
           <ChatArea 
             conversationId={selectedConversation} 
             conversations={conversations} 

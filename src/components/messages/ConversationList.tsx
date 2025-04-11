@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Users, Trash2 } from 'lucide-react';
@@ -9,6 +10,7 @@ import {
   DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Participant {
   id: string;
@@ -112,7 +114,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="max-h-[calc(100vh-300px)] overflow-y-auto">
+        <ScrollArea className="max-h-[calc(100vh-300px)]">
           {conversations.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {conversations.map(conversation => (
@@ -180,7 +182,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               Non hai conversas
             </div>
           )}
-        </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   );
