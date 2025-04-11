@@ -43,7 +43,7 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
             <div className="text-destructive text-sm font-medium">{serverError}</div>
           )}
           
-          <div className="flex justify-end">
+          <div className="flex justify-center">
             <Button 
               type="submit" 
               className="bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 px-8 text-lg"

@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Send } from 'lucide-react';
@@ -24,6 +24,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   onSendMessage
 }) => {
   const currentConversation = conversationId ? conversations.find(conv => conv.id === conversationId) : null;
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -31,6 +32,13 @@ const ChatArea: React.FC<ChatAreaProps> = ({
       onSendMessage();
     }
   };
+
+  // Scroll to bottom when messages change or conversation changes
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentConversation?.messages]);
   
   return (
     <Card className="h-full flex flex-col">
@@ -62,6 +70,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({
                     </div>
                   );
                 })}
+                <div ref={messagesEndRef} />
               </div>
             </ScrollArea>
             <div className="p-4 border-t sticky bottom-0 bg-white">
