@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -45,7 +44,6 @@ interface StudentNote {
   note: string;
   grade: string;
 }
-
 const NotesSection = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [notes, setNotes] = useState<StudentNote[]>([]);
@@ -53,19 +51,16 @@ const NotesSection = () => {
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [noteText, setNoteText] = useState('');
-
   const handleAddNote = () => {
     if (!selectedStudent || !selectedDate || !noteText) {
       toast.error('Por favor, complete todos os campos obrigatorios');
       return;
     }
-
     const selectedStudentObject = MOCK_STUDENTS.find(student => student.name === selectedStudent);
     if (!selectedStudentObject) {
       toast.error('Estudante non atopado');
       return;
     }
-
     const newNote: StudentNote = {
       id: Date.now(),
       studentId: selectedStudentObject.id,
@@ -74,7 +69,6 @@ const NotesSection = () => {
       note: noteText,
       grade: selectedStudentObject.grade
     };
-
     setNotes([...notes, newNote]);
     toast.success('Anotación gardada con éxito');
     setIsDialogOpen(false);
@@ -84,32 +78,19 @@ const NotesSection = () => {
     setSelectedDate(new Date());
     setNoteText('');
   };
-
-  const filteredNotes = notes.filter(note => 
-    note.studentName.toLowerCase().includes(searchText.toLowerCase()) ||
-    note.note.toLowerCase().includes(searchText.toLowerCase()) ||
-    format(note.date, 'dd/MM/yyyy').includes(searchText)
-  );
-
-  return (
-    <Card className="bg-white">
+  const filteredNotes = notes.filter(note => note.studentName.toLowerCase().includes(searchText.toLowerCase()) || note.note.toLowerCase().includes(searchText.toLowerCase()) || format(note.date, 'dd/MM/yyyy').includes(searchText));
+  return <Card className="bg-white">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-medium flex items-center gap-2">
-            <Book className="h-5 w-5 text-scola-primary" />
+            
             Anotacións de alumnos
           </h2>
           
           <div className="flex gap-2">
             <div className="relative">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-              <Input
-                type="text"
-                placeholder="Buscar anotacións..."
-                className="pl-8 w-[220px]"
-                value={searchText}
-                onChange={e => setSearchText(e.target.value)}
-              />
+              <Input type="text" placeholder="Buscar anotacións..." className="pl-8 w-[220px]" value={searchText} onChange={e => setSearchText(e.target.value)} />
             </div>
             
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -126,18 +107,11 @@ const NotesSection = () => {
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
                     <Label htmlFor="student">Alumno/a</Label>
-                    <select
-                      id="student"
-                      className="w-full p-2 border rounded-md"
-                      value={selectedStudent}
-                      onChange={e => setSelectedStudent(e.target.value)}
-                    >
+                    <select id="student" className="w-full p-2 border rounded-md" value={selectedStudent} onChange={e => setSelectedStudent(e.target.value)}>
                       <option value="">Seleccione alumno/a</option>
-                      {MOCK_STUDENTS.map(student => (
-                        <option key={student.id} value={student.name}>
+                      {MOCK_STUDENTS.map(student => <option key={student.id} value={student.name}>
                           {student.name} - {student.grade}
-                        </option>
-                      ))}
+                        </option>)}
                     </select>
                   </div>
 
@@ -145,35 +119,20 @@ const NotesSection = () => {
                     <Label htmlFor="date">Data</Label>
                     <Popover>
                       <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          className="w-full justify-start text-left font-normal"
-                          id="date"
-                        >
+                        <Button variant="outline" className="w-full justify-start text-left font-normal" id="date">
                           <CalendarIcon className="mr-2 h-4 w-4" />
                           {selectedDate ? format(selectedDate, 'PPP') : "Seleccione data"}
                         </Button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0">
-                        <Calendar
-                          mode="single"
-                          selected={selectedDate}
-                          onSelect={setSelectedDate}
-                          initialFocus
-                        />
+                        <Calendar mode="single" selected={selectedDate} onSelect={setSelectedDate} initialFocus />
                       </PopoverContent>
                     </Popover>
                   </div>
 
                   <div className="space-y-2">
                     <Label htmlFor="note">Anotación</Label>
-                    <Textarea
-                      id="note"
-                      placeholder="Escriba a anotación"
-                      value={noteText}
-                      onChange={e => setNoteText(e.target.value)}
-                      rows={4}
-                    />
+                    <Textarea id="note" placeholder="Escriba a anotación" value={noteText} onChange={e => setNoteText(e.target.value)} rows={4} />
                   </div>
                 </div>
                 <div className="flex justify-end gap-2">
@@ -187,8 +146,7 @@ const NotesSection = () => {
           </div>
         </div>
 
-        {notes.length > 0 ? (
-          <div className="overflow-x-auto">
+        {notes.length > 0 ? <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -199,8 +157,7 @@ const NotesSection = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredNotes.map(note => (
-                  <TableRow key={note.id}>
+                {filteredNotes.map(note => <TableRow key={note.id}>
                     <TableCell>{format(note.date, 'dd/MM/yyyy')}</TableCell>
                     <TableCell>{note.studentName}</TableCell>
                     <TableCell>{note.grade}</TableCell>
@@ -209,19 +166,13 @@ const NotesSection = () => {
                         {note.note}
                       </div>
                     </TableCell>
-                  </TableRow>
-                ))}
+                  </TableRow>)}
               </TableBody>
             </Table>
-          </div>
-        ) : (
-          <div className="text-center py-8 text-gray-500">
+          </div> : <div className="text-center py-8 text-gray-500">
             Non hai anotacións. Pulse o botón "Engadir anotación" para crear unha nova.
-          </div>
-        )}
+          </div>}
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default NotesSection;
