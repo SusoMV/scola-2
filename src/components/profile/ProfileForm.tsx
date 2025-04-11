@@ -196,7 +196,7 @@ const ProfileForm = () => {
                 </Avatar>
 
                 <div className="flex flex-col items-center">
-                  <Label htmlFor="profile_image" className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md">
+                  <Label htmlFor="profile_image" className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md my-[3px]">
                     Cambiar foto
                   </Label>
                   <Input id="profile_image" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
