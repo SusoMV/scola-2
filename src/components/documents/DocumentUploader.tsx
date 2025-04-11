@@ -79,9 +79,7 @@ const DocumentUploader: React.FC<DocumentUploaderProps> = ({
     });
   };
   return <Card className="border-0 shadow-sm">
-      <CardHeader className="pb-2">
-        
-      </CardHeader>
+      
       <CardContent>
         <div className="mb-6">
           <div className="flex items-center gap-4">
