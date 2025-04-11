@@ -312,6 +312,21 @@ const MessagesPage = () => {
     return newGroupId;
   };
 
+  const handleDeleteConversation = (conversationId: string) => {
+    setConversations(prevConversations => 
+      prevConversations.filter(conv => conv.id !== conversationId)
+    );
+    
+    if (selectedConversation === conversationId) {
+      setSelectedConversation(null);
+    }
+    
+    toast({
+      title: "Conversa eliminada",
+      description: "A conversa foi eliminada correctamente"
+    });
+  };
+
   return (
     <DashboardLayout>
       <div className="mb-6">
@@ -342,7 +357,8 @@ const MessagesPage = () => {
             <ConversationList 
               onSelectConversation={setSelectedConversation} 
               selectedConversation={selectedConversation} 
-              conversations={conversations} 
+              conversations={conversations}
+              onDeleteConversation={handleDeleteConversation}
             />
           </div>
         </div>

@@ -17,7 +17,7 @@ import {
   LogOut,
   GraduationCap,
   Settings,
-  ChevronsLeftRight
+  ArrowsUpDown
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -34,7 +34,7 @@ const navItems = [
   { 
     name: 'Substitucións', 
     path: '/substitutions', 
-    icon: <ChevronsLeftRight className="h-5 w-5" /> 
+    icon: <ArrowsUpDown className="h-5 w-5" /> 
   },
   { 
     name: 'Axenda', 

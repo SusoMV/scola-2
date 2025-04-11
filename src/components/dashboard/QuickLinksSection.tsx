@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Link } from 'react-router-dom';
-import { ExternalLink, CalendarDays, Globe, FileText, Clock, Link2, Brain, ChevronsLeftRight, Edit, Share2 } from 'lucide-react';
+import { ExternalLink, CalendarDays, Globe, FileText, Clock, Link2, Brain, ArrowsUpDown, Edit, Share2, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -57,7 +57,7 @@ const QuickLinksSection = () => {
     },
     {
       name: 'Gardas',
-      icon: <ChevronsLeftRight className="h-6 w-6 text-scola-primary" />,
+      icon: <ArrowsUpDown className="h-6 w-6 text-scola-primary" />,
       link: '/documents',
     },
     {
@@ -73,12 +73,12 @@ const QuickLinksSection = () => {
     {
       name: 'Documentos',
       icon: <FileText className="h-6 w-6 text-scola-primary" />,
-      link: '/documents',
+      link: '/documents-in-development',
     },
     {
       name: 'IA',
       icon: <Brain className="h-6 w-6 text-scola-primary" />,
-      link: '/ai',
+      link: '/ai-in-development',
     },
   ];
 
