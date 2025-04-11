@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -17,7 +16,7 @@ import {
   LogOut,
   GraduationCap,
   Settings,
-  ArrowsUpDown
+  ArrowUpDown
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -34,7 +33,7 @@ const navItems = [
   { 
     name: 'Substitucións', 
     path: '/substitutions', 
-    icon: <ArrowsUpDown className="h-5 w-5" /> 
+    icon: <ArrowUpDown className="h-5 w-5" /> 
   },
   { 
     name: 'Axenda', 
@@ -100,7 +99,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
               specialty: data.specialty || user?.user_metadata?.specialization || ''
             });
             
-            // Update user metadata to ensure consistency across the app
             if (user && (
               user.user_metadata?.full_name !== data.full_name || 
               user.user_metadata?.role !== data.role ||
