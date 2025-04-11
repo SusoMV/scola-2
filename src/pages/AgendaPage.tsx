@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TabsContent } from '@/components/ui/tabs';
 import DashboardLayout from '@/components/layout/DashboardLayout';
@@ -21,10 +22,6 @@ export const AgendaPage = () => {
   };
 
   const handleCreateEvent = (newEvent: Omit<Event, "id">) => {
-    // Since we need to keep the event type as a valid literal type,
-    // we'll translate for display but keep the original type for the data model
-    const translatedDisplayName = translateEventType(newEvent.type);
-    
     // Add the event with its original type (which matches the Event type)
     addEvent(newEvent);
     setIsDialogOpen(false);

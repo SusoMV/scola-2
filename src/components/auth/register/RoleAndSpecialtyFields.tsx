@@ -1,13 +1,16 @@
+
 import React from 'react';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { UseFormReturn } from 'react-hook-form';
 import { RegisterFormValues } from './types';
 import { ROLES, SPECIALTIES } from './constants';
+
 interface RoleAndSpecialtyFieldsProps {
   form: UseFormReturn<RegisterFormValues>;
   showSpecialty: boolean;
 }
+
 const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({
   form,
   showSpecialty
@@ -23,7 +26,7 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({
                   <SelectValue placeholder="Selecciona o teu rol" />
                 </SelectTrigger>
                 <SelectContent>
-                  {ROLES.filter(role => role.value !== 'alumnado').map(role => <SelectItem key={role.value} value={role.value}>
+                  {ROLES.filter(role => role.value !== 'alumnado' && role.value !== 'administración').map(role => <SelectItem key={role.value} value={role.value}>
                       {role.label}
                     </SelectItem>)}
                 </SelectContent>
@@ -52,4 +55,5 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({
             </FormItem>} />}
     </>;
 };
+
 export default RoleAndSpecialtyFields;
