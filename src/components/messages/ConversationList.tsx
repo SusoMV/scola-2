@@ -11,7 +11,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface Participant {
   id: string;
@@ -36,17 +35,71 @@ interface ConversationListProps {
   onDeleteConversation?: (conversationId: string) => void;
 }
 
-// Get first name and first letter of surnames
-const getInitials = (name: string) => {
-  const parts = name.split(' ');
-  if (parts.length === 1) return parts[0].charAt(0);
-  return parts[0].charAt(0) + parts[parts.length - 1].charAt(0);
-};
+// Mock conversations data to use as fallback if none are provided
+const mockConversations: Conversation[] = [{
+  id: '1',
+  name: 'Santiago López',
+  isGroup: false,
+  participants: [{
+    id: '1',
+    name: 'Santiago López',
+    role: 'docente'
+  }, {
+    id: '2',
+    name: 'Usuario Actual',
+    role: 'docente'
+  }],
+  messages: [],
+  lastMessage: {
+    content: 'Bos días, teño unha dúbida sobre a clase de mañá',
+    timestamp: new Date('2025-04-06T10:30:00')
+  }
+}, {
+  id: '2',
+  name: 'Departamento de Matemáticas',
+  isGroup: true,
+  participants: [{
+    id: '1',
+    name: 'Ana García',
+    role: 'docente'
+  }, {
+    id: '2',
+    name: 'Carlos Rodríguez',
+    role: 'docente'
+  }, {
+    id: '3',
+    name: 'Usuario Actual',
+    role: 'docente'
+  }],
+  messages: [],
+  lastMessage: {
+    content: 'Lembrarvos a reunión do departamento o venres',
+    timestamp: new Date('2025-04-05T14:45:00')
+  }
+}, {
+  id: '3',
+  name: 'Laura Fernández',
+  isGroup: false,
+  participants: [{
+    id: '3',
+    name: 'Laura Fernández',
+    role: 'docente'
+  }, {
+    id: '2',
+    name: 'Usuario Actual',
+    role: 'docente'
+  }],
+  messages: [],
+  lastMessage: {
+    content: 'Xa está listo o informe de avaliación',
+    timestamp: new Date('2025-04-04T17:15:00')
+  }
+}];
 
 const ConversationList: React.FC<ConversationListProps> = ({
   onSelectConversation,
   selectedConversation,
-  conversations = [],
+  conversations = mockConversations,
   onDeleteConversation
 }) => {
   const formatDate = (date: Date) => {
@@ -72,16 +125,8 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       onClick={() => onSelectConversation(conversation.id)}
                     >
                       <div className="flex items-start">
-                        <div className="mr-3">
-                          {conversation.isGroup ? (
-                            <Avatar className="bg-blue-100 text-blue-600">
-                              <AvatarFallback><Users className="h-5 w-5" /></AvatarFallback>
-                            </Avatar>
-                          ) : (
-                            <Avatar className="bg-scola-pastel text-scola-primary">
-                              <AvatarFallback>{getInitials(conversation.name)}</AvatarFallback>
-                            </Avatar>
-                          )}
+                        <div className={`rounded-full w-10 h-10 flex items-center justify-center mr-3 ${conversation.isGroup ? 'bg-blue-100 text-blue-600' : 'bg-scola-pastel text-scola-primary'}`}>
+                          {conversation.isGroup ? <Users className="h-5 w-5" /> : <User className="h-5 w-5" />}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between">
