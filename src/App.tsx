@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,9 +26,8 @@ import SchedulesPage from "./pages/SchedulesPage";
 import SchoolInfoPage from "./pages/SchoolInfoPage";
 import AiDevelopmentPage from "./pages/AiDevelopmentPage";
 import DocumentsDevelopmentPage from "./pages/DocumentsDevelopmentPage";
-
-// Importamos componentes de placeholder para las rutas pendientes
-import PlaceholderPage from "./pages/PlaceholderPage";
+import ClassroomPlanningPage from "./pages/ClassroomPlanningPage";
+import MeetingMinutesPage from "./pages/MeetingMinutesPage";
 
 const queryClient = new QueryClient();
 
@@ -127,10 +125,19 @@ const App = () => (
                 <DocumentsDevelopmentPage />
               </ProtectedRoute>
             } />
-            {/* Añadimos las rutas pendientes */}
             <Route path="/notifications" element={
               <ProtectedRoute>
                 <PlaceholderPage title="Notificacións" />
+              </ProtectedRoute>
+            } />
+            <Route path="/classroom-planning" element={
+              <ProtectedRoute>
+                <ClassroomPlanningPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/meeting-minutes" element={
+              <ProtectedRoute>
+                <MeetingMinutesPage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />

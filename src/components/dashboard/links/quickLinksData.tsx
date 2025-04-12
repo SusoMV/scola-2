@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Globe, FileText, Clock, Link2, Brain, Shield } from 'lucide-react';
+import { Globe, FileText, Clock, Link2, Brain, Shield, Book, ClipboardList } from 'lucide-react';
 
 export interface QuickLink {
   name: string;
@@ -28,6 +28,16 @@ export const createQuickLinks = (schoolWebUrl: string): QuickLink[] => [
     name: 'Gardas',
     icon: <Shield className="h-6 w-6 text-scola-primary" />,
     link: '/documents',
+  },
+  {
+    name: 'Planificación de aula',
+    icon: <Book className="h-6 w-6 text-scola-primary" />,
+    link: '/classroom-planning',
+  },
+  {
+    name: 'Actas',
+    icon: <ClipboardList className="h-6 w-6 text-scola-primary" />,
+    link: '/meeting-minutes',
   },
   {
     name: 'Datos do centro',
