@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -119,6 +120,72 @@ export function useConversations() {
       },
       {
         id: '2',
+        name: 'Ana García Martínez',
+        isGroup: false,
+        participants: [
+          {
+            id: '2',
+            name: 'Ana García Martínez',
+            role: 'docente'
+          },
+          {
+            id: 'current-user',
+            name: 'Usuario Actual',
+            role: 'docente'
+          }
+        ],
+        messages: [
+          {
+            id: '1',
+            sender: {
+              id: '2',
+              name: 'Ana García Martínez',
+              role: 'docente'
+            },
+            content: 'sadfdsf',
+            timestamp: new Date('2025-04-07T13:58:00')
+          }
+        ],
+        lastMessage: {
+          content: 'sadfdsf',
+          timestamp: new Date('2025-04-07T13:58:00')
+        }
+      },
+      {
+        id: '3',
+        name: 'Manuel López Fernández',
+        isGroup: false,
+        participants: [
+          {
+            id: '3',
+            name: 'Manuel López Fernández',
+            role: 'docente'
+          },
+          {
+            id: 'current-user',
+            name: 'Usuario Actual',
+            role: 'docente'
+          }
+        ],
+        messages: [
+          {
+            id: '1',
+            sender: {
+              id: '3',
+              name: 'Manuel López Fernández',
+              role: 'docente'
+            },
+            content: 'sadfasdf',
+            timestamp: new Date('2025-04-08T14:02:00')
+          }
+        ],
+        lastMessage: {
+          content: 'sadfasdf',
+          timestamp: new Date('2025-04-08T14:02:00')
+        }
+      },
+      {
+        id: '4',
         name: 'Departamento de Matemáticas',
         isGroup: true,
         participants: [
