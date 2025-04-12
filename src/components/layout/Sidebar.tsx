@@ -65,7 +65,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           <ScolaLogo size="md" />
         </div>
 
-        <SidebarUserProfile userProfile={userProfile} />
+        <SidebarUserProfile />
         <SidebarNavItems />
 
         <div className="p-4 border-t border-gray-200">
