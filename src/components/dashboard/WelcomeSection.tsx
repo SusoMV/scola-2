@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import { useSidebarProfile } from '@/hooks/useSidebarProfile';
+import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
 
 const WelcomeSection: React.FC = () => {
   const { user } = useAuth();
