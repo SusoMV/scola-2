@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
@@ -18,6 +18,7 @@ interface NewMessageDialogProps {
   facultyMembers?: Participant[];
   onSubmit?: (data: { recipient: string, content: string }) => void;
   onSelectRecipient?: (id: string) => void;
+  initialRecipient?: string;
 }
 
 // Example faculty members in case none are provided
@@ -33,14 +34,22 @@ const NewMessageDialog: React.FC<NewMessageDialogProps> = ({
   onOpenChange,
   facultyMembers = exampleFacultyMembers,
   onSubmit,
-  onSelectRecipient
+  onSelectRecipient,
+  initialRecipient
 }) => {
   const form = useForm({
     defaultValues: {
-      recipient: '',
+      recipient: initialRecipient || '',
       content: ''
     }
   });
+
+  // Update recipient when initialRecipient changes or dialog opens
+  useEffect(() => {
+    if (open && initialRecipient) {
+      form.setValue('recipient', initialRecipient);
+    }
+  }, [open, initialRecipient, form]);
 
   const selectedRecipientId = form.watch('recipient');
   const selectedRecipient = selectedRecipientId 

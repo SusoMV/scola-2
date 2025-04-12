@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -34,46 +33,50 @@ export function useConversations() {
 
   useEffect(() => {
     const facultyMessages = localStorage.getItem('faculty-messages');
-    let facultyConversations: Conversation[] = [];
+    let facultyConversations: {[key: string]: Conversation} = {};
     
     if (facultyMessages) {
       try {
         const parsedMessages = JSON.parse(facultyMessages);
         
-        facultyConversations = parsedMessages.map((msg: any) => {
-          return {
-            id: `faculty-${msg.recipientId}`,
-            name: msg.recipientName,
-            isGroup: false,
-            participants: [
-              {
-                id: msg.recipientId,
-                name: msg.recipientName,
-                role: 'docente'
-              },
-              {
-                id: 'current-user',
-                name: 'Usuario Actual',
-                role: 'docente'
-              }
-            ],
-            messages: [
-              {
-                id: `msg-${Date.now()}-${Math.random()}`,
-                sender: {
+        parsedMessages.forEach((msg: any) => {
+          const conversationId = `faculty-${msg.recipientId}`;
+          
+          if (!facultyConversations[conversationId]) {
+            facultyConversations[conversationId] = {
+              id: conversationId,
+              name: msg.recipientName,
+              isGroup: false,
+              participants: [
+                {
+                  id: msg.recipientId,
+                  name: msg.recipientName,
+                  role: 'docente'
+                },
+                {
                   id: 'current-user',
                   name: 'Usuario Actual',
                   role: 'docente'
-                },
+                }
+              ],
+              messages: [],
+              lastMessage: {
                 content: msg.content,
                 timestamp: new Date(msg.timestamp || Date.now())
               }
-            ],
-            lastMessage: {
-              content: msg.content,
-              timestamp: new Date(msg.timestamp || Date.now())
-            }
-          };
+            };
+          }
+          
+          facultyConversations[conversationId].messages.push({
+            id: `msg-${Date.now()}-${Math.random()}`,
+            sender: {
+              id: 'current-user',
+              name: 'Usuario Actual',
+              role: 'docente'
+            },
+            content: msg.content,
+            timestamp: new Date(msg.timestamp || Date.now())
+          });
         });
       } catch (error) {
         console.error('Error parsing faculty messages:', error);
@@ -154,7 +157,7 @@ export function useConversations() {
       }
     ];
 
-    const allConversations = [...facultyConversations];
+    const allConversations = [...Object.values(facultyConversations)];
     
     defaultConversations.forEach(defaultConv => {
       if (!allConversations.some(conv => conv.id === defaultConv.id)) {

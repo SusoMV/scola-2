@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card } from '@/components/ui/card';
@@ -207,6 +208,26 @@ const FacultyPage = () => {
   }) => {
     if (selectedMember) {
       toast.success(`Mensaxe enviada a ${selectedMember.name}`);
+      
+      // Save message to localStorage for syncing with Mensaxes page
+      const facultyMessages = localStorage.getItem('faculty-messages') || '[]';
+      let messages = [];
+      
+      try {
+        messages = JSON.parse(facultyMessages);
+      } catch (error) {
+        console.error('Error parsing faculty messages:', error);
+      }
+      
+      messages.push({
+        recipientId: selectedMember.id,
+        recipientName: selectedMember.name,
+        content: data.content,
+        timestamp: new Date().toISOString()
+      });
+      
+      localStorage.setItem('faculty-messages', JSON.stringify(messages));
+      
       setOpenNewMessageDialog(false);
       setSelectedMember(null);
     }
@@ -276,11 +297,8 @@ const FacultyPage = () => {
           name: member.name,
           role: member.role
         }))} 
-        onSubmit={data => {
-          toast.success(`Mensaxe enviada a ${selectedMember?.name}`);
-          setOpenNewMessageDialog(false);
-          setSelectedMember(null);
-        }} 
+        onSubmit={handleSendMessage}
+        initialRecipient={selectedMember ? selectedMember.id : undefined}
       />
     </DashboardLayout>
   );

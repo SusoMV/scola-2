@@ -11,7 +11,7 @@ const DocumentsPage = () => {
         <div className="flex items-center">
           <div className="flex items-center gap-2">
             <FileText className="h-6 w-6 text-scola-primary" />
-            <h1 className="text-2xl font-bold">Gardas</h1>
+            <h1 className="text-2xl font-bold">Documentos</h1>
           </div>
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>

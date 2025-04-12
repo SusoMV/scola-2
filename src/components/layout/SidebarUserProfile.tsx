@@ -4,17 +4,11 @@ import { Link } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Settings } from 'lucide-react';
+import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
 
-interface UserProfileProps {
-  userProfile: {
-    full_name: string;
-    avatar_url: string;
-    role: string;
-    specialty: string;
-  };
-}
-
-const SidebarUserProfile: React.FC<UserProfileProps> = ({ userProfile }) => {
+const SidebarUserProfile: React.FC = () => {
+  const userProfile = useSidebarProfile();
+  
   return (
     <div className="p-4 border-b border-gray-200">
       <div className="flex items-center space-x-3">
