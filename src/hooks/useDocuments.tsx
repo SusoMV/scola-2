@@ -23,7 +23,26 @@ export const useDocuments = (category: string) => {
         // Mock data - in a real app, fetch from API
         const mockDocuments = localStorage.getItem(`documents-${category}`);
         if (mockDocuments) {
-          setDocuments(JSON.parse(mockDocuments));
+          const parsedDocuments = JSON.parse(mockDocuments);
+          
+          // Validate that each document has a valid created_at date
+          const validDocuments = parsedDocuments.map((doc: Document) => {
+            // If created_at is invalid, set it to current date
+            if (!doc.created_at || isNaN(new Date(doc.created_at).getTime())) {
+              return {
+                ...doc,
+                created_at: new Date().toISOString()
+              };
+            }
+            return doc;
+          });
+          
+          setDocuments(validDocuments);
+          
+          // Update localStorage with validated documents if needed
+          if (JSON.stringify(validDocuments) !== mockDocuments) {
+            localStorage.setItem(`documents-${category}`, JSON.stringify(validDocuments));
+          }
         } else {
           setDocuments([]);
         }

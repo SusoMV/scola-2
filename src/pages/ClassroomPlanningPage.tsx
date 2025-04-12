@@ -23,6 +23,21 @@ const ClassroomPlanningPage = () => {
     downloadDocument
   } = useDocuments('classroom-planning');
 
+  // Helper function to safely format dates
+  const safeFormatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        return 'Data non válida';
+      }
+      return format(date, 'dd/MM/yyyy');
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Data non válida';
+    }
+  };
+
   return (
     <DashboardLayout>
       <div className="mb-6">
@@ -59,7 +74,7 @@ const ClassroomPlanningPage = () => {
                 {documents.map((doc) => (
                   <TableRow key={doc.id}>
                     <TableCell className="font-medium">{doc.name}</TableCell>
-                    <TableCell>{format(new Date(doc.created_at), 'dd/MM/yyyy')}</TableCell>
+                    <TableCell>{safeFormatDate(doc.created_at)}</TableCell>
                     <TableCell>{(doc.size / 1024).toFixed(2)} KB</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-2">
