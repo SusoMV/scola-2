@@ -7,21 +7,21 @@ import { Settings } from 'lucide-react';
 import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
 
 const SidebarUserProfile: React.FC = () => {
-  const userProfile = useSidebarProfile();
+  const { profileData } = useSidebarProfile();
   
   return (
     <div className="p-4 border-b border-gray-200">
       <div className="flex items-center space-x-3">
         <Avatar className="h-10 w-10 bg-scola-primary text-white">
-          <AvatarImage src={userProfile.avatar_url} alt={userProfile.full_name} />
+          <AvatarImage src={profileData.avatar_url} alt={profileData.full_name} />
           <AvatarFallback>
-            {userProfile.full_name.charAt(0).toUpperCase()}
+            {profileData.full_name.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <span className="font-medium">{userProfile.full_name}</span>
+          <span className="font-medium">{profileData.full_name}</span>
           <span className="text-xs text-gray-500">
-            {userProfile.role === 'directivo' ? 'Directivo' : 'Docente'} - {userProfile.specialty}
+            {profileData.role === 'directivo' ? 'Directivo' : 'Docente'} - {profileData.specialty}
           </span>
         </div>
       </div>

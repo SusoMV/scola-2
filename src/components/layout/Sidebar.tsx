@@ -12,7 +12,6 @@ import {
 } from 'lucide-react';
 import SidebarNavItems from './SidebarNavItems';
 import SidebarUserProfile from './SidebarUserProfile';
-import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
 
 interface SidebarProps {
   className?: string;
@@ -22,7 +21,6 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { signOut } = useAuth();
-  const userProfile = useSidebarProfile();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);

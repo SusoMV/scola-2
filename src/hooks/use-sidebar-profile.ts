@@ -12,7 +12,8 @@ interface UserProfile {
 
 export function useSidebarProfile() {
   const { user } = useAuth();
-  const [userProfile, setUserProfile] = useState<UserProfile>({
+  const [isLoading, setIsLoading] = useState(true);
+  const [profileData, setProfileData] = useState<UserProfile>({
     full_name: '',
     avatar_url: '',
     role: '',
@@ -23,6 +24,7 @@ export function useSidebarProfile() {
     const fetchUserProfile = async () => {
       if (user) {
         try {
+          setIsLoading(true);
           const { data, error } = await supabase
             .from('profiles')
             .select('full_name, profile_image_url, role, specialty, school_name')
@@ -32,7 +34,7 @@ export function useSidebarProfile() {
           if (error) {
             console.error('Error fetching user profile:', error);
           } else if (data) {
-            setUserProfile({
+            setProfileData({
               full_name: data.full_name || user?.user_metadata?.full_name || 'Usuario',
               avatar_url: data.profile_image_url || user?.user_metadata?.avatar_url || '',
               role: data.role || user?.user_metadata?.role || 'docente',
@@ -63,12 +65,16 @@ export function useSidebarProfile() {
           }
         } catch (error) {
           console.error('Error in fetchUserProfile:', error);
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
     };
 
     fetchUserProfile();
   }, [user]);
 
-  return userProfile;
+  return { isLoading, profileData };
 }
