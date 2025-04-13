@@ -8,4 +8,5 @@ export interface Substitution {
   reason: string;
   seen: boolean;
   date: string;
+  status: 'active' | 'completed';
 }

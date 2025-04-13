@@ -5,6 +5,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Calendar, Plus } from 'lucide-react';
 import { Substitution } from '@/types/substitutions';
 import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table';
 
 interface CurrentSubstitutionsTableProps {
   substitutions: Substitution[];
@@ -27,38 +35,46 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
             <Calendar className="h-5 w-5 text-[#0070C0]" /> 
             <h2 className="text-lg font-medium">Substitucións actuais</h2>
           </div>
+          {isDirector && (
+            <Button 
+              className="bg-[#0070C0] hover:bg-[#0070C0]/90 text-white"
+              onClick={openCreateDialog}
+            >
+              <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
+            </Button>
+          )}
         </div>
         
-        {substitutions.length > 0 ? (
+        {substitutions && substitutions.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Docente ausente</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Curso</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Hora</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Substituto</th>
-                  <th className="text-left py-3 px-4 text-sm font-medium text-gray-500">Visto</th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="font-medium text-gray-500">Docente ausente</TableHead>
+                  <TableHead className="font-medium text-gray-500">Curso</TableHead>
+                  <TableHead className="font-medium text-gray-500">Hora</TableHead>
+                  <TableHead className="font-medium text-gray-500">Substituto</TableHead>
+                  <TableHead className="font-medium text-gray-500">Visto</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {substitutions.map(substitution => (
-                  <tr key={substitution.id} className="border-t border-gray-200">
-                    <td className="py-4 px-4">{substitution.absentTeacher}</td>
-                    <td className="py-4 px-4">{substitution.course}</td>
-                    <td className="py-4 px-4">{substitution.time}</td>
-                    <td className="py-4 px-4">{substitution.substituteTeacher}</td>
-                    <td className="py-4 px-4">
+                  <TableRow key={substitution.id}>
+                    <TableCell className="py-4">{substitution.absentTeacher}</TableCell>
+                    <TableCell className="py-4">{substitution.course}</TableCell>
+                    <TableCell className="py-4">{substitution.time}</TableCell>
+                    <TableCell className="py-4">{substitution.substituteTeacher}</TableCell>
+                    <TableCell className="py-4">
                       <Checkbox 
                         checked={substitution.seen} 
                         onCheckedChange={() => handleToggleSeen(substitution.id)} 
                         className="data-[state=checked]:bg-[#0070C0] data-[state=checked]:border-[#0070C0]"
                       />
-                    </td>
-                  </tr>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         ) : (
           <p className="text-center py-4 text-gray-500">Non hai substitucións actuais</p>

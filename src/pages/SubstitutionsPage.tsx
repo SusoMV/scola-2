@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { format } from 'date-fns';
@@ -11,12 +12,13 @@ import HistoricalSubstitutionsTable from '@/components/substitutions/HistoricalS
 import CreateSubstitutionDialog from '@/components/substitutions/CreateSubstitutionDialog';
 import { Substitution } from '@/types/substitutions';
 import { useAuth } from '@/contexts/AuthContext';
+import { useFacultyMembers } from '@/hooks/useFacultyMembers';
 
 const SubstitutionsPage = () => {
   const { user } = useAuth();
+  const { isDirector } = useFacultyMembers();
   const [openDialog, setOpenDialog] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const isDirector = true;
   
   const [substitutions, setSubstitutions] = useState<Substitution[]>([
     {
@@ -27,7 +29,8 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'active'
     },
     {
       id: '2',
@@ -37,7 +40,8 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: false,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'active'
     },
     {
       id: '3',
@@ -47,7 +51,8 @@ const SubstitutionsPage = () => {
       time: '12:30 - 14:30',
       reason: 'Persoal',
       seen: false,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'active'
     }
   ]);
   
@@ -60,7 +65,8 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-30'
+      date: '2025-03-30',
+      status: 'completed'
     },
     {
       id: '5',
@@ -70,7 +76,8 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: true,
-      date: '2025-03-28'
+      date: '2025-03-28',
+      status: 'completed'
     },
     {
       id: '6',
@@ -80,7 +87,8 @@ const SubstitutionsPage = () => {
       time: '10:00 - 12:00',
       reason: 'Enfermidade',
       seen: true,
-      date: '2025-03-25'
+      date: '2025-03-25',
+      status: 'completed'
     },
     {
       id: '7',
@@ -90,7 +98,8 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-20'
+      date: '2025-03-20',
+      status: 'completed'
     }
   ]);
 
@@ -109,7 +118,8 @@ const SubstitutionsPage = () => {
       time: `${data.startTime} - ${data.endTime}`,
       reason: data.reason,
       seen: false,
-      date: data.date
+      date: data.date,
+      status: data.date === format(new Date(), 'yyyy-MM-dd') ? 'active' : 'completed'
     };
 
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
