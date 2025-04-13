@@ -75,16 +75,18 @@ const ChatArea: React.FC<ChatAreaProps> = ({
               <ArrowLeft className="h-5 w-5" />
             </Button>
           )}
-          <h2 className="text-lg font-medium">
+          <h2 className="text-lg font-medium truncate">
             {currentConversation.name}
           </h2>
         </div>
       </div>
       
-      <CardContent className="flex-1 flex flex-col p-0">
-        <Messages conversation={currentConversation} />
+      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+        <div className="flex-1 overflow-y-auto">
+          <Messages conversation={currentConversation} />
+        </div>
         
-        <div className="border-t p-4">
+        <div className="border-t p-4 bg-white">
           <div className="flex gap-2">
             <div className="flex-1 relative">
               <input
