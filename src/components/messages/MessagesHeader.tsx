@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Mail } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 const MessagesHeader: React.FC = () => {
   return (
@@ -11,7 +12,9 @@ const MessagesHeader: React.FC = () => {
           <h1 className="text-2xl font-bold">Mensaxes</h1>
         </div>
       </div>
-      <div className="dotted-border w-full h-1 mt-2"></div>
+      <div className="w-full h-px mt-4 bg-gray-200" style={{
+        backgroundImage: 'repeating-linear-gradient(to right, #0070C0, #0070C0 8px, transparent 8px, transparent 16px)'
+      }}></div>
     </div>
   );
 };

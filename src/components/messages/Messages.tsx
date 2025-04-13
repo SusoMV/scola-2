@@ -104,15 +104,15 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
 
   if (!conversation) {
     return (
-      <div className="flex-1 flex items-center justify-center p-4 py-0 my-0 px-[31px]">
+      <div className="flex-1 flex items-center justify-center p-4">
         <p className="text-gray-500">Selecciona unha conversa para comezar</p>
       </div>
     );
   }
 
   return (
-    <ScrollArea className="flex-1 py-[11px] px-[18px]" onScroll={handleScroll} ref={scrollAreaRef}>
-      <div className="space-y-4 p-4">
+    <div className="flex-1 overflow-y-auto" ref={scrollAreaRef} onScroll={handleScroll}>
+      <div className="py-4 px-4 space-y-4">
         {conversation.messages.map((message, index) => {
           const isCurrentUser = message.sender.id === 'current-user';
           const isSystem = message.type === 'system';
@@ -140,7 +140,7 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
               transition={{ duration: 0.3 }}
             >
               <div className={`max-w-[75%] ${isCurrentUser ? 'order-2' : 'order-1'}`}>
-                <div className={`rounded-t-lg ${isCurrentUser ? 'rounded-bl-lg bg-scola-pastel text-gray-800' : 'rounded-br-lg bg-gray-100 text-gray-800'} p-3`}>
+                <div className={`rounded-lg ${isCurrentUser ? 'bg-scola-primary text-white' : 'bg-gray-100 text-gray-800'} p-3`}>
                   {!isCurrentUser && conversation.isGroup && (
                     <p className="text-xs font-medium text-scola-primary mb-1">
                       {message.sender.name}
@@ -160,7 +160,7 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
         })}
         <div ref={messagesEndRef} />
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 

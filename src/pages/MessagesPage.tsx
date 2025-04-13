@@ -62,17 +62,19 @@ const MessagesPage = () => {
       <div className="flex flex-col md:flex-row gap-4 h-[calc(100vh-240px)]">
         {(!isMobile || mobileView === 'list') && (
           <motion.div 
-            className={`${isMobile ? 'w-full' : 'md:w-1/3'} flex flex-col`}
+            className={`${isMobile ? 'w-full' : 'md:w-1/3'} flex flex-col bg-white rounded-lg shadow-sm border`}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <MessagesActions 
-              onNewGroup={() => setIsNewGroupOpen(true)} 
-              onNewMessage={() => setIsNewMessageOpen(true)} 
-            />
+            <div className="p-4">
+              <MessagesActions 
+                onNewGroup={() => setIsNewGroupOpen(true)} 
+                onNewMessage={() => setIsNewMessageOpen(true)} 
+              />
+            </div>
             
-            <div className="bg-white border rounded-lg flex-1 overflow-hidden shadow-sm">
+            <div className="flex-1 overflow-hidden">
               <ConversationList 
                 onSelectConversation={(id) => {
                   setSelectedConversation(id);
@@ -90,7 +92,7 @@ const MessagesPage = () => {
         
         {(!isMobile || mobileView === 'chat') && (
           <motion.div 
-            className={`${isMobile ? 'w-full' : 'md:w-2/3'} border rounded-lg bg-white overflow-hidden shadow-sm`}
+            className={`${isMobile ? 'w-full' : 'md:w-2/3'} bg-white rounded-lg overflow-hidden shadow-sm border`}
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3 }}
@@ -121,7 +123,7 @@ const MessagesPage = () => {
               if (isMobile) {
                 setMobileView('chat');
               }
-            }} 
+            }}
           />
         )}
       </AnimatePresence>
@@ -138,7 +140,7 @@ const MessagesPage = () => {
               if (isMobile) {
                 setMobileView('chat');
               }
-            }} 
+            }}
           />
         )}
       </AnimatePresence>
