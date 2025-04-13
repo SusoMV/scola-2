@@ -1,14 +1,8 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Users, Trash2 } from 'lucide-react';
+import { User, Users } from 'lucide-react';
 import { format, isToday, isYesterday } from 'date-fns';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from '@/components/ui/motion';
 import { Conversation } from '@/types/conversations';
@@ -104,14 +98,14 @@ const ConversationList: React.FC<ConversationListProps> = ({
   };
   
   return (
-    <Card className="border-0 shadow-none h-full">
-      <CardHeader className="pb-2 my-0 py-3 px-4">
+    <Card className="border-0 shadow-none h-full flex flex-col">
+      <CardHeader className="pb-2 my-0 py-3 px-4 flex-shrink-0">
         <CardTitle className="font-medium text-xl">
           Conversas
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <ScrollArea className="max-h-[calc(100vh-300px)]">
+      <CardContent className="p-0 flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
           {conversations.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {conversations.map(conversation => (
@@ -120,47 +114,33 @@ const ConversationList: React.FC<ConversationListProps> = ({
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="relative group"
+                  className="relative"
                 >
                   <button 
-                    className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${selectedConversation === conversation.id ? 'bg-gray-50' : ''}`} 
+                    className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-start ${selectedConversation === conversation.id ? 'bg-gray-50' : ''}`} 
                     onClick={() => onSelectConversation(conversation.id)}
                   >
-                    <div className="flex items-start">
-                      <div className={`rounded-full w-10 h-10 flex items-center justify-center mr-3 ${conversation.isGroup ? 'bg-scola-pastel text-scola-primary' : 'bg-scola-pastel text-scola-primary'}`}>
-                        {conversation.isGroup ? <Users className="h-5 w-5" /> : <User className="h-5 w-5" />}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between">
-                          <p className="font-medium truncate">
-                            {conversation.name}
-                          </p>
-                          {conversation.lastMessage && (
-                            <p className="text-xs text-gray-500">
-                              {formatDate(new Date(conversation.lastMessage.timestamp))}
-                            </p>
-                          )}
-                        </div>
+                    <div className={`rounded-full flex-shrink-0 w-10 h-10 flex items-center justify-center mr-3 ${conversation.isGroup ? 'bg-scola-pastel text-scola-primary' : 'bg-scola-pastel text-scola-primary'}`}>
+                      {conversation.isGroup ? <Users className="h-5 w-5" /> : <User className="h-5 w-5" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between">
+                        <p className={`${selectedConversation === conversation.id ? 'font-bold' : 'font-medium'} truncate`}>
+                          {conversation.name}
+                        </p>
                         {conversation.lastMessage && (
-                          <p className="text-sm text-gray-500 truncate">
-                            {conversation.lastMessage.content}
+                          <p className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                            {formatDate(new Date(conversation.lastMessage.timestamp))}
                           </p>
                         )}
                       </div>
+                      {conversation.lastMessage && (
+                        <p className="text-sm text-gray-500 truncate">
+                          {conversation.lastMessage.content}
+                        </p>
+                      )}
                     </div>
                   </button>
-                  
-                  {onDeleteConversation && (
-                    <button 
-                      className="absolute top-3 right-3 text-red-500 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 transition-opacity"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onDeleteConversation(conversation.id);
-                      }}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  )}
                 </motion.li>
               ))}
             </ul>

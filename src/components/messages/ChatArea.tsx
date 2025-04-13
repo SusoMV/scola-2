@@ -5,7 +5,7 @@ import { Conversation } from '@/types/conversations';
 import Messages from './Messages';
 import MessageInput from './MessageInput';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Paperclip, Send } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 interface ChatAreaProps {
@@ -63,29 +63,52 @@ const ChatArea: React.FC<ChatAreaProps> = ({
   
   return (
     <Card className="h-full flex flex-col border-0 shadow-none">
-      <div className="p-4 border-b bg-white sticky top-0 z-10">
-        <div className="flex items-center">
-          {isMobile && onBackToList && (
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="mr-2 p-0 h-8 w-8"
-              onClick={onBackToList}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-          )}
-          <h2 className="text-lg font-medium">
-            {currentConversation.name}
-          </h2>
+      <div className="px-4 py-3 bg-white sticky top-0 z-10 flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            {isMobile && onBackToList && (
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="mr-2 p-0 h-8 w-8"
+                onClick={onBackToList}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+            )}
+            <h2 className="text-lg font-medium">
+              {currentConversation.name}
+            </h2>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 6h18"></path>
+              <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+              <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+            </svg>
+          </Button>
         </div>
       </div>
       
-      <CardContent className="flex-1 flex flex-col p-0">
+      <Separator className="m-0" />
+      
+      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
         <Messages conversation={currentConversation} />
         
-        <div className="border-t p-4">
-          <div className="flex gap-2">
+        <div className="border-t p-4 flex-shrink-0">
+          <div className="flex gap-2 items-center">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="rounded-full"
+              onClick={handleAttachmentClick}
+            >
+              <Paperclip className="h-5 w-5" />
+            </Button>
             <div className="flex-1 relative">
               <input
                 type="text"
@@ -99,12 +122,9 @@ const ChatArea: React.FC<ChatAreaProps> = ({
             <Button 
               onClick={onSendMessage}
               disabled={!messageText.trim()}
-              className="bg-scola-primary hover:bg-scola-primary/90 rounded-lg"
+              className="bg-scola-primary hover:bg-scola-primary/90 rounded-full p-2 h-10 w-10"
             >
-              <svg viewBox="0 0 24 24" fill="none" className="h-5 w-5" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <Send className="h-5 w-5" />
             </Button>
           </div>
           <input 
