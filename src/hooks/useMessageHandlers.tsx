@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Conversation } from './useConversations';
+import { Conversation, Message } from './useConversations';
 
 export function useMessageHandlers(
   conversations: Conversation[],
@@ -16,7 +16,7 @@ export function useMessageHandlers(
   
   const handleSendMessage = () => {
     if (!selectedConversation || !messageText.trim()) return;
-    const newMessage = {
+    const newMessage: Message = {
       id: `msg-${Date.now()}`,
       sender: {
         id: 'current-user',
@@ -59,7 +59,7 @@ export function useMessageHandlers(
     const fileType = file.type.split('/')[0];
     const isImage = fileType === 'image';
     
-    const newMessage = {
+    const newMessage: Message = {
       id: `msg-${Date.now()}`,
       sender: {
         id: 'current-user',
@@ -67,7 +67,7 @@ export function useMessageHandlers(
         role: 'docente'
       },
       content: file.name,
-      fileData: isImage ? URL.createObjectURL(file) : null,
+      fileData: isImage ? URL.createObjectURL(file) : undefined,
       fileSize: file.size,
       fileName: file.name,
       fileType: file.type,
@@ -107,7 +107,7 @@ export function useMessageHandlers(
     const existingConvIndex = conversations.findIndex(conv => conv.id === data.recipient && !conv.isGroup);
     
     if (existingConvIndex >= 0) {
-      const newMessage = {
+      const newMessage: Message = {
         id: `msg-${Date.now()}`,
         sender: {
           id: 'current-user',
@@ -133,7 +133,7 @@ export function useMessageHandlers(
       setConversations(updatedConversations);
       setSelectedConversation(data.recipient);
     } else {
-      const newMessage = {
+      const newMessage: Message = {
         id: `msg-${Date.now()}`,
         sender: {
           id: 'current-user',
@@ -181,6 +181,19 @@ export function useMessageHandlers(
     participants: string[];
   }) => {
     const newGroupId = `group-${Date.now()}`;
+    const systemMessage: Message = {
+      id: `msg-${Date.now()}`,
+      sender: {
+        id: 'system',
+        name: 'Sistema',
+        role: 'system'
+      },
+      content: 'Grupo creado',
+      timestamp: new Date(),
+      status: 'sent',
+      type: 'system'
+    };
+    
     const newGroup: Conversation = {
       id: newGroupId,
       name: data.name,
@@ -193,18 +206,7 @@ export function useMessageHandlers(
           role: parts[1] || 'docente'
         };
       }),
-      messages: [{
-        id: `msg-${Date.now()}`,
-        sender: {
-          id: 'system',
-          name: 'Sistema',
-          role: 'system'
-        },
-        content: 'Grupo creado',
-        timestamp: new Date(),
-        status: 'sent',
-        type: 'system'
-      }],
+      messages: [systemMessage],
       lastMessage: {
         content: 'Grupo creado',
         timestamp: new Date()
