@@ -8,7 +8,7 @@ interface MessageInputProps {
   messageText: string;
   setMessageText: (text: string) => void;
   onSendMessage: () => void;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void; // Changed from HTMLTextAreaElement to HTMLInputElement
   onAttachmentClick?: () => void;
   disabled?: boolean;
 }
