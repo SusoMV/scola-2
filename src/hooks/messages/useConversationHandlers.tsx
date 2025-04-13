@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
-import { Conversation, Message } from '@/hooks/useConversations';
+import { Conversation, Message } from '@/types/conversations';
 import { createTextMessage, createSystemMessage } from '@/hooks/messages/useMessageTypes';
 
 export function useConversationHandlers(

@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Conversation } from '@/hooks/useConversations';
+import { Conversation } from '@/types/conversations';
 import { useToast } from '@/hooks/use-toast';
 import { createImageMessage, createFileMessage } from '@/hooks/messages/useMessageTypes';
 

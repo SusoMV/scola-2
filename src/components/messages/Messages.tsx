@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
-import { Conversation } from '@/hooks/useConversations';
+import { Conversation } from '@/types/conversations';
 import { Check, CheckCheck, FileIcon, Download } from 'lucide-react';
 import { motion } from '@/components/ui/motion';
 

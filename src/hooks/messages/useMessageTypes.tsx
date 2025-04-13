@@ -1,5 +1,4 @@
-
-import { Message } from '@/hooks/useConversations';
+import { Message } from '@/types/conversations';
 
 export function createTextMessage(
   content: string,

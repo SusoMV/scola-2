@@ -11,23 +11,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from '@/components/ui/motion';
+import { Conversation } from '@/types/conversations';
 
 interface Participant {
   id: string;
   name: string;
   role: string;
 }
-export interface Conversation {
-  id: string;
-  name: string;
-  isGroup: boolean;
-  participants: Participant[];
-  messages: any[];
-  lastMessage?: {
-    content: string;
-    timestamp: Date;
-  };
-}
+
 interface ConversationListProps {
   onSelectConversation: (conversationId: string) => void;
   selectedConversation: string | null;
