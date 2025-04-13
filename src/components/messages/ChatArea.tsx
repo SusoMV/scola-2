@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Conversation } from '@/hooks/useConversations';
+import { Conversation } from '@/types/conversations';
 import Messages from './Messages';
 import MessageInput from './MessageInput';
 import { Button } from '@/components/ui/button';
