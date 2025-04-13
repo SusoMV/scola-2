@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -70,7 +69,8 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-30'
+      date: '2025-03-30',
+      status: 'confirmed'
     },
     {
       id: '5',
@@ -80,7 +80,8 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: true,
-      date: '2025-03-28'
+      date: '2025-03-28',
+      status: 'confirmed'
     },
     {
       id: '6',
@@ -90,7 +91,8 @@ const SubstitutionsPage = () => {
       time: '10:00 - 12:00',
       reason: 'Enfermidade',
       seen: true,
-      date: '2025-03-25'
+      date: '2025-03-25',
+      status: 'rejected'
     },
     {
       id: '7',
@@ -100,7 +102,8 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-20'
+      date: '2025-03-20',
+      status: 'confirmed'
     }
   ]);
 
