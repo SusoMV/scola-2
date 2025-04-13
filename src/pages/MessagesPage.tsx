@@ -8,7 +8,7 @@ import NewGroupDialog from '@/components/messages/NewGroupDialog';
 import MessagesHeader from '@/components/messages/MessagesHeader';
 import MessagesActions from '@/components/messages/MessagesActions';
 import { useConversations } from '@/hooks/useConversations';
-import { useMessageHandlers } from '@/hooks/useMessageHandlers';
+import { useMessageHandlers } from '@/hooks/messages/useMessageHandlers'; // Updated import path
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from '@/components/ui/motion';
 
