@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, Users, Trash2 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isToday, isYesterday } from 'date-fns';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { motion } from '@/components/ui/motion';
 
 interface Participant {
   id: string;
@@ -103,11 +104,17 @@ const ConversationList: React.FC<ConversationListProps> = ({
   onDeleteConversation
 }) => {
   const formatDate = (date: Date) => {
-    return format(date, 'HH:mm');
+    if (isToday(date)) {
+      return format(date, 'HH:mm');
+    } else if (isYesterday(date)) {
+      return 'Onte';
+    } else {
+      return format(date, 'dd/MM/yy');
+    }
   };
   
   return (
-    <Card className="border border-scola-gray-dark md:col-span-1">
+    <Card className="border-none shadow-none h-full">
       <CardHeader className="pb-2 my-0 py-[18px]">
         <CardTitle className="font-medium py-0 my-0 text-xl">
           Conversas
@@ -118,10 +125,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
           {conversations.length > 0 ? (
             <ul className="divide-y divide-gray-200">
               {conversations.map(conversation => (
-                <li key={conversation.id}>
+                <motion.li 
+                  key={conversation.id}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
                   <div className="relative">
                     <button 
-                      className={`w-full px-4 py-3 text-left hover:bg-gray-50 ${selectedConversation === conversation.id ? 'bg-gray-50' : ''}`} 
+                      className={`w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors ${selectedConversation === conversation.id ? 'bg-gray-50' : ''}`} 
                       onClick={() => onSelectConversation(conversation.id)}
                     >
                       <div className="flex items-start">
@@ -154,7 +166,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                           <Button 
                             variant="ghost" 
                             size="icon" 
-                            className="absolute top-2 right-2 h-8 w-8 opacity-0 hover:opacity-100 focus:opacity-100 transition-opacity"
+                            className="absolute top-2 right-2 h-8 w-8 opacity-0 group-hover:opacity-100 hover:opacity-100 focus:opacity-100 transition-opacity"
                           >
                             <Trash2 className="h-4 w-4 text-gray-400 hover:text-red-500" />
                           </Button>
@@ -174,7 +186,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
                       </DropdownMenu>
                     )}
                   </div>
-                </li>
+                </motion.li>
               ))}
             </ul>
           ) : (

@@ -24,7 +24,9 @@ export function useMessageHandlers(
         role: 'docente'
       },
       content: messageText,
-      timestamp: new Date()
+      timestamp: new Date(),
+      status: 'sent',
+      type: 'text'
     };
     
     setConversations(prevConversations => {
@@ -51,6 +53,51 @@ export function useMessageHandlers(
     });
   };
 
+  const handleAttachFile = (file: File) => {
+    if (!selectedConversation) return;
+    
+    const fileType = file.type.split('/')[0];
+    const isImage = fileType === 'image';
+    
+    const newMessage = {
+      id: `msg-${Date.now()}`,
+      sender: {
+        id: 'current-user',
+        name: 'Usuario Actual',
+        role: 'docente'
+      },
+      content: file.name,
+      fileData: isImage ? URL.createObjectURL(file) : null,
+      fileSize: file.size,
+      fileName: file.name,
+      fileType: file.type,
+      timestamp: new Date(),
+      status: 'sent',
+      type: isImage ? 'image' : 'file'
+    };
+    
+    setConversations(prevConversations => {
+      return prevConversations.map(conversation => {
+        if (conversation.id === selectedConversation) {
+          return {
+            ...conversation,
+            messages: [...conversation.messages, newMessage],
+            lastMessage: {
+              content: isImage ? '🖼️ Imaxe' : '📎 Arquivo',
+              timestamp: new Date()
+            }
+          };
+        }
+        return conversation;
+      });
+    });
+    
+    toast({
+      title: "Arquivo enviado",
+      description: `O arquivo ${file.name} foi enviado correctamente`
+    });
+  };
+
   const handleNewMessage = (data: {
     recipient: string;
     content: string;
@@ -68,7 +115,9 @@ export function useMessageHandlers(
           role: 'docente'
         },
         content: data.content,
-        timestamp: new Date()
+        timestamp: new Date(),
+        status: 'sent',
+        type: 'text'
       };
       
       const updatedConversations = [...conversations];
@@ -92,7 +141,9 @@ export function useMessageHandlers(
           role: 'docente'
         },
         content: data.content,
-        timestamp: new Date()
+        timestamp: new Date(),
+        status: 'sent',
+        type: 'text'
       };
       
       const newConversation: Conversation = {
@@ -150,7 +201,9 @@ export function useMessageHandlers(
           role: 'system'
         },
         content: 'Grupo creado',
-        timestamp: new Date()
+        timestamp: new Date(),
+        status: 'sent',
+        type: 'system'
       }],
       lastMessage: {
         content: 'Grupo creado',
@@ -178,6 +231,7 @@ export function useMessageHandlers(
     setIsNewGroupOpen,
     handleSendMessage,
     handleNewMessage,
-    handleCreateGroup
+    handleCreateGroup,
+    handleAttachFile
   };
 }
