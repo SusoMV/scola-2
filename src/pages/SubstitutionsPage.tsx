@@ -27,10 +27,7 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-04-04',
-      status: 'confirmed',
-      group: '4A',
-      classroom: 'Aula 101'
+      date: '2025-04-04'
     },
     {
       id: '2',
@@ -40,10 +37,7 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: false,
-      date: '2025-04-04',
-      status: 'pending',
-      group: '2B',
-      classroom: 'Aula 205'
+      date: '2025-04-04'
     },
     {
       id: '3',
@@ -53,10 +47,7 @@ const SubstitutionsPage = () => {
       time: '12:30 - 14:30',
       reason: 'Persoal',
       seen: false,
-      date: '2025-04-04',
-      status: 'rejected',
-      group: '5C',
-      classroom: 'Aula 302'
+      date: '2025-04-04'
     }
   ]);
   
@@ -69,8 +60,7 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-30',
-      status: 'confirmed'
+      date: '2025-03-30'
     },
     {
       id: '5',
@@ -80,8 +70,7 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: true,
-      date: '2025-03-28',
-      status: 'confirmed'
+      date: '2025-03-28'
     },
     {
       id: '6',
@@ -91,8 +80,7 @@ const SubstitutionsPage = () => {
       time: '10:00 - 12:00',
       reason: 'Enfermidade',
       seen: true,
-      date: '2025-03-25',
-      status: 'rejected'
+      date: '2025-03-25'
     },
     {
       id: '7',
@@ -102,8 +90,7 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-03-20',
-      status: 'confirmed'
+      date: '2025-03-20'
     }
   ]);
 
@@ -122,10 +109,7 @@ const SubstitutionsPage = () => {
       time: `${data.startTime} - ${data.endTime}`,
       reason: data.reason,
       seen: false,
-      date: data.date,
-      status: 'pending',
-      group: data.group || '',
-      classroom: data.classroom || ''
+      date: data.date
     };
 
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
