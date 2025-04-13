@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,6 +13,12 @@ export interface Message {
   sender: Participant;
   content: string;
   timestamp: Date;
+  type?: 'text' | 'image' | 'file' | 'system'; // Add type property
+  status?: 'sent' | 'delivered' | 'read'; // Add status property
+  fileData?: string; // Add for image/file messages
+  fileName?: string; // Add for file names
+  fileSize?: number; // Add for file size
+  fileType?: string; // Add for file type
 }
 
 export interface Conversation {
