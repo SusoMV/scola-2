@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -27,7 +28,10 @@ const SubstitutionsPage = () => {
       time: '09:00 - 11:00',
       reason: 'Cita médica',
       seen: true,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'confirmed',
+      group: '4A',
+      classroom: 'Aula 101'
     },
     {
       id: '2',
@@ -37,7 +41,10 @@ const SubstitutionsPage = () => {
       time: '11:30 - 13:30',
       reason: 'Formación',
       seen: false,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'pending',
+      group: '2B',
+      classroom: 'Aula 205'
     },
     {
       id: '3',
@@ -47,7 +54,10 @@ const SubstitutionsPage = () => {
       time: '12:30 - 14:30',
       reason: 'Persoal',
       seen: false,
-      date: '2025-04-04'
+      date: '2025-04-04',
+      status: 'rejected',
+      group: '5C',
+      classroom: 'Aula 302'
     }
   ]);
   
@@ -109,7 +119,10 @@ const SubstitutionsPage = () => {
       time: `${data.startTime} - ${data.endTime}`,
       reason: data.reason,
       seen: false,
-      date: data.date
+      date: data.date,
+      status: 'pending',
+      group: data.group || '',
+      classroom: data.classroom || ''
     };
 
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {

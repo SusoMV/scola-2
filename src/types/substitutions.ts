@@ -8,4 +8,7 @@ export interface Substitution {
   reason: string;
   seen: boolean;
   date: string;
+  status: 'pending' | 'confirmed' | 'rejected';
+  group?: string;
+  classroom?: string;
 }
