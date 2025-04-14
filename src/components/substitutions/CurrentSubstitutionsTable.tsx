@@ -45,7 +45,7 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
                     <TableCell className="py-4">{substitution.absentTeacher}</TableCell>
                     <TableCell className="py-4">{substitution.course}</TableCell>
                     <TableCell className="py-4">{substitution.time}</TableCell>
-                    <TableCell className="py-4 font-bold rounded">{substitution.substituteTeacher}</TableCell>
+                    <TableCell className="py-4 font-bold rounded-none">{substitution.substituteTeacher}</TableCell>
                     <TableCell className="py-4">
                       <Checkbox checked={substitution.seen} onCheckedChange={() => handleToggleSeen(substitution.id)} className="data-[state=checked]:bg-[#0070C0] data-[state=checked]:border-[#0070C0]" />
                     </TableCell>
