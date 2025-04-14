@@ -24,9 +24,7 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
             <Calendar className="h-5 w-5 text-[#0070C0]" /> 
             <h2 className="text-lg font-medium">Substitucións actuais</h2>
           </div>
-          {isDirector && <Button onClick={openCreateDialog} className="bg-[#0070C0] hover:bg-[#0070C0]/90 text-white">
-              <Plus className="h-4 w-4 mr-1" /> Crear
-            </Button>}
+          {isDirector}
         </div>
         
         {substitutions && substitutions.length > 0 ? <div className="overflow-x-auto">
