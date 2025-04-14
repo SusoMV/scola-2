@@ -16,7 +16,8 @@ export const useSubstitutions = () => {
       reason: 'Cita médica',
       seen: true,
       date: '2025-04-04',
-      status: 'active'
+      status: 'active',
+      specialty: 'Matemáticas'
     },
     {
       id: '2',
@@ -27,7 +28,8 @@ export const useSubstitutions = () => {
       reason: 'Formación',
       seen: false,
       date: '2025-04-04',
-      status: 'active'
+      status: 'active',
+      specialty: 'Lingua'
     },
     {
       id: '3',
@@ -38,7 +40,8 @@ export const useSubstitutions = () => {
       reason: 'Persoal',
       seen: false,
       date: '2025-04-04',
-      status: 'active'
+      status: 'active',
+      specialty: 'Inglés'
     }
   ]);
   
@@ -52,7 +55,8 @@ export const useSubstitutions = () => {
       reason: 'Cita médica',
       seen: true,
       date: '2025-03-30',
-      status: 'completed'
+      status: 'completed',
+      specialty: 'Matemáticas'
     },
     {
       id: '5',
@@ -63,7 +67,8 @@ export const useSubstitutions = () => {
       reason: 'Formación',
       seen: true,
       date: '2025-03-28',
-      status: 'completed'
+      status: 'completed',
+      specialty: 'Lingua'
     },
     {
       id: '6',
@@ -74,7 +79,8 @@ export const useSubstitutions = () => {
       reason: 'Enfermidade',
       seen: true,
       date: '2025-03-25',
-      status: 'completed'
+      status: 'completed',
+      specialty: 'Relixión'
     },
     {
       id: '7',
@@ -85,7 +91,8 @@ export const useSubstitutions = () => {
       reason: 'Cita médica',
       seen: true,
       date: '2025-03-20',
-      status: 'completed'
+      status: 'completed',
+      specialty: 'Educación Física'
     }
   ]);
 
@@ -105,7 +112,8 @@ export const useSubstitutions = () => {
       reason: data.reason,
       seen: false,
       date: data.date,
-      status: data.date === format(new Date(), 'yyyy-MM-dd') ? 'active' : 'completed'
+      status: data.date === format(new Date(), 'yyyy-MM-dd') ? 'active' : 'completed',
+      specialty: data.specialty
     };
 
     if (data.date === format(new Date(), 'yyyy-MM-dd')) {
@@ -123,7 +131,8 @@ export const useSubstitutions = () => {
         sub.substituteTeacher.toLowerCase().includes(searchLower) || 
         sub.course.toLowerCase().includes(searchLower) || 
         sub.date.includes(searchQuery) || 
-        sub.reason.toLowerCase().includes(searchLower)
+        sub.reason.toLowerCase().includes(searchLower) ||
+        (sub.specialty && sub.specialty.toLowerCase().includes(searchLower))
       );
     });
   };

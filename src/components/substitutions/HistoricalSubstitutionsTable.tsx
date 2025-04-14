@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Calendar, Search } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Input } from '@/components/ui/input';
 import { Substitution } from '@/types/substitutions';
-import { format } from 'date-fns';
 
 interface HistoricalSubstitutionsTableProps {
   filteredHistoricalSubstitutions: Substitution[];
@@ -18,52 +18,54 @@ const HistoricalSubstitutionsTable: React.FC<HistoricalSubstitutionsTableProps> 
   setSearchQuery
 }) => {
   return (
-    <Card className="border border-scola-gray-dark">
-      <CardHeader className="pb-2 flex flex-row justify-between items-center py-0 my-[12px]">
-        <CardTitle className="text-lg font-medium flex items-center gap-2 px-0 py-0">
-          <Calendar className="h-5 w-5 text-[#0070C0]" />
-          Histórico de substitucións
-        </CardTitle>
-        
-        <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-          <Input 
-            type="text" 
-            placeholder="Buscar por nome ou data..." 
-            className="pl-8 w-[250px]" 
-            value={searchQuery} 
-            onChange={e => setSearchQuery(e.target.value)} 
-          />
+    <Card className="shadow-sm border-gray-200 rounded-md">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-5 w-5 text-[#0070C0]" /> 
+            <h2 className="text-lg font-medium">Histórico de substitucións</h2>
+          </div>
+          <div className="relative max-w-xs">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+            <Input
+              type="search"
+              placeholder="Buscar..."
+              className="pl-8 w-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
         </div>
-      </CardHeader>
-      <CardContent>
-        {filteredHistoricalSubstitutions.length > 0 ? (
+        
+        {filteredHistoricalSubstitutions && filteredHistoricalSubstitutions.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-scola-gray-dark">
-                  <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Data</th>
-                  <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Docente ausente</th>
-                  <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Curso</th>
-                  <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Hora</th>
-                  <th className="text-left py-3 px-2 text-sm font-medium text-gray-500">Substituto</th>
-                </tr>
-              </thead>
-              <tbody>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="font-medium text-gray-500">Docente ausente</TableHead>
+                  <TableHead className="font-medium text-gray-500">Curso</TableHead>
+                  <TableHead className="font-medium text-gray-500">Hora</TableHead>
+                  <TableHead className="font-medium text-gray-500">Especialidade</TableHead>
+                  <TableHead className="font-medium text-gray-500">Substituto</TableHead>
+                  <TableHead className="font-medium text-gray-500">Data</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {filteredHistoricalSubstitutions.map(substitution => (
-                  <tr key={substitution.id} className="border-b border-scola-gray-dark hover:bg-scola-gray">
-                    <td className="py-3 px-2">{format(new Date(substitution.date), 'dd/MM/yyyy')}</td>
-                    <td className="py-3 px-2">{substitution.absentTeacher}</td>
-                    <td className="py-3 px-2">{substitution.course}</td>
-                    <td className="py-3 px-2">{substitution.time}</td>
-                    <td className="py-3 px-2 font-medium">{substitution.substituteTeacher}</td>
-                  </tr>
+                  <TableRow key={substitution.id}>
+                    <TableCell className="py-4">{substitution.absentTeacher}</TableCell>
+                    <TableCell className="py-4">{substitution.course}</TableCell>
+                    <TableCell className="py-4">{substitution.time}</TableCell>
+                    <TableCell className="py-4">{substitution.specialty || '-'}</TableCell>
+                    <TableCell className="py-4 font-bold">{substitution.substituteTeacher}</TableCell>
+                    <TableCell className="py-4">{substitution.date}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           </div>
         ) : (
-          <p className="text-center py-4 text-gray-500">Non hai resultados que coincidan coa búsqueda</p>
+          <p className="text-center py-4 text-gray-500">Non hai substitucións no histórico</p>
         )}
       </CardContent>
     </Card>

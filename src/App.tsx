@@ -23,6 +23,7 @@ import MessagesPage from "./pages/MessagesPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 import DocumentsPage from "./pages/DocumentsPage";
+import SchoolDocumentsPage from "./pages/SchoolDocumentsPage";
 import SchedulesPage from "./pages/SchedulesPage";
 import SchoolInfoPage from "./pages/SchoolInfoPage";
 import AiDevelopmentPage from "./pages/AiDevelopmentPage";
@@ -105,6 +106,11 @@ const App = () => (
             <Route path="/documents" element={
               <ProtectedRoute>
                 <DocumentsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/school-documents" element={
+              <ProtectedRoute>
+                <SchoolDocumentsPage />
               </ProtectedRoute>
             } />
             <Route path="/schedules" element={

@@ -9,4 +9,5 @@ export interface Substitution {
   seen: boolean;
   date: string;
   status: 'active' | 'completed';
+  specialty?: string;
 }

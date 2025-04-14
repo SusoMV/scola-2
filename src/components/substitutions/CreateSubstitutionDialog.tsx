@@ -31,6 +31,7 @@ const CreateSubstitutionDialog: React.FC<CreateSubstitutionDialogProps> = ({
       absentTeacher: '',
       course: '',
       reason: '',
+      specialty: '',
       date: format(new Date(), 'yyyy-MM-dd'),
       startTime: '09:00',
       endTime: '10:00',

@@ -50,9 +50,9 @@ export const createQuickLinks = (schoolWebUrl: string): QuickLink[] => [
     link: '/schedules',
   },
   {
-    name: 'Documentos',
+    name: 'Documentos de centro',
     icon: <FileText className="h-6 w-6 text-scola-primary" />,
-    link: '/documents-in-development',
+    link: '/school-documents',
   },
   {
     name: 'IA',

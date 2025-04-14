@@ -84,6 +84,36 @@ const SubstitutionForm: React.FC<SubstitutionFormProps> = ({
         
         <FormField
           control={form.control}
+          name="specialty"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Especialidade</FormLabel>
+              <FormControl>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Seleccionar especialidade" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Lingua">Lingua</SelectItem>
+                    <SelectItem value="Lengua">Lengua</SelectItem>
+                    <SelectItem value="Matemáticas">Matemáticas</SelectItem>
+                    <SelectItem value="Sociais">Sociais</SelectItem>
+                    <SelectItem value="Naturais">Naturais</SelectItem>
+                    <SelectItem value="Educación Física">Educación Física</SelectItem>
+                    <SelectItem value="Inglés">Inglés</SelectItem>
+                    <SelectItem value="Música">Música</SelectItem>
+                    <SelectItem value="Plástica">Plástica</SelectItem>
+                    <SelectItem value="Relixión">Relixión</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )} 
+        />
+        
+        <FormField
+          control={form.control}
           name="reason"
           render={({ field }) => (
             <FormItem>
