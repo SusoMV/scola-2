@@ -26,7 +26,7 @@ const RoleAndSpecialtyFields: React.FC<RoleAndSpecialtyFieldsProps> = ({
                   <SelectValue placeholder="Selecciona o teu rol" />
                 </SelectTrigger>
                 <SelectContent>
-                  {ROLES.filter(role => role.value !== 'alumnado' && role.value !== 'administración').map(role => <SelectItem key={role.value} value={role.value}>
+                  {ROLES.filter(role => role.value !== 'alumnado' && role.value !== 'administracion').map(role => <SelectItem key={role.value} value={role.value}>
                       {role.label}
                     </SelectItem>)}
                 </SelectContent>
