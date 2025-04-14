@@ -52,6 +52,40 @@ export function useMessageHandlers(
     });
   };
 
+  const handleDeleteMessage = (messageId: string) => {
+    if (!selectedConversation) return;
+    
+    setConversations(prevConversations => {
+      return prevConversations.map(conversation => {
+        if (conversation.id === selectedConversation) {
+          const filteredMessages = conversation.messages.filter(msg => msg.id !== messageId);
+          
+          // Update the last message if needed
+          let updatedLastMessage = conversation.lastMessage;
+          if (filteredMessages.length > 0) {
+            const lastMsg = filteredMessages[filteredMessages.length - 1];
+            updatedLastMessage = {
+              content: lastMsg.content,
+              timestamp: lastMsg.timestamp
+            };
+          }
+          
+          return {
+            ...conversation,
+            messages: filteredMessages,
+            lastMessage: updatedLastMessage
+          };
+        }
+        return conversation;
+      });
+    });
+    
+    toast({
+      title: "Mensaxe eliminada",
+      description: "A mensaxe foi eliminada correctamente"
+    });
+  };
+
   return {
     messageText,
     setMessageText,
@@ -62,6 +96,7 @@ export function useMessageHandlers(
     handleSendMessage,
     handleNewMessage,
     handleCreateGroup,
-    handleAttachFile
+    handleAttachFile,
+    handleDeleteMessage
   };
 }

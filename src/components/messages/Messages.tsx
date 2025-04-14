@@ -3,14 +3,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { format } from 'date-fns';
 import { Conversation } from '@/types/conversations';
-import { Check, CheckCheck, FileIcon, Download } from 'lucide-react';
+import { Check, CheckCheck, FileIcon, Download, Trash2 } from 'lucide-react';
 import { motion } from '@/components/ui/motion';
+import { Button } from '@/components/ui/button';
 
 interface MessagesProps {
   conversation: Conversation | null;
+  onDeleteMessage?: (messageId: string) => void;
 }
 
-const Messages: React.FC<MessagesProps> = ({ conversation }) => {
+const Messages: React.FC<MessagesProps> = ({ conversation, onDeleteMessage }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
   const [prevMessageCount, setPrevMessageCount] = useState(0);
@@ -64,8 +66,8 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
       case 'file':
         return (
           <div className="flex items-center bg-gray-50 rounded-lg p-3 space-x-3">
-            <div className="bg-scola-primary/10 p-2 rounded-lg">
-              <FileIcon className="h-8 w-8 text-scola-primary" />
+            <div className="bg-[#0070C0]/10 p-2 rounded-lg">
+              <FileIcon className="h-8 w-8 text-[#0070C0]" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{message.fileName}</p>
@@ -73,7 +75,7 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
                 {(message.fileSize / 1024).toFixed(2)} KB
               </p>
             </div>
-            <Download className="h-5 w-5 text-gray-500 cursor-pointer hover:text-scola-primary" />
+            <Download className="h-5 w-5 text-gray-500 cursor-pointer hover:text-[#0070C0]" />
           </div>
         );
       case 'system':
@@ -96,7 +98,7 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
       case 'delivered':
         return <CheckCheck className="h-4 w-4 text-gray-400" />;
       case 'read':
-        return <CheckCheck className="h-4 w-4 text-scola-primary" />;
+        return <CheckCheck className="h-4 w-4 text-[#0070C0]" />;
       default:
         return null;
     }
@@ -134,15 +136,15 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
           return (
             <motion.div 
               key={message.id} 
-              className={`flex items-end ${isCurrentUser ? 'justify-end' : ''}`}
+              className={`flex items-end group ${isCurrentUser ? 'justify-end' : ''}`}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
             >
-              <div className={`max-w-[75%] ${isCurrentUser ? 'order-2' : 'order-1'}`}>
-                <div className={`rounded-lg ${isCurrentUser ? 'bg-scola-primary text-white' : 'bg-gray-100 text-gray-800'} p-3`}>
+              <div className={`max-w-[75%] relative ${isCurrentUser ? 'order-2' : 'order-1'}`}>
+                <div className={`rounded-lg ${isCurrentUser ? 'bg-[#0070C0] text-white' : 'bg-gray-100 text-gray-800'} p-3`}>
                   {!isCurrentUser && conversation.isGroup && (
-                    <p className="text-xs font-medium text-scola-primary mb-1">
+                    <p className="text-xs font-medium text-[#0070C0] mb-1">
                       {message.sender.name}
                     </p>
                   )}
@@ -154,6 +156,16 @@ const Messages: React.FC<MessagesProps> = ({ conversation }) => {
                   </span>
                   {renderMessageStatus(message)}
                 </div>
+                
+                {isCurrentUser && onDeleteMessage && (
+                  <Button 
+                    variant="ghost" 
+                    className="absolute -top-2 -right-2 h-6 w-6 p-0 rounded-full bg-white text-red-500 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
+                    onClick={() => onDeleteMessage(message.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                )}
               </div>
             </motion.div>
           );

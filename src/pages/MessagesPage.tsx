@@ -11,6 +11,8 @@ import { useConversations } from '@/hooks/conversations/useConversations';
 import { useMessageHandlers } from '@/hooks/messages/useMessageHandlers';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { AnimatePresence, motion } from '@/components/ui/motion';
+import { useToast } from '@/hooks/use-toast';
+import { Message } from '@/types/conversations';
 
 const MessagesPage = () => {
   const {
@@ -20,6 +22,8 @@ const MessagesPage = () => {
     setSelectedConversation,
     handleDeleteConversation
   } = useConversations();
+  
+  const { toast } = useToast();
   
   const {
     messageText,
@@ -53,6 +57,35 @@ const MessagesPage = () => {
   const handleBackToList = () => {
     setMobileView('list');
     setSelectedConversation(null);
+  };
+
+  const handleDeleteMessage = (messageId: string) => {
+    if (!selectedConversation) return;
+    
+    setConversations(prevConversations => {
+      return prevConversations.map(conversation => {
+        if (conversation.id === selectedConversation) {
+          const filteredMessages = conversation.messages.filter(msg => msg.id !== messageId);
+          
+          return {
+            ...conversation,
+            messages: filteredMessages,
+            lastMessage: filteredMessages.length > 0 
+              ? {
+                  content: filteredMessages[filteredMessages.length - 1].content,
+                  timestamp: filteredMessages[filteredMessages.length - 1].timestamp
+                }
+              : conversation.lastMessage
+          };
+        }
+        return conversation;
+      });
+    });
+    
+    toast({
+      title: "Mensaxe eliminada",
+      description: "A mensaxe foi eliminada correctamente"
+    });
   };
 
   return (
@@ -106,6 +139,7 @@ const MessagesPage = () => {
               onBackToList={handleBackToList}
               isMobile={isMobile}
               onAttachFile={handleAttachFile}
+              onDeleteConversation={handleDeleteConversation}
             />
           </motion.div>
         )}
