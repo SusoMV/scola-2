@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Globe, FileText, Clock, Link2, Brain, Shield, Book, ClipboardList } from 'lucide-react';
+import { Globe, FileText, Clock, Brain, Shield, Book, ClipboardList } from 'lucide-react';
 
 export interface QuickLink {
   name: string;

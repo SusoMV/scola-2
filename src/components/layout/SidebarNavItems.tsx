@@ -9,7 +9,8 @@ import {
   Users, 
   MessageSquare,
   GraduationCap,
-  ArrowUpDown
+  ArrowUpDown,
+  FileText
 } from 'lucide-react';
 
 export const navItems = [
@@ -47,6 +48,11 @@ export const navItems = [
     name: 'Titorías', 
     path: '/tutoring', 
     icon: <GraduationCap className="h-5 w-5" /> 
+  },
+  { 
+    name: 'Documentos', 
+    path: '/school-documents', 
+    icon: <FileText className="h-5 w-5" /> 
   },
 ];
 
