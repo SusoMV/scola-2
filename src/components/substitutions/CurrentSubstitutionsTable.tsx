@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -7,14 +6,12 @@ import { Substitution } from '@/types/substitutions';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-
 interface CurrentSubstitutionsTableProps {
   substitutions: Substitution[];
   handleToggleSeen: (id: string) => void;
   openCreateDialog: () => void;
   isDirector: boolean;
 }
-
 const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
   substitutions,
   handleToggleSeen,
@@ -28,14 +25,7 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
             <Calendar className="h-5 w-5 text-[#0070C0]" /> 
             <h2 className="text-lg font-medium">Substitucións actuais</h2>
           </div>
-          {isDirector && (
-            <Button 
-              className="bg-[#0070C0] hover:bg-[#0070C0]/90 text-white"
-              onClick={openCreateDialog}
-            >
-              <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
-            </Button>
-          )}
+          {isDirector}
         </div>
         
         {substitutions && substitutions.length > 0 ? <div className="overflow-x-auto">
@@ -65,5 +55,4 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
       </CardContent>
     </Card>;
 };
-
 export default CurrentSubstitutionsTable;
