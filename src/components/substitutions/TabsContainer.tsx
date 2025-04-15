@@ -1,11 +1,12 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import CurrentSubstitutionsTable from './CurrentSubstitutionsTable';
 import HistoricalSubstitutionsTable from './HistoricalSubstitutionsTable';
 import { Substitution } from '@/types/substitutions';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface TabsContainerProps {
   substitutions: Substitution[];
@@ -26,24 +27,30 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
   openCreateDialog,
   isDirector
 }) => {
+  const isMobile = useIsMobile();
+  
   return (
     <Tabs defaultValue="current" className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <TabsList>
-          <TabsTrigger value="current">
+      <div className="flex justify-between items-center mb-2">
+        <TabsList className={isMobile ? "h-8" : ""}>
+          <TabsTrigger value="current" className={isMobile ? "px-3 py-1 text-xs h-6" : ""}>
             Hoxe
           </TabsTrigger>
-          <TabsTrigger value="historical">
+          <TabsTrigger value="historical" className={isMobile ? "px-3 py-1 text-xs h-6" : ""}>
             Histórico
           </TabsTrigger>
         </TabsList>
         
         {isDirector && (
           <Button 
-            className="bg-[#0070C0] hover:bg-[#0070C0]/90 text-white"
+            className={isMobile 
+              ? "bg-[#0070C0] hover:bg-[#0070C0]/90 text-white h-7 text-xs px-2 py-1" 
+              : "bg-[#0070C0] hover:bg-[#0070C0]/90 text-white"
+            }
             onClick={openCreateDialog}
           >
-            <Plus className="mr-2 h-4 w-4" /> Crear Ausencia
+            <Plus className={isMobile ? "mr-1 h-3 w-3" : "mr-2 h-4 w-4"} /> 
+            Crear Ausencia
           </Button>
         )}
       </div>

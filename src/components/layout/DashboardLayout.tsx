@@ -20,8 +20,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
       <Sidebar />
       
       <main className={cn(
-        "flex-1 ml-0 lg:ml-64 p-4 md:p-8 transition-all", 
-        isMobile && "pb-20", // Add padding at the bottom for mobile to avoid content being hidden by the navigation bar
+        "flex-1 ml-0 lg:ml-64 p-3 md:p-8 transition-all", 
+        isMobile && "pb-14", // Reduced bottom padding to prevent content being hidden
         className
       )}>
         {children}
