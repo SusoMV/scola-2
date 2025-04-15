@@ -4,12 +4,12 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import TeacherAssignmentTab from '@/components/teacher-assignment/TeacherAssignmentTab';
 import StudentGroupsTab from '@/components/teacher-assignment/StudentGroupsTab';
-import { Users, Plus } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Users, BookOpen, Plus } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 
 const TeacherAssignmentPage = () => {
   const { user } = useAuth();
@@ -17,7 +17,6 @@ const TeacherAssignmentPage = () => {
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("assignment");
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [editMode, setEditMode] = useState(false);
   
   useEffect(() => {
     // Check user role from auth context or localStorage
@@ -34,76 +33,57 @@ const TeacherAssignmentPage = () => {
     return null; // Don't render anything while checking permissions
   }
 
-  const handleEditClick = () => {
-    if (activeTab === "assignment") {
-      document.dispatchEvent(new CustomEvent('toggle-edit-mode'));
-      setEditMode(!editMode);
-    }
-  };
-
-  const handleAddGroup = () => {
-    document.dispatchEvent(new CustomEvent('open-add-group-dialog'));
-  };
-
   return (
     <DashboardLayout>
-      <div className="p-6">
-        <div className="flex items-center mb-4">
-          <Users className="h-6 w-6 text-scola-primary mr-3" />
-          <h1 className="text-2xl font-medium text-scola-primary">Adscrición e grupos</h1>
-        </div>
-
-        <Separator className="border-gray-200 my-4" />
-
-        <div className="flex justify-between items-center mb-6">
-          <Tabs defaultValue="assignment" value={activeTab} onValueChange={(value) => {
-            setActiveTab(value);
-            setEditMode(false);
-          }} className="w-full">
-            <div className="flex justify-between items-center">
-              <TabsList className="bg-white border shadow-sm">
-                <TabsTrigger 
-                  value="assignment" 
-                  className="data-[state=active]:bg-scola-primary data-[state=active]:text-white px-6 py-2.5"
-                >
-                  Adscrición docente
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="groups" 
-                  className="data-[state=active]:bg-scola-primary data-[state=active]:text-white px-6 py-2.5"
-                >
-                  Grupos
-                </TabsTrigger>
-              </TabsList>
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg md:text-xl font-medium flex items-center">
+            <Users className="h-5 w-5 mr-2 text-scola-primary" />
+            Adscrición e grupos
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-between items-center mb-4">
+            <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="flex justify-between items-center">
+                <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
+                  <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md">
+                    <div className="flex items-center">
+                      <Users className="h-4 w-4 mr-1" />
+                      <span>Adscrición docente</span>
+                    </div>
+                  </TabsTrigger>
+                  <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md">
+                    <div className="flex items-center">
+                      <BookOpen className="h-4 w-4 mr-1" />
+                      <span>Grupos</span>
+                    </div>
+                  </TabsTrigger>
+                </TabsList>
+                
+                {activeTab === "groups" && (
+                  <Button 
+                    onClick={() => document.dispatchEvent(new CustomEvent('open-add-group-dialog'))}
+                    className="bg-scola-primary text-white"
+                    size="sm"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Engadir grupo
+                  </Button>
+                )}
+              </div>
               
-              {activeTab === "assignment" ? (
-                <Button 
-                  onClick={handleEditClick}
-                  className={`${editMode ? 'bg-green-600' : 'bg-scola-primary'} text-white`}
-                >
-                  {editMode ? 'Gardar adscrición' : 'Editar adscrición'}
-                </Button>
-              ) : (
-                <Button 
-                  onClick={handleAddGroup}
-                  className="bg-scola-primary text-white"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Engadir grupo
-                </Button>
-              )}
-            </div>
-            
-            <TabsContent value="assignment" className="mt-6 pt-0">
-              <TeacherAssignmentTab />
-            </TabsContent>
-            
-            <TabsContent value="groups" className="mt-6 pt-0">
-              <StudentGroupsTab />
-            </TabsContent>
-          </Tabs>
-        </div>
-      </div>
+              <TabsContent value="assignment" className="mt-6">
+                <TeacherAssignmentTab />
+              </TabsContent>
+              
+              <TabsContent value="groups" className="mt-6">
+                <StudentGroupsTab />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </CardContent>
+      </Card>
     </DashboardLayout>
   );
 };

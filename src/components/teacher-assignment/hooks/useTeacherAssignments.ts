@@ -38,18 +38,7 @@ export const useTeacherAssignments = () => {
   };
 
   const cancelEdit = () => {
-    // Reload data from localStorage
-    const loadedData = localStorage.getItem('teacher_assignments');
-    if (loadedData) {
-      try {
-        setAssignments(JSON.parse(loadedData));
-      } catch (e) {
-        console.error('Error loading teacher assignments', e);
-        setAssignments(initialAssignments);
-      }
-    } else {
-      setAssignments(initialAssignments);
-    }
+    setAssignments(initialAssignments);
     setEditMode(false);
   };
 
