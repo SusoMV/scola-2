@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -10,11 +9,9 @@ import SidebarNavItems, { navItems } from './SidebarNavItems';
 import SidebarUserProfile from './SidebarUserProfile';
 import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 interface SidebarProps {
   className?: string;
 }
-
 const Sidebar: React.FC<SidebarProps> = ({
   className
 }) => {
@@ -26,11 +23,9 @@ const Sidebar: React.FC<SidebarProps> = ({
     signOut
   } = useAuth();
   const userProfile = useSidebarProfile();
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
   const handleSignOut = async () => {
     try {
       await signOut();
@@ -39,11 +34,9 @@ const Sidebar: React.FC<SidebarProps> = ({
       console.error('Error signing out:', error);
     }
   };
-
   const isActive = (path: string) => {
     return location.pathname === path;
   };
-
   return <>
       {/* Desktop Sidebar */}
       <div className={cn("fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 lg:translate-x-0 flex flex-col", isMobileMenuOpen ? "translate-x-0" : "-translate-x-full", className)}>
@@ -63,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Mobile Bottom Navigation */}
-      {isMobile && <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around items-center py-1">
+      {isMobile && <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around items-center my-[10px] py-[11px]">
           {navItems.map(item => <Button key={item.path} variant="ghost" size="sm" className={cn("flex flex-col items-center justify-center p-1", isActive(item.path) ? "text-scola-primary" : "text-gray-500 hover:text-scola-primary")} onClick={() => navigate(item.path)}>
               {item.icon}
               <span className="text-[10px] mt-1">{item.name}</span>
@@ -73,5 +66,4 @@ const Sidebar: React.FC<SidebarProps> = ({
       {isMobileMenuOpen && <div className="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden" onClick={toggleMobileMenu} />}
     </>;
 };
-
 export default Sidebar;
