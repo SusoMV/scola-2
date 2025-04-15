@@ -1,18 +1,17 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import ScolaLogo from '@/components/ScolaLogo';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
-  Menu,
-  X,
   LogOut,
 } from 'lucide-react';
-import SidebarNavItems from './SidebarNavItems';
+import SidebarNavItems, { navItems } from './SidebarNavItems';
 import SidebarUserProfile from './SidebarUserProfile';
 import { useSidebarProfile } from '@/hooks/use-sidebar-profile';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SidebarProps {
   className?: string;
@@ -20,6 +19,8 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useIsMobile();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { signOut } = useAuth();
   const userProfile = useSidebarProfile();
@@ -37,23 +38,13 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     }
   };
 
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
   return (
     <>
-      <div className="fixed top-4 left-4 z-40 lg:hidden">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={toggleMobileMenu}
-          className="bg-white border-scola-primary text-scola-primary hover:bg-scola-pastel"
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-5 w-5" />
-          ) : (
-            <Menu className="h-5 w-5" />
-          )}
-        </Button>
-      </div>
-
+      {/* Desktop Sidebar */}
       <div 
         className={cn(
           "fixed inset-y-0 left-0 z-30 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 lg:translate-x-0 flex flex-col",
@@ -79,6 +70,29 @@ const Sidebar: React.FC<SidebarProps> = ({ className }) => {
           </Button>
         </div>
       </div>
+
+      {/* Mobile Bottom Navigation */}
+      {isMobile && (
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around items-center py-2">
+          {navItems.map((item) => (
+            <Button
+              key={item.path}
+              variant="ghost"
+              size="icon"
+              className={cn(
+                "flex flex-col items-center justify-center p-1",
+                isActive(item.path)
+                  ? "text-scola-primary"
+                  : "text-gray-500 hover:text-scola-primary"
+              )}
+              onClick={() => navigate(item.path)}
+            >
+              {item.icon}
+              <span className="text-xs mt-1">{item.name}</span>
+            </Button>
+          ))}
+        </div>
+      )}
 
       {isMobileMenuOpen && (
         <div 
