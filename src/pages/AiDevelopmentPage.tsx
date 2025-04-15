@@ -1,7 +1,21 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Brain, BookOpen, FileText, GraduationCap, CheckSquare, Clock, Key, Users, Shield, Smile, Library, Utensils, Bus, UserPlus } from 'lucide-react';
+import { 
+  Brain, 
+  BookOpen, 
+  FileText, 
+  CheckSquare, 
+  Clock, 
+  Key, 
+  Users, 
+  Shield, 
+  Smile, 
+  Library, 
+  Utensils, 
+  Bus, 
+  UserPlus 
+} from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import AIChatbotButton from '@/components/ai/AIChatbotButton';
 import { toast } from '@/components/ui/use-toast';
@@ -44,7 +58,7 @@ const AiDevelopmentPage = () => {
       
       <Card className="border-0 shadow-sm">
         <CardContent className="p-6">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {chatbots.map((chatbot, index) => (
               <AIChatbotButton 
                 key={index}

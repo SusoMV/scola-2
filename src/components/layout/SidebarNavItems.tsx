@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -9,7 +10,6 @@ import {
   MessageSquare,
   GraduationCap,
   ArrowUpDown,
-  FileText
 } from 'lucide-react';
 
 export const navItems = [
@@ -47,11 +47,6 @@ export const navItems = [
     name: 'Titorías', 
     path: '/tutoring', 
     icon: <GraduationCap className="h-5 w-5" /> 
-  },
-  { 
-    name: 'Documentos do centro', 
-    path: '/school-documents', 
-    icon: <FileText className="h-5 w-5" /> 
   },
 ];
 
