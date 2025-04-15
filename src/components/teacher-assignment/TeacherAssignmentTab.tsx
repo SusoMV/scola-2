@@ -1,6 +1,4 @@
-
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -148,7 +146,7 @@ const TeacherAssignmentTab: React.FC = () => {
     toast.success('Adscrición docente gardada correctamente');
   };
 
-  const renderTeacherSelect = (
+  const renderTeacherInput = (
     courseIndex: number, 
     field: keyof TeacherAssignment, 
     label: string
@@ -214,7 +212,7 @@ const TeacherAssignmentTab: React.FC = () => {
           <Button 
             size="sm" 
             onClick={() => setEditMode(true)}
-            className="text-xs md:text-sm"
+            className="text-xs md:text-sm bg-scola-primary"
           >
             Editar adscrición
           </Button>
@@ -223,21 +221,162 @@ const TeacherAssignmentTab: React.FC = () => {
 
       <div className="space-y-6">
         {assignments.map((assignment, courseIndex) => (
-          <Card key={assignment.course} className="border border-gray-200">
-            <CardContent className="p-4">
-              <h3 className="font-medium text-scola-primary mb-3 text-sm md:text-base">
-                {assignment.course}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {renderTeacherSelect(courseIndex, 'tutor', 'Titora/Titor')}
-                {renderTeacherSelect(courseIndex, 'english', 'Inglés')}
-                {renderTeacherSelect(courseIndex, 'physicalEd', 'Educación Física')}
-                {renderTeacherSelect(courseIndex, 'music', 'Música')}
-                {renderTeacherSelect(courseIndex, 'art', 'Plástica')}
-                {renderTeacherSelect(courseIndex, 'religion', 'Relixión')}
+          <div key={assignment.course} className="border border-[#0070C0] border-dashed rounded-md p-4">
+            <h3 className="font-medium text-[#0070C0] mb-4 text-sm md:text-base">
+              {assignment.course}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Titora/Titor</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.tutor}
+                      onValueChange={(value) => handleChange(courseIndex, 'tutor', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar titor/a" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.tutor} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Inglés</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.english}
+                      onValueChange={(value) => handleChange(courseIndex, 'english', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar docente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.english} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Educación Física</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.physicalEd}
+                      onValueChange={(value) => handleChange(courseIndex, 'physicalEd', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar docente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.physicalEd} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Música</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.music}
+                      onValueChange={(value) => handleChange(courseIndex, 'music', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar docente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.music} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Plástica</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.art}
+                      onValueChange={(value) => handleChange(courseIndex, 'art', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar docente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.art} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <div className="space-y-1">
+                  <Label className="text-xs md:text-sm font-medium text-gray-700">Relixión</Label>
+                  {editMode ? (
+                    <Select
+                      value={assignment.religion}
+                      onValueChange={(value) => handleChange(courseIndex, 'religion', value)}
+                    >
+                      <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+                        <SelectValue placeholder="Seleccionar docente" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {facultyMembers.map((teacher) => (
+                          <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
+                            {teacher}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    <Input value={assignment.religion} readOnly className="h-8 text-xs md:text-sm bg-gray-50" />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>

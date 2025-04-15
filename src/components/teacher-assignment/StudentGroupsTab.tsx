@@ -1,11 +1,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from '@/components/ui/table';
-import { Download, Edit, Save, X, FileSpreadsheet, FileText } from 'lucide-react';
+import { Download, Edit, Save, X, FileSpreadsheet, FileText, Plus, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Student {
@@ -73,6 +74,8 @@ const StudentGroupsTab: React.FC = () => {
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [editingStudents, setEditingStudents] = useState<Student[]>([]);
+  const [openAddGroupDialog, setOpenAddGroupDialog] = useState(false);
+  const [newGroupName, setNewGroupName] = useState('');
   const isMobile = useIsMobile();
 
   // In a real app, you would fetch this data from the database
@@ -150,21 +153,53 @@ const StudentGroupsTab: React.FC = () => {
     }
   };
 
+  const handleAddGroup = () => {
+    if (newGroupName && newGroupName.trim() !== '') {
+      if (groups[newGroupName]) {
+        toast.error('Este grupo xa existe');
+        return;
+      }
+      
+      const updatedGroups = {
+        ...groups,
+        [newGroupName]: []
+      };
+      
+      setGroups(updatedGroups);
+      localStorage.setItem('student_groups', JSON.stringify(updatedGroups));
+      setNewGroupName('');
+      setOpenAddGroupDialog(false);
+      toast.success(`Grupo ${newGroupName} creado correctamente`);
+    } else {
+      toast.error('Debes especificar un nome para o grupo');
+    }
+  };
+
   return (
     <div>
+      <div className="flex justify-between items-center mb-4">
+        <Button 
+          onClick={() => setOpenAddGroupDialog(true)}
+          className="bg-scola-primary text-white"
+          size="sm"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Engadir grupo
+        </Button>
+      </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        {courses.map((course) => (
-          <Button
-            key={course}
-            variant="outline"
-            className="h-20 flex flex-col items-center justify-center p-2 text-xs md:text-sm border-scola-primary text-scola-primary hover:bg-scola-pastel"
+        {Object.keys(groups).map((course) => (
+          <div 
+            key={course} 
+            className="border border-[#0070C0] border-dashed rounded-md p-4 text-center cursor-pointer hover:bg-scola-pastel transition-colors"
             onClick={() => handleOpenCourse(course)}
           >
-            <span className="text-center">{course}</span>
-            <span className="text-xs text-gray-500 mt-1">
-              {groups[course] ? groups[course].length : 0} alumnos
-            </span>
-          </Button>
+            <div className="text-[#0070C0] font-medium mb-1">{course}</div>
+            <div className="text-gray-500 text-xs">
+              {groups[course].length} {groups[course].length === 1 ? 'alumno' : 'alumnos'}
+            </div>
+          </div>
         ))}
       </div>
 
@@ -301,6 +336,35 @@ const StudentGroupsTab: React.FC = () => {
           </DialogContent>
         </Dialog>
       )}
+      
+      <Dialog open={openAddGroupDialog} onOpenChange={setOpenAddGroupDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Engadir novo grupo</DialogTitle>
+            <DialogDescription>
+              Introduce o nome do novo grupo de alumnos
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Nome
+              </Label>
+              <Input
+                id="name"
+                value={newGroupName}
+                onChange={(e) => setNewGroupName(e.target.value)}
+                placeholder="Ex: 1º Primaria B"
+                className="col-span-3"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenAddGroupDialog(false)}>Cancelar</Button>
+            <Button onClick={handleAddGroup}>Engadir</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
