@@ -17,11 +17,12 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onTeacherChange
 }) => {
   return (
-    <div className="border border-[#0070C0] border-dashed rounded-md p-4">
-      <h3 className="font-medium text-[#0070C0] mb-4 text-sm md:text-base">
+    <div className="border border-scola-primary border-dashed rounded-md p-6">
+      <h3 className="font-medium text-scola-primary mb-6 text-lg">
         {assignment.course}
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-6 gap-x-8">
         <div>
           <TeacherSelector
             label="Titora/Titor"

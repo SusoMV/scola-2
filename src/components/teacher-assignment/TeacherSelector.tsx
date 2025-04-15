@@ -18,33 +18,32 @@ const TeacherSelector: React.FC<TeacherSelectorProps> = ({
   editMode, 
   onChange 
 }) => {
-  return editMode ? (
-    <div className="space-y-1">
-      <Label className="text-xs md:text-sm font-medium text-gray-700">{label}</Label>
-      <Select
-        value={value}
-        onValueChange={onChange}
-      >
-        <SelectTrigger className="w-full h-8 text-xs md:text-sm">
-          <SelectValue placeholder={`Seleccionar ${label}`} />
-        </SelectTrigger>
-        <SelectContent>
-          {facultyMembers.map((teacher) => (
-            <SelectItem key={teacher} value={teacher} className="text-xs md:text-sm">
-              {teacher}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </div>
-  ) : (
-    <div className="space-y-1">
-      <Label className="text-xs md:text-sm font-medium text-gray-700">{label}</Label>
-      <Input 
-        value={value} 
-        readOnly 
-        className="h-8 text-xs md:text-sm bg-gray-50" 
-      />
+  return (
+    <div className="space-y-2">
+      <Label className="font-medium text-gray-700">{label}</Label>
+      {editMode ? (
+        <Select
+          value={value}
+          onValueChange={onChange}
+        >
+          <SelectTrigger className="w-full border-gray-300 bg-white">
+            <SelectValue placeholder={`Seleccionar ${label}`} />
+          </SelectTrigger>
+          <SelectContent>
+            {facultyMembers.map((teacher) => (
+              <SelectItem key={teacher} value={teacher}>
+                {teacher}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : (
+        <Input 
+          value={value} 
+          readOnly 
+          className="border-gray-300 bg-gray-50" 
+        />
+      )}
     </div>
   );
 };
