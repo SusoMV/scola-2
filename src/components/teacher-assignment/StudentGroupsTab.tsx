@@ -1,7 +1,5 @@
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
+import React, { useEffect } from 'react';
 import { useStudentGroups } from './hooks/useStudentGroups';
 import StudentGroupCard from './StudentGroupCard';
 import StudentGroupDetailsDialog from './StudentGroupDetailsDialog';
@@ -28,19 +26,20 @@ const StudentGroupsTab: React.FC = () => {
     handleAddGroup
   } = useStudentGroups();
 
+  useEffect(() => {
+    const handleOpenAddGroupDialog = () => {
+      setOpenAddGroupDialog(true);
+    };
+
+    document.addEventListener('open-add-group-dialog', handleOpenAddGroupDialog);
+    
+    return () => {
+      document.removeEventListener('open-add-group-dialog', handleOpenAddGroupDialog);
+    };
+  }, [setOpenAddGroupDialog]);
+
   return (
     <div>
-      <div className="flex justify-between items-center mb-4">
-        <Button 
-          onClick={() => setOpenAddGroupDialog(true)}
-          className="bg-scola-primary text-white"
-          size="sm"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Engadir grupo
-        </Button>
-      </div>
-
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {Object.keys(groups).map((course) => (
           <StudentGroupCard

@@ -5,10 +5,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import TeacherAssignmentTab from '@/components/teacher-assignment/TeacherAssignmentTab';
 import StudentGroupsTab from '@/components/teacher-assignment/StudentGroupsTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen } from 'lucide-react';
+import { Users, BookOpen, Plus } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Button } from '@/components/ui/button';
 
 const TeacherAssignmentPage = () => {
   const { user } = useAuth();
@@ -42,30 +43,45 @@ const TeacherAssignmentPage = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className={`grid w-full ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} mb-4`}>
-              <TabsTrigger value="assignment" className="text-xs md:text-sm">
-                <div className="flex items-center">
-                  <Users className="h-4 w-4 mr-1" />
-                  <span>Adscrición docente</span>
-                </div>
-              </TabsTrigger>
-              <TabsTrigger value="groups" className="text-xs md:text-sm">
-                <div className="flex items-center">
-                  <BookOpen className="h-4 w-4 mr-1" />
-                  <span>Grupos</span>
-                </div>
-              </TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="assignment" className="mt-0">
-              <TeacherAssignmentTab />
-            </TabsContent>
-            
-            <TabsContent value="groups" className="mt-0">
-              <StudentGroupsTab />
-            </TabsContent>
-          </Tabs>
+          <div className="flex justify-between items-center mb-4">
+            <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <div className="flex justify-between items-center">
+                <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
+                  <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md">
+                    <div className="flex items-center">
+                      <Users className="h-4 w-4 mr-1" />
+                      <span>Adscrición docente</span>
+                    </div>
+                  </TabsTrigger>
+                  <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md">
+                    <div className="flex items-center">
+                      <BookOpen className="h-4 w-4 mr-1" />
+                      <span>Grupos</span>
+                    </div>
+                  </TabsTrigger>
+                </TabsList>
+                
+                {activeTab === "groups" && (
+                  <Button 
+                    onClick={() => document.dispatchEvent(new CustomEvent('open-add-group-dialog'))}
+                    className="bg-scola-primary text-white"
+                    size="sm"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Engadir grupo
+                  </Button>
+                )}
+              </div>
+              
+              <TabsContent value="assignment" className="mt-6">
+                <TeacherAssignmentTab />
+              </TabsContent>
+              
+              <TabsContent value="groups" className="mt-6">
+                <StudentGroupsTab />
+              </TabsContent>
+            </Tabs>
+          </div>
         </CardContent>
       </Card>
     </DashboardLayout>
