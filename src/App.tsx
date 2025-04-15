@@ -31,6 +31,7 @@ import DocumentsDevelopmentPage from "./pages/DocumentsDevelopmentPage";
 import ClassroomPlanningPage from "./pages/ClassroomPlanningPage";
 import MeetingMinutesPage from "./pages/MeetingMinutesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
+import TeacherAssignmentPage from "./pages/TeacherAssignmentPage";
 
 const queryClient = new QueryClient();
 
@@ -146,6 +147,11 @@ const App = () => (
             <Route path="/meeting-minutes" element={
               <ProtectedRoute>
                 <MeetingMinutesPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/teacher-assignment" element={
+              <ProtectedRoute>
+                <TeacherAssignmentPage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
