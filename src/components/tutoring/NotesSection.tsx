@@ -82,10 +82,7 @@ const NotesSection = () => {
   return <Card className="bg-white">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-medium flex items-center gap-2">
-            
-            Anotacións de alumnos
-          </h2>
+          <h2 className="text-xl font-medium flex items-center gap-2">Anotacións sobre alumnado</h2>
           
           <div className="flex gap-2">
             <div className="relative">
