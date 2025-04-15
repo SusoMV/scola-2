@@ -56,10 +56,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       </div>
 
       {/* Mobile Bottom Navigation */}
-      {isMobile && <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around items-center my-[10px] py-[11px]">
+      {isMobile && <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around items-center py-[11px] my-0">
           {navItems.map(item => <Button key={item.path} variant="ghost" size="sm" className={cn("flex flex-col items-center justify-center p-1", isActive(item.path) ? "text-scola-primary" : "text-gray-500 hover:text-scola-primary")} onClick={() => navigate(item.path)}>
               {item.icon}
-              <span className="text-[10px] mt-1">{item.name}</span>
+              
             </Button>)}
         </div>}
 
