@@ -4,6 +4,9 @@ import { useStudentGroups } from './hooks/useStudentGroups';
 import StudentGroupCard from './StudentGroupCard';
 import StudentGroupDetailsDialog from './StudentGroupDetailsDialog';
 import AddGroupDialog from './AddGroupDialog';
+import AddStudentDialog from './AddStudentDialog';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
 
 const StudentGroupsTab: React.FC = () => {
   const {
@@ -15,6 +18,9 @@ const StudentGroupsTab: React.FC = () => {
     newGroupName,
     setNewGroupName,
     setOpenAddGroupDialog,
+    openAddStudentDialog,
+    setOpenAddStudentDialog,
+    newStudents,
     handleOpenCourse,
     handleCloseCourse,
     handleEditMode,
@@ -23,7 +29,12 @@ const StudentGroupsTab: React.FC = () => {
     handleEditStudent,
     handleExportExcel,
     handleExportPDF,
-    handleAddGroup
+    handleAddGroup,
+    handleNewStudentChange,
+    handleAddStudentRow,
+    handleRemoveStudentRow,
+    handleSaveNewGroup,
+    handleCancelNewGroup
   } = useStudentGroups();
 
   useEffect(() => {
@@ -40,6 +51,17 @@ const StudentGroupsTab: React.FC = () => {
 
   return (
     <div>
+      <div className="mb-4 flex justify-end">
+        <Button 
+          onClick={() => setOpenAddGroupDialog(true)}
+          className="text-xs md:text-sm bg-scola-primary"
+          size="sm"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Engadir grupo
+        </Button>
+      </div>
+      
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {Object.keys(groups).map((course) => (
           <StudentGroupCard
@@ -72,6 +94,18 @@ const StudentGroupsTab: React.FC = () => {
         newGroupName={newGroupName}
         onNewGroupNameChange={setNewGroupName}
         onAddGroup={handleAddGroup}
+      />
+      
+      <AddStudentDialog
+        open={openAddStudentDialog}
+        onOpenChange={setOpenAddStudentDialog}
+        groupName={newGroupName}
+        students={newStudents}
+        onStudentChange={handleNewStudentChange}
+        onAddRow={handleAddStudentRow}
+        onRemoveRow={handleRemoveStudentRow}
+        onSave={handleSaveNewGroup}
+        onCancel={handleCancelNewGroup}
       />
     </div>
   );

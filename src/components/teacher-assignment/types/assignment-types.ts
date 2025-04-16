@@ -19,6 +19,19 @@ export const facultyMembers = [
   'Elena Sánchez Gómez'
 ];
 
+// Available courses for dropdown selection
+export const courses = [
+  '4º Infantil',
+  '5º Infantil',
+  '6º Infantil',
+  '1º Primaria',
+  '2º Primaria',
+  '3º Primaria',
+  '4º Primaria',
+  '5º Primaria',
+  '6º Primaria'
+];
+
 // Sample data for initial assignments
 export const initialAssignments: TeacherAssignment[] = [
   {

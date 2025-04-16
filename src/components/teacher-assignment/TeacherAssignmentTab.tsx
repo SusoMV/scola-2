@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useTeacherAssignments } from './hooks/useTeacherAssignments';
 import CourseCard from './CourseCard';
+import AddAssignmentDialog from './AddAssignmentDialog';
+import { Plus } from 'lucide-react';
 
 const TeacherAssignmentTab: React.FC = () => {
   const {
@@ -11,12 +13,26 @@ const TeacherAssignmentTab: React.FC = () => {
     setEditMode,
     handleChange,
     handleSave,
-    cancelEdit
+    cancelEdit,
+    openAddAssignmentDialog,
+    setOpenAddAssignmentDialog,
+    newAssignment,
+    handleNewAssignmentChange,
+    handleAddAssignment
   } = useTeacherAssignments();
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-between mb-4">
+        <Button 
+          onClick={() => setOpenAddAssignmentDialog(true)}
+          className="text-xs md:text-sm bg-scola-primary"
+          size="sm"
+        >
+          <Plus className="h-4 w-4 mr-1" />
+          Engadir adscrición
+        </Button>
+        
         {editMode ? (
           <div className="space-x-2">
             <Button 
@@ -57,6 +73,14 @@ const TeacherAssignmentTab: React.FC = () => {
           />
         ))}
       </div>
+      
+      <AddAssignmentDialog
+        open={openAddAssignmentDialog}
+        onOpenChange={setOpenAddAssignmentDialog}
+        newAssignment={newAssignment}
+        onFieldChange={handleNewAssignmentChange}
+        onAddAssignment={handleAddAssignment}
+      />
     </div>
   );
 };
