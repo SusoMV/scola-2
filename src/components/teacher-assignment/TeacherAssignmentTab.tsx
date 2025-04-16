@@ -39,14 +39,14 @@ const TeacherAssignmentTab: React.FC = () => {
           <Button 
             size="sm" 
             onClick={() => setEditMode(true)}
-            className="text-xs md:text-sm bg-purple-600 hover:bg-purple-700"
+            className="text-xs md:text-sm bg-scola-primary"
           >
             Editar adscrición
           </Button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="space-y-6">
         {assignments.map((assignment, courseIndex) => (
           <CourseCard
             key={assignment.course}

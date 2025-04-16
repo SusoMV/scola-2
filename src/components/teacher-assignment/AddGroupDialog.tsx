@@ -24,7 +24,7 @@ const AddGroupDialog: React.FC<AddGroupDialogProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-purple-700">Engadir novo grupo</DialogTitle>
+          <DialogTitle>Engadir novo grupo</DialogTitle>
           <DialogDescription>
             Introduce o nome do novo grupo de alumnos
           </DialogDescription>
@@ -39,13 +39,13 @@ const AddGroupDialog: React.FC<AddGroupDialogProps> = ({
               value={newGroupName}
               onChange={(e) => onNewGroupNameChange(e.target.value)}
               placeholder="Ex: 1º Primaria B"
-              className="col-span-3 border-purple-200 focus:ring-purple-400"
+              className="col-span-3"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} className="border-purple-200">Cancelar</Button>
-          <Button onClick={onAddGroup} className="bg-purple-600 hover:bg-purple-700">Engadir</Button>
+          <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button onClick={onAddGroup}>Engadir</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

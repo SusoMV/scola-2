@@ -37,8 +37,8 @@ const TeacherAssignmentPage = () => {
     <DashboardLayout>
       <Card className="border-0 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg md:text-xl font-medium flex items-center text-purple-700">
-            <Users className="h-5 w-5 mr-2 text-purple-600" />
+          <CardTitle className="text-lg md:text-xl font-medium flex items-center">
+            <Users className="h-5 w-5 mr-2 text-scola-primary" />
             Adscrición e grupos
           </CardTitle>
         </CardHeader>
@@ -46,14 +46,14 @@ const TeacherAssignmentPage = () => {
           <div className="flex justify-between items-center mb-4">
             <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
               <div className="flex justify-between items-center">
-                <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} bg-purple-100`}>
-                  <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
+                  <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md">
                     <div className="flex items-center">
                       <Users className="h-4 w-4 mr-1" />
                       <span>Adscrición docente</span>
                     </div>
                   </TabsTrigger>
-                  <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+                  <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md">
                     <div className="flex items-center">
                       <BookOpen className="h-4 w-4 mr-1" />
                       <span>Grupos</span>
@@ -64,7 +64,7 @@ const TeacherAssignmentPage = () => {
                 {activeTab === "groups" && (
                   <Button 
                     onClick={() => document.dispatchEvent(new CustomEvent('open-add-group-dialog'))}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="bg-scola-primary text-white"
                     size="sm"
                   >
                     <Plus className="h-4 w-4 mr-1" />

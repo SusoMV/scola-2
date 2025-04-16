@@ -17,8 +17,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onTeacherChange
 }) => {
   return (
-    <div className="border border-purple-300 border-dashed rounded-md p-6 hover:bg-purple-50/50 transition-colors">
-      <h3 className="font-medium text-purple-700 mb-4 text-sm md:text-base">
+    <div className="border border-[#0070C0] border-dashed rounded-md p-4">
+      <h3 className="font-medium text-[#0070C0] mb-4 text-sm md:text-base">
         {assignment.course}
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
