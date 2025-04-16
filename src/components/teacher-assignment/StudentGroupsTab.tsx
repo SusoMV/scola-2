@@ -9,20 +9,21 @@ const StudentGroupsTab: React.FC = () => {
   const {
     groups,
     selectedCourse,
-    openAddGroupDialog,
+    editMode,
     editingStudents,
+    openAddGroupDialog,
     newGroupName,
     setNewGroupName,
     setOpenAddGroupDialog,
     handleOpenCourse,
     handleCloseCourse,
+    handleEditMode,
+    handleCancelEdit,
     handleSaveChanges,
     handleEditStudent,
     handleExportExcel,
     handleExportPDF,
-    handleAddGroup,
-    handleAddStudent,
-    handleRemoveStudent
+    handleAddGroup
   } = useStudentGroups();
 
   useEffect(() => {
@@ -30,28 +31,16 @@ const StudentGroupsTab: React.FC = () => {
       setOpenAddGroupDialog(true);
     };
 
-    const handleAddStudentToGroup = () => {
-      handleAddStudent();
-    };
-
-    const handleRemoveStudentFromGroup = (event: CustomEvent) => {
-      handleRemoveStudent(event.detail.index);
-    };
-
     document.addEventListener('open-add-group-dialog', handleOpenAddGroupDialog);
-    document.addEventListener('add-student-to-group', handleAddStudentToGroup);
-    document.addEventListener('remove-student-from-group', handleRemoveStudentFromGroup as EventListener);
     
     return () => {
       document.removeEventListener('open-add-group-dialog', handleOpenAddGroupDialog);
-      document.removeEventListener('add-student-to-group', handleAddStudentToGroup);
-      document.removeEventListener('remove-student-from-group', handleRemoveStudentFromGroup as EventListener);
     };
-  }, [setOpenAddGroupDialog, handleAddStudent, handleRemoveStudent]);
+  }, [setOpenAddGroupDialog]);
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {Object.keys(groups).map((course) => (
           <StudentGroupCard
             key={course}
@@ -65,8 +54,11 @@ const StudentGroupsTab: React.FC = () => {
       {selectedCourse && (
         <StudentGroupDetailsDialog
           selectedCourse={selectedCourse}
+          editMode={editMode}
           editingStudents={editingStudents}
           onClose={handleCloseCourse}
+          onEdit={handleEditMode}
+          onCancel={handleCancelEdit}
           onSave={handleSaveChanges}
           onExportExcel={handleExportExcel}
           onExportPDF={handleExportPDF}

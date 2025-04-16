@@ -4,7 +4,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import TeacherAssignmentTab from '@/components/teacher-assignment/TeacherAssignmentTab';
 import StudentGroupsTab from '@/components/teacher-assignment/StudentGroupsTab';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, BookOpen, Plus } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -33,75 +33,57 @@ const TeacherAssignmentPage = () => {
     return null; // Don't render anything while checking permissions
   }
 
-  const handleOpenAddTeacherDialog = () => {
-    document.dispatchEvent(new CustomEvent('open-add-teacher-dialog'));
-  };
-
-  const handleOpenAddGroupDialog = () => {
-    document.dispatchEvent(new CustomEvent('open-add-group-dialog'));
-  };
-
   return (
     <DashboardLayout>
-      <div className="container mx-auto px-4 py-6">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Adscrición e grupos</h1>
-          {activeTab === "assignment" ? (
-            <Button 
-              onClick={handleOpenAddTeacherDialog} 
-              className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Engadir adscrición
-            </Button>
-          ) : (
-            <Button 
-              onClick={handleOpenAddGroupDialog} 
-              className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Engadir grupo
-            </Button>
-          )}
-        </div>
-
-        <Card className="border-0 shadow-sm">
-          <CardContent className="p-0">
+      <Card className="border-0 shadow-sm">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg md:text-xl font-medium flex items-center">
+            <Users className="h-5 w-5 mr-2 text-scola-primary" />
+            Adscrición e grupos
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-between items-center mb-4">
             <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="w-full border-b border-gray-200 bg-transparent p-0 h-auto">
-                <div className="flex gap-6 px-6 pt-4">
-                  <TabsTrigger 
-                    value="assignment" 
-                    className="rounded-none text-sm font-medium border-b-2 border-transparent px-0 py-3 data-[state=active]:border-[#9b87f5] data-[state=active]:text-[#9b87f5] hover:text-[#9b87f5] transition-colors bg-transparent"
-                  >
+              <div className="flex justify-between items-center">
+                <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
+                  <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md">
                     <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-2" />
+                      <Users className="h-4 w-4 mr-1" />
                       <span>Adscrición docente</span>
                     </div>
                   </TabsTrigger>
-                  <TabsTrigger 
-                    value="groups" 
-                    className="rounded-none text-sm font-medium border-b-2 border-transparent px-0 py-3 data-[state=active]:border-[#9b87f5] data-[state=active]:text-[#9b87f5] hover:text-[#9b87f5] transition-colors bg-transparent"
-                  >
+                  <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md">
                     <div className="flex items-center">
-                      <BookOpen className="h-4 w-4 mr-2" />
+                      <BookOpen className="h-4 w-4 mr-1" />
                       <span>Grupos</span>
                     </div>
                   </TabsTrigger>
-                </div>
-              </TabsList>
+                </TabsList>
+                
+                {activeTab === "groups" && (
+                  <Button 
+                    onClick={() => document.dispatchEvent(new CustomEvent('open-add-group-dialog'))}
+                    className="bg-scola-primary text-white"
+                    size="sm"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Engadir grupo
+                  </Button>
+                )}
+              </div>
               
-              <TabsContent value="assignment" className="p-6 pt-8">
+              <TabsContent value="assignment" className="mt-6">
                 <TeacherAssignmentTab />
               </TabsContent>
               
-              <TabsContent value="groups" className="p-6 pt-8">
+              <TabsContent value="groups" className="mt-6">
                 <StudentGroupsTab />
               </TabsContent>
             </Tabs>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </DashboardLayout>
   );
 };
