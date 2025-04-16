@@ -86,26 +86,25 @@ export function useStudentGroups() {
     }
   };
 
-  const handleAddGroup = () => {
-    if (newGroupName && newGroupName.trim() !== '') {
-      if (groups[newGroupName]) {
-        toast.error('Este grupo xa existe');
-        return;
-      }
-      
-      const updatedGroups = {
-        ...groups,
-        [newGroupName]: []
-      };
-      
-      setGroups(updatedGroups);
-      localStorage.setItem('student_groups', JSON.stringify(updatedGroups));
-      setNewGroupName('');
-      setOpenAddGroupDialog(false);
-      toast.success(`Grupo ${newGroupName} creado correctamente`);
-    } else {
+  const handleAddGroup = (groupName: string, students: Student[]) => {
+    if (groupName.trim() === '') {
       toast.error('Debes especificar un nome para o grupo');
+      return;
     }
+    
+    if (groups[groupName]) {
+      toast.error('Este grupo xa existe');
+      return;
+    }
+    
+    const updatedGroups = {
+      ...groups,
+      [groupName]: students
+    };
+    
+    setGroups(updatedGroups);
+    localStorage.setItem('student_groups', JSON.stringify(updatedGroups));
+    toast.success(`Grupo ${groupName} creado correctamente`);
   };
 
   return {

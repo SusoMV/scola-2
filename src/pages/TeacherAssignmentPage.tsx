@@ -5,11 +5,10 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import TeacherAssignmentTab from '@/components/teacher-assignment/TeacherAssignmentTab';
 import StudentGroupsTab from '@/components/teacher-assignment/StudentGroupsTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen, Plus } from 'lucide-react';
+import { Users, BookOpen } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Button } from '@/components/ui/button';
 
 const TeacherAssignmentPage = () => {
   const { user } = useAuth();
@@ -60,17 +59,6 @@ const TeacherAssignmentPage = () => {
                     </div>
                   </TabsTrigger>
                 </TabsList>
-                
-                {activeTab === "groups" && (
-                  <Button 
-                    onClick={() => document.dispatchEvent(new CustomEvent('open-add-group-dialog'))}
-                    className="bg-scola-primary text-white"
-                    size="sm"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    Engadir grupo
-                  </Button>
-                )}
               </div>
               
               <TabsContent value="assignment" className="mt-6">
