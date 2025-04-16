@@ -4,9 +4,6 @@ import { useStudentGroups } from './hooks/useStudentGroups';
 import StudentGroupCard from './StudentGroupCard';
 import StudentGroupDetailsDialog from './StudentGroupDetailsDialog';
 import AddGroupDialog from './AddGroupDialog';
-import AddStudentDialog from './AddStudentDialog';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
 
 const StudentGroupsTab: React.FC = () => {
   const {
@@ -18,9 +15,6 @@ const StudentGroupsTab: React.FC = () => {
     newGroupName,
     setNewGroupName,
     setOpenAddGroupDialog,
-    openAddStudentDialog,
-    setOpenAddStudentDialog,
-    newStudents,
     handleOpenCourse,
     handleCloseCourse,
     handleEditMode,
@@ -29,12 +23,7 @@ const StudentGroupsTab: React.FC = () => {
     handleEditStudent,
     handleExportExcel,
     handleExportPDF,
-    handleAddGroup,
-    handleNewStudentChange,
-    handleAddStudentRow,
-    handleRemoveStudentRow,
-    handleSaveNewGroup,
-    handleCancelNewGroup
+    handleAddGroup
   } = useStudentGroups();
 
   useEffect(() => {
@@ -50,18 +39,8 @@ const StudentGroupsTab: React.FC = () => {
   }, [setOpenAddGroupDialog]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-end">
-        <Button 
-          onClick={() => setOpenAddGroupDialog(true)}
-          className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Engadir grupo
-        </Button>
-      </div>
-      
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
+    <div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {Object.keys(groups).map((course) => (
           <StudentGroupCard
             key={course}
@@ -93,18 +72,6 @@ const StudentGroupsTab: React.FC = () => {
         newGroupName={newGroupName}
         onNewGroupNameChange={setNewGroupName}
         onAddGroup={handleAddGroup}
-      />
-      
-      <AddStudentDialog
-        open={openAddStudentDialog}
-        onOpenChange={setOpenAddStudentDialog}
-        groupName={newGroupName}
-        students={newStudents}
-        onStudentChange={handleNewStudentChange}
-        onAddRow={handleAddStudentRow}
-        onRemoveRow={handleRemoveStudentRow}
-        onSave={handleSaveNewGroup}
-        onCancel={handleCancelNewGroup}
       />
     </div>
   );

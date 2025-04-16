@@ -2,9 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useTeacherAssignments } from './hooks/useTeacherAssignments';
-import { Plus } from 'lucide-react';
-import AddAssignmentDialog from './AddAssignmentDialog';
-import AssignmentCard from './AssignmentCard';
+import CourseCard from './CourseCard';
 
 const TeacherAssignmentTab: React.FC = () => {
   const {
@@ -13,43 +11,35 @@ const TeacherAssignmentTab: React.FC = () => {
     setEditMode,
     handleChange,
     handleSave,
-    cancelEdit,
-    openAddAssignmentDialog,
-    setOpenAddAssignmentDialog,
-    newAssignment,
-    handleNewAssignmentChange,
-    handleAddAssignment
+    cancelEdit
   } = useTeacherAssignments();
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-end space-x-2">
-        <Button 
-          onClick={() => setOpenAddAssignmentDialog(true)}
-          className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Engadir adscrición
-        </Button>
+    <div className="space-y-4">
+      <div className="flex justify-end mb-4">
         {editMode ? (
           <div className="space-x-2">
             <Button 
               variant="outline" 
+              size="sm" 
               onClick={cancelEdit}
+              className="text-xs md:text-sm"
             >
               Cancelar
             </Button>
             <Button 
+              size="sm" 
               onClick={handleSave}
-              className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
+              className="text-xs md:text-sm"
             >
               Gardar cambios
             </Button>
           </div>
         ) : (
           <Button 
+            size="sm" 
             onClick={() => setEditMode(true)}
-            className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
+            className="text-xs md:text-sm bg-scola-primary"
           >
             Editar adscrición
           </Button>
@@ -58,7 +48,7 @@ const TeacherAssignmentTab: React.FC = () => {
 
       <div className="space-y-6">
         {assignments.map((assignment, courseIndex) => (
-          <AssignmentCard
+          <CourseCard
             key={assignment.course}
             assignment={assignment}
             courseIndex={courseIndex}
@@ -67,14 +57,6 @@ const TeacherAssignmentTab: React.FC = () => {
           />
         ))}
       </div>
-      
-      <AddAssignmentDialog
-        open={openAddAssignmentDialog}
-        onOpenChange={setOpenAddAssignmentDialog}
-        newAssignment={newAssignment}
-        onFieldChange={handleNewAssignmentChange}
-        onAddAssignment={handleAddAssignment}
-      />
     </div>
   );
 };
