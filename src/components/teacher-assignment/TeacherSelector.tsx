@@ -25,7 +25,7 @@ const TeacherSelector: React.FC<TeacherSelectorProps> = ({
         value={value}
         onValueChange={onChange}
       >
-        <SelectTrigger className="w-full h-8 text-xs md:text-sm">
+        <SelectTrigger className="w-full h-8 text-xs md:text-sm bg-white border-purple-200 focus:ring-purple-400">
           <SelectValue placeholder={`Seleccionar ${label}`} />
         </SelectTrigger>
         <SelectContent>
@@ -43,7 +43,7 @@ const TeacherSelector: React.FC<TeacherSelectorProps> = ({
       <Input 
         value={value} 
         readOnly 
-        className="h-8 text-xs md:text-sm bg-gray-50" 
+        className="h-8 text-xs md:text-sm bg-gray-50 border-purple-100" 
       />
     </div>
   );
