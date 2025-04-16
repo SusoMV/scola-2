@@ -19,6 +19,13 @@ export const facultyMembers = [
   'Elena Sánchez Gómez'
 ];
 
+// List of available courses
+export const courses = [
+  '4º Infantil', '5º Infantil', '6º Infantil',
+  '1º Primaria', '2º Primaria', '3º Primaria',
+  '4º Primaria', '5º Primaria', '6º Primaria'
+];
+
 // Sample data for initial assignments
 export const initialAssignments: TeacherAssignment[] = [
   {
@@ -73,33 +80,6 @@ export const initialAssignments: TeacherAssignment[] = [
     physicalEd: 'Manuel López Fernández',
     music: 'Carmen Rodríguez Vázquez',
     art: 'Ana García Martínez',
-    religion: 'Elena Sánchez Gómez'
-  },
-  {
-    course: '4º Primaria',
-    tutor: 'Carmen Rodríguez Vázquez',
-    english: 'David Pérez Santos',
-    physicalEd: 'Manuel López Fernández',
-    music: 'Carmen Rodríguez Vázquez',
-    art: 'Carmen Rodríguez Vázquez',
-    religion: 'Elena Sánchez Gómez'
-  },
-  {
-    course: '5º Primaria',
-    tutor: 'Elena Sánchez Gómez',
-    english: 'David Pérez Santos',
-    physicalEd: 'Manuel López Fernández',
-    music: 'Carmen Rodríguez Vázquez',
-    art: 'Elena Sánchez Gómez',
-    religion: 'Elena Sánchez Gómez'
-  },
-  {
-    course: '6º Primaria',
-    tutor: 'Manuel López Fernández',
-    english: 'David Pérez Santos',
-    physicalEd: 'Manuel López Fernández',
-    music: 'Carmen Rodríguez Vázquez',
-    art: 'Manuel López Fernández',
     religion: 'Elena Sánchez Gómez'
   }
 ];

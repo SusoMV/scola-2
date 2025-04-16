@@ -6,7 +6,6 @@ import { toast } from 'sonner';
 export function useStudentGroups() {
   const [groups, setGroups] = useState<GroupData>(initialGroups);
   const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
-  const [editMode, setEditMode] = useState(false);
   const [editingStudents, setEditingStudents] = useState<Student[]>([]);
   const [openAddGroupDialog, setOpenAddGroupDialog] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
@@ -27,27 +26,11 @@ export function useStudentGroups() {
 
   const handleOpenCourse = (course: string) => {
     setSelectedCourse(course);
-    setEditMode(false);
     setEditingStudents(groups[course]);
   };
 
   const handleCloseCourse = () => {
     setSelectedCourse(null);
-    setEditMode(false);
-  };
-
-  const handleEditMode = () => {
-    if (selectedCourse) {
-      setEditMode(true);
-      setEditingStudents([...groups[selectedCourse]]);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditMode(false);
-    if (selectedCourse) {
-      setEditingStudents(groups[selectedCourse]);
-    }
   };
 
   const handleSaveChanges = () => {
@@ -55,7 +38,6 @@ export function useStudentGroups() {
       const updatedGroups = { ...groups };
       updatedGroups[selectedCourse] = editingStudents;
       setGroups(updatedGroups);
-      setEditMode(false);
       
       // In a real app, you would send this data to your API
       localStorage.setItem('student_groups', JSON.stringify(updatedGroups));
@@ -108,10 +90,27 @@ export function useStudentGroups() {
     }
   };
 
+  const handleAddStudent = () => {
+    const newStudent: Student = {
+      id: crypto.randomUUID(),
+      name: '',
+      birthDate: '',
+      parents: '',
+      phone: ''
+    };
+    
+    setEditingStudents([...editingStudents, newStudent]);
+  };
+
+  const handleRemoveStudent = (index: number) => {
+    const updatedStudents = [...editingStudents];
+    updatedStudents.splice(index, 1);
+    setEditingStudents(updatedStudents);
+  };
+
   return {
     groups,
     selectedCourse,
-    editMode,
     editingStudents,
     openAddGroupDialog,
     newGroupName,
@@ -119,12 +118,12 @@ export function useStudentGroups() {
     setOpenAddGroupDialog,
     handleOpenCourse,
     handleCloseCourse,
-    handleEditMode,
-    handleCancelEdit,
     handleSaveChanges,
     handleEditStudent,
     handleExportExcel,
     handleExportPDF,
-    handleAddGroup
+    handleAddGroup,
+    handleAddStudent,
+    handleRemoveStudent
   };
 }
