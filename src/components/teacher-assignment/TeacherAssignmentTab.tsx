@@ -2,9 +2,9 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useTeacherAssignments } from './hooks/useTeacherAssignments';
-import CourseCard from './CourseCard';
-import AddAssignmentDialog from './AddAssignmentDialog';
 import { Plus } from 'lucide-react';
+import AddAssignmentDialog from './AddAssignmentDialog';
+import AssignmentCard from './AssignmentCard';
 
 const TeacherAssignmentTab: React.FC = () => {
   const {
@@ -22,40 +22,34 @@ const TeacherAssignmentTab: React.FC = () => {
   } = useTeacherAssignments();
 
   return (
-    <div className="space-y-4">
-      <div className="flex justify-between mb-4">
+    <div className="space-y-6">
+      <div className="flex justify-end space-x-2">
         <Button 
           onClick={() => setOpenAddAssignmentDialog(true)}
-          className="text-xs md:text-sm bg-scola-primary"
-          size="sm"
+          className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
         >
           <Plus className="h-4 w-4 mr-1" />
           Engadir adscrición
         </Button>
-        
         {editMode ? (
           <div className="space-x-2">
             <Button 
               variant="outline" 
-              size="sm" 
               onClick={cancelEdit}
-              className="text-xs md:text-sm"
             >
               Cancelar
             </Button>
             <Button 
-              size="sm" 
               onClick={handleSave}
-              className="text-xs md:text-sm"
+              className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
             >
               Gardar cambios
             </Button>
           </div>
         ) : (
           <Button 
-            size="sm" 
             onClick={() => setEditMode(true)}
-            className="text-xs md:text-sm bg-scola-primary"
+            className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
           >
             Editar adscrición
           </Button>
@@ -64,7 +58,7 @@ const TeacherAssignmentTab: React.FC = () => {
 
       <div className="space-y-6">
         {assignments.map((assignment, courseIndex) => (
-          <CourseCard
+          <AssignmentCard
             key={assignment.course}
             assignment={assignment}
             courseIndex={courseIndex}

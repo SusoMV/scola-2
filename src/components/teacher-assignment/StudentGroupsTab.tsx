@@ -50,19 +50,18 @@ const StudentGroupsTab: React.FC = () => {
   }, [setOpenAddGroupDialog]);
 
   return (
-    <div>
-      <div className="mb-4 flex justify-end">
+    <div className="space-y-6">
+      <div className="flex justify-end">
         <Button 
           onClick={() => setOpenAddGroupDialog(true)}
-          className="text-xs md:text-sm bg-scola-primary"
-          size="sm"
+          className="bg-[#0070C0] hover:bg-[#0058a2] text-white"
         >
           <Plus className="h-4 w-4 mr-1" />
           Engadir grupo
         </Button>
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4">
         {Object.keys(groups).map((course) => (
           <StudentGroupCard
             key={course}

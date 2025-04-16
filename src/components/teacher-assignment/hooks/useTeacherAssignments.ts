@@ -1,14 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
-import { TeacherAssignment, initialAssignments, facultyMembers, courses } from '../types/assignment-types';
+import { TeacherAssignment, initialAssignments } from '../types/assignment-types';
 
 export const useTeacherAssignments = () => {
   const [assignments, setAssignments] = useState<TeacherAssignment[]>(initialAssignments);
   const [editMode, setEditMode] = useState(false);
   const [openAddAssignmentDialog, setOpenAddAssignmentDialog] = useState(false);
   const [newAssignment, setNewAssignment] = useState<TeacherAssignment>({
-    course: courses[0],
+    course: '',
     tutor: '',
     english: '',
     physicalEd: '',
@@ -55,11 +55,27 @@ export const useTeacherAssignments = () => {
   };
 
   const cancelEdit = () => {
-    setAssignments(initialAssignments);
+    // Load from localStorage or reset to initial
+    const loadedData = localStorage.getItem('teacher_assignments');
+    if (loadedData) {
+      try {
+        setAssignments(JSON.parse(loadedData));
+      } catch (e) {
+        setAssignments(initialAssignments);
+      }
+    } else {
+      setAssignments(initialAssignments);
+    }
     setEditMode(false);
   };
 
   const handleAddAssignment = () => {
+    // Validar que o curso non estea en branco
+    if (!newAssignment.course.trim()) {
+      toast.error('O campo Curso é obrigatorio');
+      return;
+    }
+
     // Validar que o curso non estea xa na lista
     if (assignments.some(assignment => assignment.course === newAssignment.course)) {
       toast.error('Este curso xa existe na adscrición');
@@ -81,7 +97,7 @@ export const useTeacherAssignments = () => {
     
     // Resetear o formulario e pechar o diálogo
     setNewAssignment({
-      course: courses[0],
+      course: '',
       tutor: '',
       english: '',
       physicalEd: '',

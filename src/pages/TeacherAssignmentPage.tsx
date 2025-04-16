@@ -5,7 +5,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import TeacherAssignmentTab from '@/components/teacher-assignment/TeacherAssignmentTab';
 import StudentGroupsTab from '@/components/teacher-assignment/StudentGroupsTab';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen } from 'lucide-react';
+import { Users } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -37,34 +37,32 @@ const TeacherAssignmentPage = () => {
       <Card className="border-0 shadow-sm">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg md:text-xl font-medium flex items-center">
-            <Users className="h-5 w-5 mr-2 text-scola-primary" />
+            <Users className="h-5 w-5 mr-2 text-[#0070C0]" />
             Adscrición e grupos
           </CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <div className="flex justify-between items-center">
-              <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
-                <TabsTrigger value="assignment" className="text-xs md:text-sm rounded-md">
-                  <div className="flex items-center">
-                    <Users className="h-4 w-4 mr-1" />
-                    <span>Adscrición docente</span>
-                  </div>
-                </TabsTrigger>
-                <TabsTrigger value="groups" className="text-xs md:text-sm rounded-md">
-                  <div className="flex items-center">
-                    <BookOpen className="h-4 w-4 mr-1" />
-                    <span>Grupos</span>
-                  </div>
-                </TabsTrigger>
-              </TabsList>
-            </div>
+            <TabsList className="w-full bg-gray-100 mb-4 h-12 rounded-md">
+              <TabsTrigger 
+                value="assignment" 
+                className={`w-1/2 h-full rounded-md ${activeTab === 'assignment' ? 'bg-[#0070C0] text-white' : 'text-gray-700'}`}
+              >
+                Adscrición docente
+              </TabsTrigger>
+              <TabsTrigger 
+                value="groups" 
+                className={`w-1/2 h-full rounded-md ${activeTab === 'groups' ? 'bg-[#0070C0] text-white' : 'text-gray-700'}`}
+              >
+                Grupos
+              </TabsTrigger>
+            </TabsList>
             
-            <TabsContent value="assignment" className="mt-6">
+            <TabsContent value="assignment">
               <TeacherAssignmentTab />
             </TabsContent>
             
-            <TabsContent value="groups" className="mt-6">
+            <TabsContent value="groups">
               <StudentGroupsTab />
             </TabsContent>
           </Tabs>

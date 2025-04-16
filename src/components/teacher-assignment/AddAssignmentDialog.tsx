@@ -3,8 +3,8 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { TeacherAssignment, facultyMembers, courses } from './types/assignment-types';
+import { Input } from '@/components/ui/input';
+import { TeacherAssignment } from './types/assignment-types';
 
 interface AddAssignmentDialogProps {
   open: boolean;
@@ -35,138 +35,96 @@ const AddAssignmentDialog: React.FC<AddAssignmentDialogProps> = ({
             <Label htmlFor="course" className="text-right">
               Curso
             </Label>
-            <Select
+            <Input
+              id="course"
               value={newAssignment.course}
-              onValueChange={(value) => onFieldChange('course', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un curso" />
-              </SelectTrigger>
-              <SelectContent>
-                {courses.map((course) => (
-                  <SelectItem key={course} value={course}>{course}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('course', e.target.value)}
+              placeholder="Introduce o curso (ej: 4º Infantil)"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="tutor" className="text-right">
               Titora/Titor
             </Label>
-            <Select
+            <Input
+              id="tutor"
               value={newAssignment.tutor}
-              onValueChange={(value) => onFieldChange('tutor', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('tutor', e.target.value)}
+              placeholder="Nome do titor"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="english" className="text-right">
               Inglés
             </Label>
-            <Select
+            <Input
+              id="english"
               value={newAssignment.english}
-              onValueChange={(value) => onFieldChange('english', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('english', e.target.value)}
+              placeholder="Profesor de inglés"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="physicalEd" className="text-right">
               Educación Física
             </Label>
-            <Select
+            <Input
+              id="physicalEd"
               value={newAssignment.physicalEd}
-              onValueChange={(value) => onFieldChange('physicalEd', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('physicalEd', e.target.value)}
+              placeholder="Profesor de educación física"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="music" className="text-right">
               Música
             </Label>
-            <Select
+            <Input
+              id="music"
               value={newAssignment.music}
-              onValueChange={(value) => onFieldChange('music', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('music', e.target.value)}
+              placeholder="Profesor de música"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="art" className="text-right">
               Plástica
             </Label>
-            <Select
+            <Input
+              id="art"
               value={newAssignment.art}
-              onValueChange={(value) => onFieldChange('art', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('art', e.target.value)}
+              placeholder="Profesor de plástica"
+              className="col-span-3"
+            />
           </div>
           
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="religion" className="text-right">
               Relixión
             </Label>
-            <Select
+            <Input
+              id="religion"
               value={newAssignment.religion}
-              onValueChange={(value) => onFieldChange('religion', value)}
-            >
-              <SelectTrigger className="col-span-3">
-                <SelectValue placeholder="Selecciona un docente" />
-              </SelectTrigger>
-              <SelectContent>
-                {facultyMembers.map((teacher) => (
-                  <SelectItem key={teacher} value={teacher}>{teacher}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(e) => onFieldChange('religion', e.target.value)}
+              placeholder="Profesor de relixión"
+              className="col-span-3"
+            />
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={onAddAssignment} className="bg-scola-primary">Engadir</Button>
+          <Button onClick={onAddAssignment} className="bg-[#0070C0] hover:bg-[#0058a2]">Engadir</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
