@@ -1,9 +1,10 @@
 
-import React from 'react';
-import { Calendar, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar, Search, ArrowUpDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { Substitution } from '@/types/substitutions';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -19,7 +20,31 @@ const HistoricalSubstitutionsTable: React.FC<HistoricalSubstitutionsTableProps> 
   setSearchQuery
 }) => {
   const isMobile = useIsMobile();
-  
+  const [sortField, setSortField] = useState<keyof Substitution | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+
+  const handleSort = (field: keyof Substitution) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const sortedSubstitutions = [...filteredHistoricalSubstitutions].sort((a, b) => {
+    if (!sortField) return 0;
+
+    const aValue = a[sortField];
+    const bValue = b[sortField];
+
+    if (sortDirection === 'asc') {
+      return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+    } else {
+      return bValue < aValue ? -1 : bValue > aValue ? 1 : 0;
+    }
+  });
+
   return (
     <Card className="shadow-sm border-gray-200 rounded-md">
       <CardContent className={isMobile ? "p-2" : "p-6"}>
@@ -40,21 +65,65 @@ const HistoricalSubstitutionsTable: React.FC<HistoricalSubstitutionsTableProps> 
           </div>
         </div>
         
-        {filteredHistoricalSubstitutions && filteredHistoricalSubstitutions.length > 0 ? (
+        {sortedSubstitutions && sortedSubstitutions.length > 0 ? (
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Docente ausente</TableHead>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Curso</TableHead>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Hora</TableHead>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Especialidade</TableHead>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Substituto</TableHead>
-                  <TableHead className={isMobile ? "font-medium text-gray-500 text-xs p-2" : "font-medium text-gray-500"}>Data</TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 cursor-pointer ${isMobile ? "text-xs p-2" : ""}`}
+                    onClick={() => handleSort('absentTeacher')}
+                  >
+                    <div className="flex items-center gap-1">
+                      Docente ausente
+                      <ArrowUpDown className="h-4 w-4" />
+                    </div>
+                  </TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 cursor-pointer ${isMobile ? "text-xs p-2" : ""}`}
+                    onClick={() => handleSort('course')}
+                  >
+                    <div className="flex items-center gap-1">
+                      Curso
+                      <ArrowUpDown className="h-4 w-4" />
+                    </div>
+                  </TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 ${isMobile ? "text-xs p-2" : ""}`}
+                  >
+                    Hora
+                  </TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 cursor-pointer ${isMobile ? "text-xs p-2" : ""}`}
+                    onClick={() => handleSort('specialty')}
+                  >
+                    <div className="flex items-center gap-1">
+                      Especialidade
+                      <ArrowUpDown className="h-4 w-4" />
+                    </div>
+                  </TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 cursor-pointer ${isMobile ? "text-xs p-2" : ""}`}
+                    onClick={() => handleSort('substituteTeacher')}
+                  >
+                    <div className="flex items-center gap-1">
+                      Substituto
+                      <ArrowUpDown className="h-4 w-4" />
+                    </div>
+                  </TableHead>
+                  <TableHead 
+                    className={`font-medium text-gray-500 cursor-pointer ${isMobile ? "text-xs p-2" : ""}`}
+                    onClick={() => handleSort('date')}
+                  >
+                    <div className="flex items-center gap-1">
+                      Data
+                      <ArrowUpDown className="h-4 w-4" />
+                    </div>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredHistoricalSubstitutions.map(substitution => (
+                {sortedSubstitutions.map(substitution => (
                   <TableRow key={substitution.id}>
                     <TableCell className={isMobile ? "py-1 px-2 text-xs" : "py-4"}>{substitution.absentTeacher}</TableCell>
                     <TableCell className={isMobile ? "py-1 px-2 text-xs" : "py-4"}>{substitution.course}</TableCell>

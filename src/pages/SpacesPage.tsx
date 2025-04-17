@@ -13,7 +13,6 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
 
-// Categorías de espacios
 const SPACE_CATEGORIES = [
   { id: 'aulas', name: 'Aulas' },
   { id: 'salas', name: 'Salas' },
@@ -23,7 +22,6 @@ const SPACE_CATEGORIES = [
   { id: 'despachos', name: 'Despachos' }
 ];
 
-// Datos de ejemplo para espacios
 const MOCK_SPACES = [
   {
     id: 1,
@@ -99,7 +97,6 @@ const MOCK_SPACES = [
   }
 ];
 
-// Datos de ejemplo para reservas
 const MOCK_RESERVATIONS = [{
   id: 1,
   space: 'Biblioteca',
@@ -132,7 +129,6 @@ const SpacesPage = () => {
   const [showSpaceInfoDialog, setShowSpaceInfoDialog] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<any>(null);
 
-  // Formulario para espazos
   const spaceForm = useForm({
     defaultValues: {
       name: '',
@@ -143,7 +139,6 @@ const SpacesPage = () => {
     }
   });
 
-  // Formulario para reservas
   const reservationForm = useForm({
     defaultValues: {
       space: '',
@@ -204,7 +199,7 @@ const SpacesPage = () => {
           <Building className="h-6 w-6 text-[#0070C0]" />
           <h1 className="text-2xl font-bold">Espazos</h1>
         </div>
-        <div className="w-full h-[2px] mt-2 border-b border-dashed border-blue-300"></div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
       <div className="flex justify-between items-center mb-4">
