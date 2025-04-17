@@ -36,9 +36,12 @@ const TeacherAssignmentPage = () => {
     <DashboardLayout>
       <Card className="border-0 shadow-sm">
         <CardHeader className="pb-2">
-          <CardTitle className="text-lg md:text-xl font-medium flex items-center">
-            <Users className="h-5 w-5 mr-2 text-scola-primary" />
-            Adscrición e grupos
+          <CardTitle className="mb-6">
+            <div className="flex items-center gap-2">
+              <Users className="h-6 w-6 text-scola-primary" />
+              <h1 className="text-2xl font-bold">Adscrición e grupos</h1>
+            </div>
+            <div className="dotted-border w-full h-1 mt-2"></div>
           </CardTitle>
         </CardHeader>
         <CardContent>

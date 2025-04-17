@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -64,23 +63,13 @@ const AddAssignmentDialog: React.FC<AddAssignmentDialogProps> = ({
             <Label htmlFor="course" className="text-right">
               Curso
             </Label>
-            <div className="col-span-3">
-              <Select
-                value={newAssignment.course}
-                onValueChange={(value) => handleInputChange('course', value)}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Selecciona curso" />
-                </SelectTrigger>
-                <SelectContent>
-                  {courses.map((course) => (
-                    <SelectItem key={course} value={course}>
-                      {course}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <Input
+              id="course"
+              value={newAssignment.course}
+              onChange={(e) => handleInputChange('course', e.target.value)}
+              placeholder="Introduce o curso"
+              className="col-span-3"
+            />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="tutor" className="text-right">
