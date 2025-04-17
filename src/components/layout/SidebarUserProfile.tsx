@@ -19,9 +19,12 @@ const SidebarUserProfile: React.FC = () => {
           </AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <span className="font-medium">{userProfile.full_name}</span>
+          <span className="font-medium text-sm">{userProfile.full_name}</span>
           <span className="text-xs text-gray-500">
-            {userProfile.role === 'directivo' ? 'Directivo' : 'Docente'} - {userProfile.specialty}
+            {userProfile.role === 'directivo' ? 'Directivo' : 'Docente'}
+          </span>
+          <span className="text-xs text-gray-500">
+            {userProfile.specialty}
           </span>
         </div>
       </div>
