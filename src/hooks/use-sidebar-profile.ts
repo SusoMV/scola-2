@@ -35,6 +35,10 @@ export function useSidebarProfile() {
             
             // Si el error es porque no hay filas, crear un perfil para el usuario
             if (error.code === 'PGRST116') {
+              // Get school id from school name
+              const schoolName = user?.user_metadata?.school_name || '';
+              const schoolId = schoolName.split(' - ')[0] || '';
+              
               // Obtener datos de los metadatos del usuario para crear el perfil
               const userData = {
                 id: user.id,
@@ -42,7 +46,8 @@ export function useSidebarProfile() {
                 email: user.email || '',
                 role: user?.user_metadata?.role || 'docente',
                 specialty: user?.user_metadata?.specialty || '',
-                school_name: user?.user_metadata?.school_name || '',
+                school_name: schoolName,
+                school_id: schoolId,
                 profile_image_url: user?.user_metadata?.avatar_url || '',
                 // Convertir al usuario específico en directivo
                 ...(user.id === 'e4e80ce8-ea43-4f3e-95fe-5a9ad57504df' && { role: 'directivo' })

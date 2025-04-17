@@ -9,7 +9,6 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Card } from '@/components/ui/card';
@@ -21,13 +20,21 @@ import { useProfileImage } from '@/hooks/use-profile-image';
 const SPECIALTIES = ['597031 Infantil', '597032 Inglés', '597033 Francés', '597034 Educación Física', '597036 Pedagoxía Terapéutica', '597035 Música', '597037 Audición e Linguaxe', '597038 Primaria', '597939 Orientación', '000000 Relixión', 'Matemáticas', 'Lingua e Literatura Galega', 'Lingua e Literatura Castelá', 'Ciencias Naturais', 'Física e Química', 'Xeografía e Historia', 'Tecnoloxía', 'Economía', 'Informática', 'Filosofía', 'Outro'];
 
 // Lista de centros educativos
-const SCHOOLS = ['15000016 - CEIP San Marcos', '15026637 - CEIP de Barouta', '15025220 - CEP Plurilingüe  de Ventín', '15032649 - EEI de Milladorio', '15020659 - EEI de Covas', '15000107 - CEIP A Maía', '15032625 - CEIP Agro do Muíño', '15019542 - EEI da Igrexa', '15021779 - CEIP da Castellana', '15000338 - CPI As Mirandas', '15020672 - EEI de Rorís', '15032716 - CEIP de Arteixo', '15000363 - CEIP Ponte dos Brozos', '15020714 - EEI de Larín de Arriba', '15023041 - CEIP de Galán', '15032376 - EEI de Vilarrodís-Oseiro', '15000569 - CEIP San Xosé Obreiro', '15020933 - EEI de Barrionovo', '15020775 - EEI da Lagoa', '15000612 - CEIP de Arzúa', '15019301 - CPI de San Vicente', '15001070 - CPI de Cruz do Sar', '15001124 - CEIP Francisco Vales Villamarín', '15001239 - CPI Armando Cotarelo Valledor', '15001367 - CEIP Plurilingüe de Abanqueiro', '15022085 - CEIP de Pazos-Comoxo', '15001471 - CEIP Praia Xardín', '15021500 - CEIP Santa Baia', '15023341 - CEIP Santa María do Castro', '15027149 - CEIP de Cespón', '15001616 - CEIP de Escarabote', '15001665 - CPI Plurilingüe Antonio Orza Couto', '15001811 - EEI de Sabaxáns', '15001847 - CEIP  Plurilingüe de Pedrouzos', '15001744 - EEI dos Ánxeles', '15001926 - CPI As Revoltas', '15002025 - CEIP Eladia Mariño', '15002086 - CEIP de Ponte do Porto', '15002050 - CEIP O Areal', '15002062 - CEIP de Camelle', '15025554 - CEIP Emilio González López', '15002165 - CEIP Wenceslao Fernández Flórez', '15032426 - CEIP Plurilingüe O Graxal', '15023053 - CEIP Portofaro', '15019608 - EEI de San Bartolomeu', '15023065 - CEIP Gonzalo Torrente Ballester', '15020969 - CEIP Plurilingüe Mosteiro de Caaveiro', '15021524 - CEIP Plurilingüe A Cristina', '15021354 - CEIP Bergantiños', '15002578 - CEIP Fogar', '15027393 - CEIP Xesús San Luís Romero', '15024896 - CEIP de Nétoma-Razo', '15023077 - CEIP de Gándara-Sofán', '15011661 - CEIP Manuel Fraga Iribarne', '15002852 - CEIP do Pindo', '15002761 - CEIP Plurilingüe de Carnota', '15003005 - CEIP Vicente Otero Valcárcel', '15003017 - CEIP de Tabeaio', '15003054 - CEIP Nicolás del Río', '15022139 - EEI da Pereiriña', '15022127 - CEIP da Igrexa', '15003248 - CEIP Plurilingüe Vila de Cee', '15003376 - CPI Plurilingüe O Cruce', '15020970 - CEIP Plurilingüe Celso Emilio Ferreiro', '15003534 - CEIP da Barqueira', '15022152 - EEI de Coirós de Arriba', '15003789 - CEIP Praia de Quenxe', '15003807 - CEIP de Bormoio- Agualada', '15002670 - CEIP Canosa-Rus', '15003881 - CPI Alcalde Xosé Pichel', '15019323 - CEIP Plurilingüe Alborada', '15004976 - CEIP Curros Enríquez', '15005038 - CEIP de Prácticas', '15021721 - CEIP de Zalaeta', '15021627 - CEIP Emilia Pardo Bazán', '15004988 - CEIP Eusebio da Guarda', '15023375 - CEIP José Cornide Saavedra', '15027241 - CEIP Juan Fernández Latorre', '15020568 - CEIP Plurilingüe Labaca', '15019311 - CEIP Plurilingüe María Barbeito e Cervino', '15005518 - CEIP María Pita', '15004991 - CEIP Cidade Vella', '15033228 - CEIP Novo Mesoiro', '15004745 - CEIP Plurilingüe Anxo da Garda', '15004964 - CEIP Plurilingüe Concepción Arenal', '15005521 - CEIP Ramón de la Sagra', '15005014 - CEIP Raquel Camacho', '15005361 - CEIP Rosalía de Castro', '15025037 - CEIP Sagrada Familia', '15021548 - CEIP Sal Lence', '15021792 - CEIP Salgado Torres', '15025025 - CEIP San Francisco Javier', '15005701 - CEIP Plurilingüe San Pedro de Visma', '15005026 - CEIP Torre de Hércules', '15021536 - CEIP Plurilingüe Víctor López Seoane', '15024902 - CEIP Plurilingüe Wenceslao Fernández Flórez', '15023363 - CEIP Plurilingüe  Manuel Murguía', '15027253 - CEIP Isaac Díaz Pardo', '15005828 - CEIP Plurilingüe de Tarrío', '15027708 - CEIP Plurilingüe Ría do Burgo', '15021809 - CEIP Sofía Casanova', '15033149 - CEIP Vila de Rutis', '15005877 - CEIP de Teixeiro', '15005932 - CEIP de Curtis', '15023399 - CPI Eusebio Lorenzo Baleirón', '15021810 - CEIP Plurilingüe Santa Eulalia de Dumbría', '15020982 - CEIP Plurilingüe O Ramo', '15025633 - CEIP Plurilingüe Os Casais', '15022981 - CEIP Plurilingüe de Centieiras', '15023405 - CPI A Xunqueira', '15024941 - CEIP Plurilingüe A Laxe', '15021858 - CEIP Almirante Juan de Lángara y Huarte', '15006663 - CEIP Cruceiro de Canido', '15024938 - CEIP de Esteiro', '15026960 - CEIP de Ponzos', '15006845 - CEIP Isaac Peral', '15021834 - CEIP Manuel Masdías', '15006699 - CEIP Plurilingüe Ángela Ruiz Robles', '15021846 - CEIP  Plurilingüe San Xoán de Filgueira', '15024227 - CEIP de Pazos', '15007242 - CEIP Mar de Fóra', '15007266 - CEIP Areouta', '15007400 - CPI de Ponte Carreira', '15007655 - CEIP de Caión', '15025256 - CEIP Alfredo Brañas', '15007886 - CEIP Ramón Otero Pedrayo', '15007621 - CPI Plurilingüe Cabo da Area', '15021160 - EEI de Traba', '15008039 - CPI Plurilingüe Cernadas de Castro', '15021861 - CEIP Joaquín Rodríguez Otero', '15026765 - CEIP Milladoiro', '15008398 - CEIP Francisco López Estrada', '15008490 - CEIP Víctor Sáenz', '15008714 - CPI Plurilingüe da Picota', '15008805 - CEIP de Melide Nº 1', '15023910 - CEIP Martagona', '15027526 - CEIP Mestre Pastor Barral', '15008982 - EEI de Olas', '15009007 - EEI Visantoña', '15020854 - CPI de Xanceda', '15023223 - CEIP de Bemantes', '15009071 - CPI Castro Baxoi', '15009081 - CEIP de San Ramón', '15009241 - CPI Plurilingüe Virxe da Cela', '15009391 - CEIP Santiago Apóstolo', '15009445 - CEIP Plurilingüe Unión Mugardesa', '15009810 - CEIP Plurilingüe Ricardo Tobío', '15024951 - CEIP  Plurilingüe de Louro', '15023727 - EEI de Muros', '15009998 - CEIP Ramón de Artaza y Malvárez', '15021214 - EEI de Tal de Abaixo', '15009597 - CEIP de Vilarmide- Eduardo Noya', '15024239 - CEIP dos Muíños', '15009676 - CEIP Virxe da Barca', '15019499 - CEIP de Piñeiros', '15023508 - CEIP Plurilingüe Virxe do Mar', '15022310 - CEIP A Gándara', '15023740 - CEIP A Solaina', '15010162 - CEIP Plurilingüe  Ponte de Xubia', '15010058 - CPI do Feal', '15022577 - CEIP de Maciñeira', '15010307 - CEIP San Isidro', '15022826 - EEI de Aro', '15010575 - CEIP O Coto', '15010681 - CEIP Plurilingüe Alexandre Rodríguez Cadarso', '15010848 - CEIP Felipe de Castro', '15025670 - CEIP Plurilingüe Isidro Parga Pondal', '15023089 - CEIP Luís Seoane', '15011026 - CEIP Plurilingüe de Rabadeira', '15025050 - CEIP Ramón María del Valle- Inclán', '15011105 - CEIP de Mesón do Vento', '15011336 - CEIP Alfonso D. Rodríguez Castelao', '15025487 - CEIP Campomaior', '15032868 - CEIP Plurilíngue do Camiño Inglés', '15011567 - CEIP Plurilingüe de Sigüeiro', '15011981 - CEIP José María Lage', '15033101 - CEIP Plurilingüe de Outes', '15021780 - CEIP Plurilingüe Bragade', '15012420 - CEIP de Oza dos Ríos', '15024045 - EEI de Areas', '15021603 - EEI de Viñas', '15022322 - EEI da Escravitude', '15021056 - EEI de Arretén', '15012626 - EEI de Pontecesures', '15012742 - CEIP Flavia', '15012717 - CEIP Rosalía de Castro', '15020374 - EEI de Extramundi de Arriba', '15019347 - CPI Camiño de Santiago', '15020611 - EEI Gonzar', '15013072 - EEI da Granxa', '15013059 - EEI de Vilariño', '15013199 - CEP Salustiano Rey Eiras', '15013163 - EEI Fernández Varela', '15023417 - CEP Pilar Maestu Sierra', '15026236 - EEI da Angustia', '15013230 - CEIP As Forcadas', '15013291 - CEIP Eduardo Pondal', '15024963 - CEIP Plurilingüe de Andrade', '15013412 - CEIP de Ombre', '15013503 - CEIP Couceiro Freijomil', '15026194 - CEIP Plurilingüe A Fraga', '15013643 - CEIP Plurilingüe A Magdalena', '15013591 - CEIP Plurilingüe Santa María', '15013761 - CEIP de Campanario', '15013783 - EEI de Caamaño', '15025062 - CEIP de Portosín', '15013928 - CEIP Plurilingüe de Sobrado- Nebra', '15013977 - CEIP Santa Irene', '15013989 - EEI de Queiruga', '15013898 - CEIP de Seráns', '15024756 - EEI de Carballosa', '15025542 - CEIP Xuño', '15027401 - CEIP Ana María Diéguez', '15014180 - CEIP Alfonso D. Rodríguez Castelao', '15023430 - CEP Xosé María Brea Segade', '15014261 - CEIP Heroínas de Sálvora', '15014271 - CEIP Plurilingüe de Artes', '15021731 - CEIP Plurilingüe de Frións', '15024771 - CEP Plurilingüe de Carreira', '15014295 - EEI Capela-Carreira', '15025281 - CEIP de Olveira', '15014465 - CEIP Plurilingüe de Palmeira', '15014571 - EEI Deán Grande', '15014544 - CEIP Plurilingüe O Grupo', '15014738 - CPI Plurilingüe dos Dices', '15014799 - CEIP de Pumar-Urdilde', '15014829 - CEIP Pedro Barrié de la Maza', '15032686 - CEIP Plurilingüe O Mosteirón', '15014881 - CEIP Sada y sus contornos', '15014957 - CPI de San Sadurniño', '15015238 - CEIP Plurilingüe Barrié de la Maza', '15026777 - CEIP Plurilingüe Pepe de Xan Baña'];
+const SCHOOLS = ['15000016 - CEIP San Marcos', '15026637 - CEIP de Barouta', '15025220 - CEP Plurilingüe  de Ventín', '15032649 - EEI de Milladorio', '15020659 - EEI de Covas', '15000107 - CEIP A Maía', '15032625 - CEIP Agro do Muíño', '15019542 - EEI da Igrexa', '15021779 - CEIP da Castellana', '15000338 - CPI As Mirandas', '15020672 - EEI de Rorís', '15032716 - CEIP de Arteixo', '15000363 - CEIP Ponte dos Brozos', '15020714 - EEI de Larín de Arriba', '15023041 - CEIP de Galán', '15032376 - EEI de Vilarrodís-Oseiro', '15000569 - CEIP San Xosé Obreiro', '15020933 - EEI de Barrionovo', '15020775 - EEI da Lagoa', '15000612 - CEIP de Arzúa', '15019301 - CPI de San Vicente', '15001070 - CPI de Cruz do Sar', '15001124 - CEIP Francisco Vales Villamarín', '15001239 - CPI Armando Cotarelo Valledor', '15001367 - CEIP Plurilingüe de Abanqueiro', '15022085 - CEIP de Pazos-Comoxo', '15001471 - CEIP Praia Xardín', '15021500 - CEIP Santa Baia', '15023341 - CEIP Santa María do Castro', '15027149 - CEIP de Cespón', '15001616 - CEIP de Escarabote', '15001665 - CPI Plurilingüe Antonio Orza Couto', '15001811 - EEI de Sabaxáns', '15001847 - CEIP  Plurilingüe de Pedrouzos', '15001744 - EEI dos Ánxeles', '15001926 - CPI As Revoltas', '15002025 - CEIP Eladia Mariño', '15002086 - CEIP de Ponte do Porto', '15002050 - CEIP O Areal', '15002062 - CEIP de Camelle', '15025554 - CEIP Emilio González López', '15002165 - CEIP Wenceslao Fernández Flórez', '15032426 - CEIP Plurilingüe O Graxal', '15019608 - EEI de San Bartolomeu', '15023065 - CEIP Gonzalo Torrente Ballester', '15020969 - CEIP Plurilingüe Mosteiro de Caaveiro', '15021524 - CEIP Plurilingüe A Cristina', '15021354 - CEIP Bergantiños', '15002578 - CEIP Fogar', '15027393 - CEIP Xesús San Luís Romero', '15024896 - CEIP de Nétoma-Razo', '15023077 - CEIP de Gándara-Sofán', '15011661 - CEIP Manuel Fraga Iribarne', '15002852 - CEIP do Pindo', '15002761 - CEIP Plurilingüe de Carnota', '15003005 - CEIP Vicente Otero Valcárcel', '15003017 - CEIP de Tabeaio', '15003054 - CEIP Nicolás del Río', '15022139 - EEI da Pereiriña', '15022127 - CEIP da Igrexa', '15003248 - CEIP Plurilingüe Vila de Cee', '15003376 - CPI Plurilingüe O Cruce', '15020970 - CEIP Plurilingüe Celso Emilio Ferreiro', '15003534 - CEIP da Barqueira', '15022152 - EEI de Coirós de Arriba', '15003789 - CEIP Praia de Quenxe', '15003807 - CEIP de Bormoio- Agualada', '15002670 - CEIP Canosa-Rus', '15003881 - CPI Alcalde Xosé Pichel', '15019323 - CEIP Plurilingüe Alborada', '15004976 - CEIP Curros Enríquez', '15005038 - CEIP de Prácticas', '15021721 - CEIP de Zalaeta', '15021627 - CEIP Emilia Pardo Bazán', '15004988 - CEIP Eusebio da Guarda', '15023375 - CEIP José Cornide Saavedra', '15027241 - CEIP Juan Fernández Latorre', '15020568 - CEIP Plurilingüe Labaca', '15019311 - CEIP Plurilingüe María Barbeito e Cervino', '15005518 - CEIP María Pita', '15004991 - CEIP Cidade Vella', '15033228 - CEIP Novo Mesoiro', '15004745 - CEIP Plurilingüe Anxo da Garda', '15004964 - CEIP Plurilingüe Concepción Arenal', '15005521 - CEIP Ramón de la Sagra', '15005014 - CEIP Raquel Camacho', '15005361 - CEIP Rosalía de Castro', '15025037 - CEIP Sagrada Familia', '15021548 - CEIP Sal Lence', '15021792 - CEIP Salgado Torres', '15025025 - CEIP San Francisco Javier', '15005701 - CEIP Plurilingüe San Pedro de Visma', '15005026 - CEIP Torre de Hércules', '15021536 - CEIP Plurilingüe Víctor López Seoane', '15024902 - CEIP Plurilingüe Wenceslao Fernández Flórez', '15023363 - CEIP Plurilingüe  Manuel Murguía', '15027253 - CEIP Isaac Díaz Pardo', '15005828 - CEIP Plurilingüe de Tarrío', '15027708 - CEIP Plurilingüe Ría do Burgo', '15021809 - CEIP Sofía Casanova', '15033149 - CEIP Vila de Rutis', '15005877 - CEIP de Teixeiro', '15005932 - CEIP de Curtis', '15023399 - CPI Eusebio Lorenzo Baleirón', '15021810 - CEIP Plurilingüe Santa Eulalia de Dumbría', '15020982 - CEIP Plurilingüe O Ramo', '15025633 - CEIP Plurilingüe Os Casais', '15022981 - CEIP Plurilingüe de Centieiras', '15023405 - CPI A Xunqueira', '15024941 - CEIP Plurilingüe A Laxe', '15021858 - CEIP Almirante Juan de Lángara y Huarte', '15006663 - CEIP Cruceiro de Canido', '15024938 - CEIP de Esteiro', '15026960 - CEIP de Ponzos', '15006845 - CEIP Isaac Peral', '15021834 - CEIP Manuel Masdías', '15006699 - CEIP Plurilingüe Ángela Ruiz Robles', '15021846 - CEIP  Plurilingüe San Xoán de Filgueira', '15024227 - CEIP de Pazos', '15007242 - CEIP Mar de Fóra', '15007266 - CEIP Areouta', '15007400 - CPI de Ponte Carreira', '15007655 - CEIP de Caión', '15025256 - CEIP Alfredo Brañas', '15007886 - CEIP Ramón Otero Pedrayo', '15007621 - CPI Plurilingüe Cabo da Area', '15021160 - EEI de Traba', '15008039 - CPI Plurilingüe Cernadas de Castro', '15021861 - CEIP Joaquín Rodríguez Otero', '15026765 - CEIP Milladoiro', '15008398 - CEIP Francisco López Estrada', '15008490 - CEIP Víctor Sáenz', '15008714 - CPI Plurilingüe da Picota', '15008805 - CEIP de Melide Nº 1', '15023910 - CEIP Martagona', '15027526 - CEIP Mestre Pastor Barral', '15008982 - EEI de Olas', '15009007 - EEI Visantoña', '15020854 - CPI de Xanceda', '15023223 - CEIP de Bemantes', '15009071 - CPI Castro Baxoi', '15009081 - CEIP de San Ramón', '15009241 - CPI Plurilingüe Virxe da Cela', '15009391 - CEIP Santiago Apóstolo', '15009445 - CEIP Plurilingüe Unión Mugardesa', '15009810 - CEIP Plurilingüe Ricardo Tobío', '15024951 - CEIP  Plurilingüe de Louro', '15023727 - EEI de Muros', '15009998 - CEIP Ramón de Artaza y Malvárez', '15021214 - EEI de Tal de Abaixo', '15009597 - CEIP de Vilarmide- Eduardo Noya', '15024239 - CEIP dos Muíños', '15009676 - CEIP Virxe da Barca', '15019499 - CEIP de Piñeiros', '15023508 - CEIP Plurilingüe Virxe do Mar', '15022310 - CEIP A Gándara', '15023740 - CEIP A Solaina', '15010162 - CEIP Plurilingüe  Ponte de Xubia', '15010058 - CPI do Feal', '15022577 - CEIP de Maciñeira', '15010307 - CEIP San Isidro', '15022826 - EEI de Aro', '15010575 - CEIP O Coto', '15010681 - CEIP Plurilingüe Alexandre Rodríguez Cadarso', '15010848 - CEIP Felipe de Castro', '15025670 - CEIP Plurilingüe Isidro Parga Pondal', '15023089 - CEIP Luís Seoane', '15011026 - CEIP Plurilingüe de Rabadeira', '15025050 - CEIP Ramón María del Valle- Inclán', '15011105 - CEIP de Mesón do Vento', '15011336 - CEIP Alfonso D. Rodríguez Castelao', '15025487 - CEIP Campomaior', '15032868 - CEIP Plurilíngue do Camiño Inglés', '15011567 - CEIP Plurilingüe de Sigüeiro', '15011981 - CEIP José María Lage', '15033101 - CEIP Plurilingüe de Outes', '15021780 - CEIP Plurilingüe Bragade', '15012420 - CEIP de Oza dos Ríos', '15024045 - EEI de Areas', '15021603 - EEI de Viñas', '15022322 - EEI da Escravitude', '15021056 - EEI de Arretén', '15012626 - EEI de Pontecesures', '15012742 - CEIP Flavia', '15012717 - CEIP Rosalía de Castro', '15020374 - EEI de Extramundi de Arriba', '15019347 - CPI Camiño de Santiago', '15020611 - EEI Gonzar', '15013072 - EEI da Granxa', '15013059 - EEI de Vilariño', '15013199 - CEP Salustiano Rey Eiras', '15013163 - EEI Fernández Varela', '15023417 - CEP Pilar Maestu Sierra', '15026236 - EEI da Angustia', '15013230 - CEIP As Forcadas', '15013291 - CEIP Eduardo Pondal', '15024963 - CEIP Plurilingüe de Andrade', '15013412 - CEIP de Ombre', '15013503 - CEIP Couceiro Freijomil', '15026194 - CEIP Plurilingüe A Fraga', '15013643 - CEIP Plurilingüe A Magdalena', '15013591 - CEIP Plurilingüe Santa María', '15013761 - CEIP de Campanario', '15013783 - EEI de Caamaño', '15025062 - CEIP de Portosín', '15013928 - CEIP Plurilingüe de Sobrado- Nebra', '15013977 - CEIP Santa Irene', '15013989 - EEI de Queiruga', '15013898 - CEIP de Seráns', '15024756 - EEI de Carballosa', '15025542 - CEIP Xuño', '15027401 - CEIP Ana María Diéguez', '15014180 - CEIP Alfonso D. Rodríguez Castelao', '15023430 - CEP Xosé María Brea Segade', '15014261 - CEIP Heroínas de Sálvora', '15014271 - CEIP Plurilingüe de Artes', '15021731 - CEIP Plurilingüe de Frións', '15024771 - CEP Plurilingüe de Carreira', '15014295 - EEI Capela-Carreira', '15025281 - CEIP de Olveira', '15014465 - CEIP Plurilingüe de Palmeira', '15014571 - EEI Deán Grande', '15014544 - CEIP Plurilingüe O Grupo', '15014738 - CPI Plurilingüe dos Dices', '15014799 - CEIP de Pumar-Urdilde', '15014829 - CEIP Pedro Barrié de la Maza', '15032686 - CEIP Plurilingüe O Mosteirón', '15014881 - CEIP Sada y sus contornos', '15014957 - CPI de San Sadurniño', '15015238 - CEIP Plurilingüe Barrié de la Maza', '15026777 - CEIP Plurilingüe Pepe de Xan Baña'];
 
 const ProfileForm = () => {
   const { user, updateUserMetadata } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [profileImage, uploadProfileImage, uploadError] = useProfileImage();
+  const { 
+    isUploading, 
+    previewUrl, 
+    selectedFile, 
+    handleFileChange, 
+    uploadProfileImage: uploadImage, 
+    resetProfileImage 
+  } = useProfileImage(user?.id);
+  
   const [formData, setFormData] = useState({
     full_name: '',
     role: '',
@@ -73,6 +80,10 @@ const ProfileForm = () => {
             
             // Si el error es porque no hay filas, crear un perfil para el usuario
             if (error.code === 'PGRST116') {
+              // Get school id from school name
+              const schoolName = user?.user_metadata?.school_name || '';
+              const schoolId = schoolName.split(' - ')[0] || '';
+
               // Obtener datos de los metadatos del usuario para crear el perfil
               const userData = {
                 id: user.id,
@@ -80,7 +91,8 @@ const ProfileForm = () => {
                 email: user.email || '',
                 role: user?.user_metadata?.role || 'docente',
                 specialty: user?.user_metadata?.specialty || '',
-                school_name: user?.user_metadata?.school_name || '',
+                school_name: schoolName,
+                school_id: schoolId,
                 profile_image_url: user?.user_metadata?.avatar_url || '',
                 // Convertir al usuario específico en directivo
                 ...(user.id === 'e4e80ce8-ea43-4f3e-95fe-5a9ad57504df' && { role: 'directivo' })
@@ -143,11 +155,19 @@ const ProfileForm = () => {
     fetchUserProfile();
   }, [user, form]);
 
-  useEffect(() => {
-    if (profileImage) {
-      form.setValue('profile_image_url', profileImage);
+  // Function to upload the profile image
+  const uploadProfileImage = async () => {
+    try {
+      const imageUrl = await uploadImage();
+      if (imageUrl) {
+        form.setValue('profile_image_url', imageUrl);
+        toast.success('Imaxe subida correctamente');
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Error ao subir a imaxe');
     }
-  }, [profileImage, form]);
+  };
 
   // Manejar el envío del formulario
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
@@ -157,6 +177,9 @@ const ProfileForm = () => {
     setError(null);
     
     try {
+      // Get school id from school name
+      const schoolId = data.school_name.split(' - ')[0] || '';
+
       // Actualizar el perfil en la base de datos
       const { error: updateError } = await supabase
         .from('profiles')
@@ -165,6 +188,7 @@ const ProfileForm = () => {
           role: data.role === 'directivo' ? 'directivo' : 'docente', // Asegurar que el role es válido
           specialty: data.specialty,
           school_name: data.school_name,
+          school_id: schoolId,
           profile_image_url: data.profile_image_url || formData.profile_image_url
         })
         .eq('id', user.id);
@@ -200,17 +224,30 @@ const ProfileForm = () => {
             {/* Sección de imagen de perfil */}
             <div className="flex flex-col items-center space-y-4">
               <Avatar className="w-32 h-32 border-2 border-scola-primary">
-                <AvatarImage src={form.watch('profile_image_url') || formData.profile_image_url} alt="Foto de perfil" />
+                <AvatarImage src={previewUrl || form.watch('profile_image_url') || formData.profile_image_url} alt="Foto de perfil" />
                 <AvatarFallback className="text-2xl bg-scola-primary text-white">
                   {formData.full_name?.split(' ').map(name => name[0]).join('') || 'U'}
                 </AvatarFallback>
               </Avatar>
-              <Button type="button" variant="outline" onClick={uploadProfileImage} className="w-full">
-                Cambiar foto
-              </Button>
-              {uploadError && (
-                <p className="text-sm text-red-500">{uploadError}</p>
-              )}
+              <div className="flex flex-col gap-2 w-full">
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="profile-image"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+                <label htmlFor="profile-image" className="w-full">
+                  <Button type="button" variant="outline" className="w-full" onClick={() => document.getElementById('profile-image')?.click()}>
+                    Seleccionar foto
+                  </Button>
+                </label>
+                {selectedFile && (
+                  <Button type="button" variant="default" onClick={uploadProfileImage} className="w-full" disabled={isUploading}>
+                    {isUploading ? 'Subindo...' : 'Subir foto'}
+                  </Button>
+                )}
+              </div>
             </div>
 
             {/* Formulario de datos */}
