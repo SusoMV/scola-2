@@ -16,7 +16,8 @@ const TeacherAssignmentTab: React.FC = () => {
     handleChange,
     handleSave,
     cancelEdit,
-    handleAddAssignment
+    handleAddAssignment,
+    handleDeleteAssignment
   } = useTeacherAssignments();
 
   return (
@@ -68,6 +69,7 @@ const TeacherAssignmentTab: React.FC = () => {
             courseIndex={courseIndex}
             editMode={editMode}
             onTeacherChange={handleChange}
+            onDelete={handleDeleteAssignment}
           />
         ))}
       </div>

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -12,7 +11,18 @@ import { Check, CalendarIcon, Clock, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
-// Mock data - in a real app, this would come from the database
+const COURSES = [
+  "4º Infantil",
+  "5º Infantil",
+  "6º Infantil",
+  "1º Primaria",
+  "2º Primaria",
+  "3º Primaria",
+  "4º Primaria",
+  "5º Primaria",
+  "6º Primaria"
+];
+
 const MOCK_STUDENTS = [
   { id: 1, name: 'Ana García' },
   { id: 2, name: 'Carlos Rodríguez' },
@@ -38,6 +48,7 @@ const AttendanceControl = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
 
   const handleAddAbsence = () => {
     if (!selectedStudent || !selectedDate || !startTime || !endTime) {
@@ -68,7 +79,6 @@ const AttendanceControl = () => {
     toast.success('Falta de asistencia rexistrada');
     setIsDialogOpen(false);
     
-    // Reset form
     setSelectedStudent('');
     setSelectedDate(new Date());
     setStartTime('');
@@ -99,6 +109,23 @@ const AttendanceControl = () => {
                 <DialogTitle>Rexistrar falta de asistencia</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="course">Curso</Label>
+                  <select 
+                    id="course"
+                    className="w-full p-2 border rounded-md"
+                    value={selectedCourse}
+                    onChange={(e) => setSelectedCourse(e.target.value)}
+                  >
+                    <option value="">Seleccione curso</option>
+                    {COURSES.map(course => (
+                      <option key={course} value={course}>
+                        {course}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="student">Alumno/a</Label>
                   <select 

@@ -2,25 +2,40 @@
 import React from 'react';
 import TeacherSelector from './TeacherSelector';
 import { TeacherAssignment } from './types/assignment-types';
+import { Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface CourseCardProps {
   assignment: TeacherAssignment;
   courseIndex: number;
   editMode: boolean;
   onTeacherChange: (courseIndex: number, field: keyof TeacherAssignment, value: string) => void;
+  onDelete: (courseIndex: number) => void;
 }
 
 const CourseCard: React.FC<CourseCardProps> = ({
   assignment,
   courseIndex,
   editMode,
-  onTeacherChange
+  onTeacherChange,
+  onDelete
 }) => {
   return (
-    <div className="border border-[#0070C0] border-dashed rounded-md p-4">
-      <h3 className="font-medium text-[#0070C0] mb-4 text-sm md:text-base">
-        {assignment.course}
-      </h3>
+    <div className="border border-[#0070C0] border-dashed rounded-md p-4 relative">
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="font-medium text-[#0070C0] text-sm md:text-base">
+          {assignment.course}
+        </h3>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => onDelete(courseIndex)}
+          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
           <TeacherSelector

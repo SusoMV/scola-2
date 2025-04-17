@@ -12,7 +12,18 @@ import { CalendarIcon, Clock } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 
-// Mock data - in a real app, this would come from the database
+const COURSES = [
+  "4º Infantil",
+  "5º Infantil",
+  "6º Infantil",
+  "1º Primaria",
+  "2º Primaria",
+  "3º Primaria",
+  "4º Primaria",
+  "5º Primaria",
+  "6º Primaria"
+];
+
 const MOCK_STUDENTS = [{
   id: 1,
   name: 'Ana García',
@@ -34,6 +45,7 @@ const MOCK_STUDENTS = [{
   name: 'Laura Martínez',
   family: 'Martínez López'
 }];
+
 interface TutoringSession {
   id: number;
   studentId: number;
@@ -43,6 +55,7 @@ interface TutoringSession {
   time: string;
   topics: string;
 }
+
 const TutoringSessions = () => {
   const [sessions, setSessions] = useState<TutoringSession[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -50,6 +63,8 @@ const TutoringSessions = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTime, setSelectedTime] = useState('');
   const [topics, setTopics] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+
   const handleAddSession = () => {
     if (!selectedStudent || !selectedDate || !selectedTime || !topics) {
       toast.error('Por favor, complete todos os campos obrigatorios');
@@ -73,12 +88,12 @@ const TutoringSessions = () => {
     toast.success('Titoría solicitada con éxito');
     setIsDialogOpen(false);
 
-    // Reset form
     setSelectedStudent('');
     setSelectedDate(new Date());
     setSelectedTime('');
     setTopics('');
   };
+
   return <Card className="bg-white">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
@@ -99,6 +114,23 @@ const TutoringSessions = () => {
                     {MOCK_STUDENTS.map(student => <option key={student.id} value={student.name}>
                         {student.name}
                       </option>)}
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="course">Curso</Label>
+                  <select 
+                    id="course"
+                    className="w-full p-2 border rounded-md"
+                    value={selectedCourse}
+                    onChange={(e) => setSelectedCourse(e.target.value)}
+                  >
+                    <option value="">Seleccione curso</option>
+                    {COURSES.map(course => (
+                      <option key={course} value={course}>
+                        {course}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -169,4 +201,5 @@ const TutoringSessions = () => {
       </CardContent>
     </Card>;
 };
+
 export default TutoringSessions;

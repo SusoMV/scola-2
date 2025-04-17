@@ -44,6 +44,19 @@ interface StudentNote {
   note: string;
   grade: string;
 }
+
+const COURSES = [
+  "4º Infantil",
+  "5º Infantil",
+  "6º Infantil",
+  "1º Primaria",
+  "2º Primaria",
+  "3º Primaria",
+  "4º Primaria",
+  "5º Primaria",
+  "6º Primaria"
+];
+
 const NotesSection = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [notes, setNotes] = useState<StudentNote[]>([]);
@@ -51,6 +64,8 @@ const NotesSection = () => {
   const [selectedStudent, setSelectedStudent] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [noteText, setNoteText] = useState('');
+  const [selectedCourse, setSelectedCourse] = useState('');
+
   const handleAddNote = () => {
     if (!selectedStudent || !selectedDate || !noteText) {
       toast.error('Por favor, complete todos os campos obrigatorios');
@@ -78,7 +93,9 @@ const NotesSection = () => {
     setSelectedDate(new Date());
     setNoteText('');
   };
+
   const filteredNotes = notes.filter(note => note.studentName.toLowerCase().includes(searchText.toLowerCase()) || note.note.toLowerCase().includes(searchText.toLowerCase()) || format(note.date, 'dd/MM/yyyy').includes(searchText));
+
   return <Card className="bg-white">
       <CardContent className="p-6">
         <div className="flex justify-between items-center mb-6">
@@ -128,6 +145,23 @@ const NotesSection = () => {
                   </div>
 
                   <div className="space-y-2">
+                    <Label htmlFor="course">Curso</Label>
+                    <select 
+                      id="course"
+                      className="w-full p-2 border rounded-md"
+                      value={selectedCourse}
+                      onChange={(e) => setSelectedCourse(e.target.value)}
+                    >
+                      <option value="">Seleccione curso</option>
+                      {COURSES.map(course => (
+                        <option key={course} value={course}>
+                          {course}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="space-y-2">
                     <Label htmlFor="note">Anotación</Label>
                     <Textarea id="note" placeholder="Escriba a anotación" value={noteText} onChange={e => setNoteText(e.target.value)} rows={4} />
                   </div>
@@ -172,4 +206,5 @@ const NotesSection = () => {
       </CardContent>
     </Card>;
 };
+
 export default NotesSection;
