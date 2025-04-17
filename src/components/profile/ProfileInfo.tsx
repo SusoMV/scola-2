@@ -25,42 +25,42 @@ const ProfileInfo = () => {
             .from('profiles')
             .select('*')
             .eq('id', user.id)
-            .single();
+            .maybeSingle(); // Use maybeSingle instead of single
 
-          if (error) {
+          if (error && error.code !== 'PGRST116') {
             console.error('Error fetching profile data:', error);
-          } else if (data) {
-            // Set profile data from database
-            setProfileData({
-              full_name: data.full_name || '',
-              email: data.email || user.email || '',
-              school_name: data.school_name || '',
-              specialty: data.specialty || '',
-              role: data.role || 'docente',
-              profile_image_url: data.profile_image_url || ''
-            });
-            
-            // Ensure metadata in auth is synchronized with profile
-            if (user && (
-              user.user_metadata?.full_name !== data.full_name || 
-              user.user_metadata?.role !== data.role ||
-              user.user_metadata?.specialty !== data.specialty ||
-              user.user_metadata?.school_name !== data.school_name ||
-              user.user_metadata?.avatar_url !== data.profile_image_url
-            )) {
-              try {
-                await supabase.auth.updateUser({
-                  data: {
-                    full_name: data.full_name,
-                    role: data.role,
-                    specialty: data.specialty,
-                    school_name: data.school_name,
-                    avatar_url: data.profile_image_url
-                  }
-                });
-              } catch (updateError) {
-                console.error('Error updating user metadata:', updateError);
-              }
+          }
+
+          // Set profile data from database or fallback to user metadata
+          setProfileData({
+            full_name: data?.full_name || user?.user_metadata?.full_name || '',
+            email: data?.email || user?.email || '',
+            school_name: data?.school_name || user?.user_metadata?.school_name || '',
+            specialty: data?.specialty || user?.user_metadata?.specialty || '',
+            role: data?.role || user?.user_metadata?.role || 'docente',
+            profile_image_url: data?.profile_image_url || user?.user_metadata?.avatar_url || ''
+          });
+          
+          // Ensure metadata in auth is synchronized with profile if profile exists
+          if (data && user && (
+            user.user_metadata?.full_name !== data.full_name || 
+            user.user_metadata?.role !== data.role ||
+            user.user_metadata?.specialty !== data.specialty ||
+            user.user_metadata?.school_name !== data.school_name ||
+            user.user_metadata?.avatar_url !== data.profile_image_url
+          )) {
+            try {
+              await supabase.auth.updateUser({
+                data: {
+                  full_name: data.full_name,
+                  role: data.role,
+                  specialty: data.specialty,
+                  school_name: data.school_name,
+                  avatar_url: data.profile_image_url
+                }
+              });
+            } catch (updateError) {
+              console.error('Error updating user metadata:', updateError);
             }
           }
         } catch (error) {
