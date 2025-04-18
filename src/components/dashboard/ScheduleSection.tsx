@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
@@ -48,20 +47,20 @@ const ScheduleSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-4">
           {scheduleItems.map((item, index) => (
             <div 
               key={index} 
-              className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
+              className="flex flex-col p-4 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
             >
               <div className="text-center">
-                <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md mb-2">
+                <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md mb-2 inline-block">
                   {item.time}
                 </div>
                 <p className="font-medium text-gray-700 mb-1">{item.subject}</p>
                 <p className="text-sm text-gray-500">{item.group}</p>
               </div>
-              <div className="mt-2 text-sm text-gray-500">
+              <div className="mt-2 text-sm text-gray-500 text-center">
                 {item.location}
               </div>
             </div>
@@ -73,4 +72,3 @@ const ScheduleSection = () => {
 };
 
 export default ScheduleSection;
-

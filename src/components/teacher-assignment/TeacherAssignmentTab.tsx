@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { useTeacherAssignments } from './hooks/useTeacherAssignments';
 import CourseCard from './CourseCard';
 import AddAssignmentDialog from './AddAssignmentDialog';
-import { Plus } from 'lucide-react';
+import { Plus, Users } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const TeacherAssignmentTab: React.FC = () => {
   const {
@@ -22,56 +23,63 @@ const TeacherAssignmentTab: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between mb-4">
-        <Button 
-          size="sm" 
-          onClick={() => setOpenAddDialog(true)}
-          className="text-xs md:text-sm bg-scola-primary"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Engadir adscrición
-        </Button>
-        
-        {editMode ? (
-          <div className="space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={cancelEdit}
-              className="text-xs md:text-sm"
-            >
-              Cancelar
-            </Button>
-            <Button 
-              size="sm" 
-              onClick={handleSave}
-              className="text-xs md:text-sm"
-            >
-              Gardar cambios
-            </Button>
-          </div>
-        ) : (
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <Users className="h-6 w-6 text-scola-primary" />
+          <h1 className="text-2xl font-bold">Adscrición e grupos</h1>
+        </div>
+        <div className="flex gap-2">
           <Button 
             size="sm" 
-            onClick={() => setEditMode(true)}
-            className="text-xs md:text-sm bg-scola-primary"
+            onClick={() => setOpenAddDialog(true)}
+            className="text-xs md:text-sm bg-[#0070C0]"
           >
-            Editar adscrición
+            <Plus className="h-4 w-4 mr-1" />
+            Engadir adscrición
           </Button>
-        )}
+          {editMode ? (
+            <>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={cancelEdit}
+                className="text-xs md:text-sm"
+              >
+                Cancelar
+              </Button>
+              <Button 
+                size="sm" 
+                onClick={handleSave}
+                className="text-xs md:text-sm bg-[#0070C0]"
+              >
+                Gardar cambios
+              </Button>
+            </>
+          ) : (
+            <Button 
+              size="sm" 
+              onClick={() => setEditMode(true)}
+              className="text-xs md:text-sm bg-[#0070C0]"
+            >
+              Editar adscrición
+            </Button>
+          )}
+        </div>
       </div>
 
-      <div className="space-y-6">
-        {assignments.map((assignment, courseIndex) => (
-          <CourseCard
-            key={assignment.course}
-            assignment={assignment}
-            courseIndex={courseIndex}
-            editMode={editMode}
-            onTeacherChange={handleChange}
-            onDelete={handleDeleteAssignment}
-          />
-        ))}
+      <div className="border-t border-dotted border-[#0070C0] pt-4">
+        <div className="space-y-6">
+          {assignments.map((assignment, courseIndex) => (
+            <CourseCard
+              key={assignment.course}
+              assignment={assignment}
+              courseIndex={courseIndex}
+              editMode={editMode}
+              onTeacherChange={handleChange}
+              onDelete={handleDeleteAssignment}
+            />
+          ))}
+        </div>
       </div>
       
       <AddAssignmentDialog 
