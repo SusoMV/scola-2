@@ -48,22 +48,20 @@ const ScheduleSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {scheduleItems.map((item, index) => (
             <div 
               key={index} 
-              className="p-4 bg-white rounded-md border border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between"
+              className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
             >
-              <div className="flex items-center">
-                <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md w-32 text-center">
+              <div className="text-center">
+                <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md mb-2">
                   {item.time}
                 </div>
-                <div className="ml-4">
-                  <p className="font-medium">{item.subject}</p>
-                  <p className="text-sm text-gray-500">{item.group}</p>
-                </div>
+                <p className="font-medium text-gray-700 mb-1">{item.subject}</p>
+                <p className="text-sm text-gray-500">{item.group}</p>
               </div>
-              <div className="mt-2 md:mt-0 md:ml-4 text-sm text-gray-500">
+              <div className="mt-2 text-sm text-gray-500">
                 {item.location}
               </div>
             </div>
@@ -75,3 +73,4 @@ const ScheduleSection = () => {
 };
 
 export default ScheduleSection;
+
