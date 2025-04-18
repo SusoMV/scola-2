@@ -39,7 +39,7 @@ const ScheduleSection = () => {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {scheduleItems.map((item, index) => <div key={index} className="flex flex-col p-4 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer py-0 px-0 my-[7px] mx-0">
+          {scheduleItems.map((item, index) => <div key={index} className="flex flex-col p-4 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer mx-0 py-[8px] my-[8px] px-[7px]">
               <div className="text-center">
                 <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md mb-2 inline-block">
                   {item.time}
