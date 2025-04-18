@@ -15,6 +15,7 @@ import { Card } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Shield } from 'lucide-react';
 import { useProfileImage } from '@/hooks/use-profile-image';
+import { SCHOOLS } from '@/components/auth/complete-profile/constants';
 
 // Lista de especialidades predefinidas limitada a las especificadas
 const SPECIALTIES = [
@@ -29,9 +30,6 @@ const SPECIALTIES = [
   '597939 Orientación', 
   '000000 Relixión'
 ];
-
-// Lista de centros educativos
-// ... keep existing code (SCHOOLS array definition)
 
 // Definimos o esquema de validación
 const profileSchema = z.object({
