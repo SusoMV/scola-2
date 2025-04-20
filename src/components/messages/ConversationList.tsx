@@ -7,20 +7,17 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from '@/components/ui/motion';
 import { Conversation } from '@/types/conversations';
-
 interface Participant {
   id: string;
   name: string;
   role: string;
 }
-
 interface ConversationListProps {
   onSelectConversation: (conversationId: string) => void;
   selectedConversation: string | null;
   conversations?: Conversation[];
   onDeleteConversation?: (conversationId: string) => void;
 }
-
 const mockConversations: Conversation[] = [{
   id: '1',
   name: 'Santiago López',
@@ -80,7 +77,6 @@ const mockConversations: Conversation[] = [{
     timestamp: new Date('2025-04-04T17:15:00')
   }
 }];
-
 const ConversationList: React.FC<ConversationListProps> = ({
   onSelectConversation,
   selectedConversation,
@@ -96,7 +92,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
       return format(date, 'dd/MM/yy');
     }
   };
-
   return <Card className="border-0 shadow-none h-full flex flex-col">
       <CardHeader className="pb-2 my-0 py-3 px-4 flex-shrink-0">
         <CardTitle className="font-medium text-xl">
@@ -140,7 +135,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               e.stopPropagation();
               onDeleteConversation(conversation.id);
             }}>
-                      <Trash2 className="h-4 w-4" />
+                      
                     </button>}
                 </motion.li>)}
             </ul> : <div className="p-4 text-center text-gray-500">
@@ -150,5 +145,4 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </CardContent>
     </Card>;
 };
-
 export default ConversationList;
