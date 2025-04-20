@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar, Plus } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { addDays, format, startOfWeek, endOfWeek, isSameDay, isWeekend } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Event } from '@/types/agenda';
@@ -122,7 +121,7 @@ const WeekView: React.FC<WeekViewProps> = ({
       ) : (
         <CardContent>
           <div className="pb-2 my-[8px]">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center py-4">
               <div className="text-lg font-medium flex items-center">
                 <Calendar className="h-5 w-5 mr-2 text-scola-primary" />
                 Semana del {format(startOfCurrentWeek, 'd MMM', {
