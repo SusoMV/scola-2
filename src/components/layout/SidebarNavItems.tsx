@@ -1,9 +1,8 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { 
-  LayoutDashboard, 
+  House, 
   CalendarDays, 
   Building2, 
   Users, 
@@ -14,9 +13,9 @@ import {
 
 export const navItems = [
   { 
-    name: 'Panel', 
+    name: 'Inicio', 
     path: '/dashboard', 
-    icon: <LayoutDashboard className="h-5 w-5" /> 
+    icon: <House className="h-5 w-5" /> 
   },
   { 
     name: 'Substitucións', 
