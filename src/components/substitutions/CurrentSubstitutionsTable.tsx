@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import { Calendar, Plus } from 'lucide-react';
 import { Substitution } from '@/types/substitutions';
 import { Button } from '@/components/ui/button';
@@ -56,10 +55,10 @@ const CurrentSubstitutionsTable: React.FC<CurrentSubstitutionsTableProps> = ({
                     <TableCell className={isMobile ? "py-1 px-2 text-xs" : "py-4"}>{substitution.specialty || '-'}</TableCell>
                     <TableCell className={isMobile ? "py-1 px-2 text-xs font-bold" : "py-4 font-bold"}>{substitution.substituteTeacher}</TableCell>
                     <TableCell className={isMobile ? "py-1 px-2 text-xs" : "py-4"}>
-                      <Checkbox 
+                      <Switch 
                         checked={substitution.seen} 
-                        onCheckedChange={() => handleToggleSeen(substitution.id)} 
-                        className="data-[state=checked]:bg-[#0070C0] data-[state=checked]:border-[#0070C0]" 
+                        onCheckedChange={() => handleToggleSeen(substitution.id)}
+                        className="data-[state=checked]:bg-[#0070C0]"
                       />
                     </TableCell>
                   </TableRow>
