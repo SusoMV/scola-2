@@ -41,7 +41,7 @@ const ScheduleSection = () => {
         <div className="space-y-2">
           {scheduleItems.map((item, index) => <div key={index} className="flex flex-col p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer">
               <div className="text-center">
-                <div className="bg-scola-pastel text-scola-primary text-xs font-medium rounded-md mb-1 inline-block py-[5px] px-[28px]">
+                <div className="bg-scola-pastel text-scola-primary text-xs font-medium rounded-md mb-1 inline-block px-[25px] py-[5px]">
                   {item.time}
                 </div>
                 <p className="font-medium text-gray-700 mb-0.5 text-sm">{item.subject}</p>
