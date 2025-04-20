@@ -1,12 +1,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
+
 interface ScheduleItem {
   time: string;
   subject: string;
   group: string;
   location: string;
 }
+
 const ScheduleSection = () => {
   // Mock data for the schedule
   const scheduleItems: ScheduleItem[] = [{
@@ -30,7 +32,9 @@ const ScheduleSection = () => {
     group: '3º Primaria',
     location: 'Ximnasio'
   }];
-  return <Card className="border-0 shadow-sm">
+
+  return (
+    <Card className="border-0 shadow-sm">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium flex items-center">
           <Clock className="h-5 w-5 mr-2 text-scola-primary" />
@@ -38,21 +42,28 @@ const ScheduleSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {scheduleItems.map((item, index) => <div key={index} className="flex flex-col p-4 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer mx-0 py-[8px] my-[8px] px-[7px]">
+        <div className="space-y-2">
+          {scheduleItems.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
+            >
               <div className="text-center">
-                <div className="bg-scola-pastel text-scola-primary text-sm font-medium py-1 px-3 rounded-md mb-2 inline-block">
+                <div className="bg-scola-pastel text-scola-primary text-xs font-medium py-0.5 px-2 rounded-md mb-1 inline-block">
                   {item.time}
                 </div>
-                <p className="font-medium text-gray-700 mb-1">{item.subject}</p>
-                <p className="text-sm text-gray-500">{item.group}</p>
+                <p className="font-medium text-gray-700 mb-0.5 text-sm">{item.subject}</p>
+                <p className="text-xs text-gray-500">{item.group}</p>
               </div>
-              <div className="mt-2 text-sm text-gray-500 text-center">
+              <div className="mt-1 text-xs text-gray-500 text-center">
                 {item.location}
               </div>
-            </div>)}
+            </div>
+          ))}
         </div>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
+
 export default ScheduleSection;

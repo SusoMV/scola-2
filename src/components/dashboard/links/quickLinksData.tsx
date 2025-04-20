@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Globe, FileText, Clock, Brain, Shield, Book, ClipboardList, Users } from 'lucide-react';
 
@@ -58,6 +57,11 @@ export const createQuickLinks = (schoolWebUrl: string): QuickLink[] => [
     name: 'Documentos de centro',
     icon: <FileText className="h-6 w-6 text-scola-primary" />,
     link: '/school-documents',
+  },
+  {
+    name: 'Modelos',
+    icon: <FileText className="h-6 w-6 text-scola-primary" />,
+    link: '/templates',
   },
   {
     name: 'IA',

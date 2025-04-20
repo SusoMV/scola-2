@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -32,6 +31,7 @@ import ClassroomPlanningPage from "./pages/ClassroomPlanningPage";
 import MeetingMinutesPage from "./pages/MeetingMinutesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import TeacherAssignmentPage from "./pages/TeacherAssignmentPage";
+import TemplatesPage from "./pages/TemplatesPage";
 
 const queryClient = new QueryClient();
 
@@ -152,6 +152,11 @@ const App = () => (
             <Route path="/teacher-assignment" element={
               <ProtectedRoute>
                 <TeacherAssignmentPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/templates" element={
+              <ProtectedRoute>
+                <TemplatesPage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
