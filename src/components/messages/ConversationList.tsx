@@ -7,11 +7,13 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { motion } from '@/components/ui/motion';
 import { Conversation } from '@/types/conversations';
+
 interface Participant {
   id: string;
   name: string;
   role: string;
 }
+
 interface ConversationListProps {
   onSelectConversation: (conversationId: string) => void;
   selectedConversation: string | null;
@@ -19,7 +21,6 @@ interface ConversationListProps {
   onDeleteConversation?: (conversationId: string) => void;
 }
 
-// Mock conversations data to use as fallback if none are provided
 const mockConversations: Conversation[] = [{
   id: '1',
   name: 'Santiago López',
@@ -79,6 +80,7 @@ const mockConversations: Conversation[] = [{
     timestamp: new Date('2025-04-04T17:15:00')
   }
 }];
+
 const ConversationList: React.FC<ConversationListProps> = ({
   onSelectConversation,
   selectedConversation,
@@ -94,6 +96,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
       return format(date, 'dd/MM/yy');
     }
   };
+
   return <Card className="border-0 shadow-none h-full flex flex-col">
       <CardHeader className="pb-2 my-0 py-3 px-4 flex-shrink-0">
         <CardTitle className="font-medium text-xl">
@@ -118,15 +121,15 @@ const ConversationList: React.FC<ConversationListProps> = ({
                         {conversation.isGroup ? <Users className="h-5 w-5" /> : <User className="h-5 w-5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex justify-between">
+                        <div className="flex justify-between items-start mb-1">
                           <p className="font-medium truncate max-w-[70%]">
                             {conversation.name}
                           </p>
-                          {conversation.lastMessage && <p className="text-xs text-gray-500 flex-shrink-0">
+                          {conversation.lastMessage && <p className="text-xs text-gray-500 flex-shrink-0 ml-2">
                               {formatDate(new Date(conversation.lastMessage.timestamp))}
                             </p>}
                         </div>
-                        {conversation.lastMessage && <p className="text-sm text-gray-500 truncate">
+                        {conversation.lastMessage && <p className="text-sm text-gray-500 truncate pr-4">
                             {conversation.lastMessage.content}
                           </p>}
                       </div>
@@ -137,7 +140,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
               e.stopPropagation();
               onDeleteConversation(conversation.id);
             }}>
-                      
+                      <Trash2 className="h-4 w-4" />
                     </button>}
                 </motion.li>)}
             </ul> : <div className="p-4 text-center text-gray-500">
@@ -147,4 +150,5 @@ const ConversationList: React.FC<ConversationListProps> = ({
       </CardContent>
     </Card>;
 };
+
 export default ConversationList;
