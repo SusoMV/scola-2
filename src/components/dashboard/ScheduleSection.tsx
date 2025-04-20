@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Clock } from 'lucide-react';
@@ -20,7 +21,7 @@ const ScheduleSection = () => {
     time: '10:00 - 11:00',
     subject: 'Lingua Galega',
     group: '6º Primaria',
-    location: 'Aula 14'
+    location: 'Aula 12'
   }, {
     time: '11:30 - 12:30',
     subject: 'Ciencias Naturais',
@@ -42,20 +43,20 @@ const ScheduleSection = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-2">
+        <div className="space-y-4">
           {scheduleItems.map((item, index) => (
             <div
               key={index}
-              className="flex flex-col p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
+              className="relative flex items-center border border-dashed border-blue-300 rounded-lg p-4 hover:border-solid transition-all duration-200"
             >
-              <div className="text-center">
-                <div className="bg-scola-pastel text-scola-primary text-xs font-medium py-0.5 px-2 rounded-md mb-1 inline-block">
-                  {item.time}
-                </div>
-                <p className="font-medium text-gray-700 mb-0.5 text-sm">{item.subject}</p>
-                <p className="text-xs text-gray-500">{item.group}</p>
+              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-md text-sm font-medium min-w-[120px]">
+                {item.time}
               </div>
-              <div className="mt-1 text-xs text-gray-500 text-center">
+              <div className="flex-grow px-6">
+                <h3 className="text-lg font-medium text-gray-700">{item.subject}</h3>
+                <p className="text-sm text-gray-500">{item.group}</p>
+              </div>
+              <div className="text-gray-500 text-sm">
                 {item.location}
               </div>
             </div>
