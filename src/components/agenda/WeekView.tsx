@@ -1,12 +1,14 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Calendar, Plus } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { addDays, format, startOfWeek, endOfWeek, isSameDay, isWeekend } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Event } from '@/types/agenda';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
+import DayCell from './DayCell';
 
 interface WeekViewProps {
   events: Event[];
@@ -119,16 +121,16 @@ const WeekView: React.FC<WeekViewProps> = ({
         </div>
       ) : (
         <CardContent>
-          <CardHeader className="pb-2 my-[8px]">
+          <div className="pb-2 my-[8px]">
             <div className="flex justify-between items-center">
-              <CardTitle className="text-lg font-medium flex items-center">
+              <div className="text-lg font-medium flex items-center">
                 <Calendar className="h-5 w-5 mr-2 text-scola-primary" />
                 Semana del {format(startOfCurrentWeek, 'd MMM', {
                 locale: es
               })} al {format(endOfCurrentWeek, 'd MMM yyyy', {
                 locale: es
               })}
-              </CardTitle>
+              </div>
               <div className="flex gap-2">
                 <Button variant="outline" size="sm" onClick={() => setCurrentDate(addDays(currentDate, -7))}>
                   Anterior
@@ -141,12 +143,14 @@ const WeekView: React.FC<WeekViewProps> = ({
                 </Button>
               </div>
             </div>
-          </CardHeader>
-          <CardContent className="py-[18px]">
+          </div>
+          <div className="py-[18px]">
             <div className="grid grid-cols-7 gap-4">
-              {weekDays.map((day, index) => <DayCell key={index} day={day} events={getEventsForDay(day)} onAddEvent={onAddEvent} />)}
+              {weekDays.map((day, index) => (
+                <DayCell key={index} day={day} events={getEventsForDay(day)} onAddEvent={onAddEvent} />
+              ))}
             </div>
-          </CardContent>
+          </div>
         </CardContent>
       )}
     </Card>
