@@ -47,9 +47,9 @@ const ScheduleSection = () => {
           {scheduleItems.map((item, index) => (
             <div
               key={index}
-              className="relative flex items-center border border-dashed border-blue-300 rounded-lg p-4 hover:border-solid transition-all duration-200"
+              className="relative flex items-center border border-dashed border-scola-primary rounded-lg p-4 hover:border-solid transition-all duration-200"
             >
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-md text-sm font-medium min-w-[120px]">
+              <div className="bg-scola-pastel text-scola-primary px-3 py-1 rounded-md text-sm font-medium min-w-[120px]">
                 {item.time}
               </div>
               <div className="flex-grow px-6">
