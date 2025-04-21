@@ -24,7 +24,7 @@ const DayCell: React.FC<DayCellProps> = ({ day, events, onAddEvent }) => {
   const eventsForDay = events.filter(event => isSameDay(event.start, day));
 
   return (
-    <div className={`border rounded-md p-2 ${isWeekend(day) ? 'bg-gray-50' : ''}`}>
+    <div className={`border border-dashed border-scola-primary rounded-md p-4 relative bg-white hover:bg-scola-pastel hover:border-solid transition-all duration-200 ${isWeekend(day) ? 'bg-gray-50' : ''}`}>
       <div className="text-center border-b pb-2 mb-2">
         <p className={`font-medium ${isWeekend(day) ? 'text-gray-500' : ''}`}>{formatDayLabel(day)}</p>
       </div>
