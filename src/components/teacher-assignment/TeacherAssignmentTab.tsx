@@ -22,13 +22,17 @@ const TeacherAssignmentTab: React.FC = () => {
 
   return (
     <div className="space-y-4">
+      <p className="text-sm text-gray-500 mb-4">
+        Xestiona as adscricións docentes e realiza os cambios necesarios
+      </p>
+
       <div className="flex justify-end items-center gap-2">
         <Button 
           onClick={() => setOpenAddDialog(true)} 
           className="bg-scola-primary hover:bg-scola-primary-dark text-white"
           size="sm"
         >
-          <Plus className="h-4 w-4 mr-1" />
+          <Plus className="h-4 w-4" />
           Engadir adscrición
         </Button>
         {editMode ? (
@@ -39,7 +43,7 @@ const TeacherAssignmentTab: React.FC = () => {
               onClick={cancelEdit}
               className="border-scola-primary text-scola-primary hover:bg-scola-pastel"
             >
-              <X className="h-4 w-4 mr-1" />
+              <X className="h-4 w-4" />
               Cancelar
             </Button>
             <Button 
@@ -47,7 +51,7 @@ const TeacherAssignmentTab: React.FC = () => {
               onClick={handleSave}
               className="bg-scola-primary hover:bg-scola-primary-dark text-white"
             >
-              <Save className="h-4 w-4 mr-1" />
+              <Save className="h-4 w-4" />
               Gardar cambios
             </Button>
           </>
@@ -57,7 +61,7 @@ const TeacherAssignmentTab: React.FC = () => {
             onClick={() => setEditMode(true)}
             className="bg-scola-primary hover:bg-scola-primary-dark text-white"
           >
-            <Edit className="h-4 w-4 mr-1" />
+            <Edit className="h-4 w-4" />
             Editar adscrición
           </Button>
         )}

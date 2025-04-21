@@ -34,19 +34,27 @@ const TeacherAssignmentPage = () => {
 
   return (
     <DashboardLayout>
+      <div className="mb-6">
+        <div className="flex items-center">
+          <div className="flex items-center gap-2">
+            <Users className="h-6 w-6 text-scola-primary" />
+            <h1 className="text-2xl font-bold text-gray-900">Adscrición e grupos</h1>
+          </div>
+        </div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
+      </div>
+
       <Card className="border-0 shadow-sm">
-        <CardHeader className="pb-2">
-          <CardTitle className="mb-6">
-            <div className="flex items-center gap-2">
-              <Users className="h-6 w-6 text-scola-primary" />
-              <h1 className="text-2xl font-bold text-gray-900">Adscrición e grupos</h1>
-            </div>
-            <div className="w-full h-[1px] bg-gradient-to-r from-scola-primary to-transparent mt-2"></div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} bg-scola-pastel`}>
+        <CardContent className="p-6">
+          <Tabs 
+            defaultValue="assignment" 
+            value={activeTab} 
+            onValueChange={setActiveTab} 
+            className="w-full"
+          >
+            <TabsList 
+              className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} bg-scola-pastel`}
+            >
               <TabsTrigger 
                 value="assignment" 
                 className="text-xs md:text-sm rounded-md data-[state=active]:bg-scola-primary data-[state=active]:text-white"
