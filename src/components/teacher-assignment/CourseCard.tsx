@@ -21,9 +21,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onDelete
 }) => {
   return (
-    <div className="border border-[#0070C0] border-dashed rounded-md p-4 relative">
+    <div className="border border-scola-primary border-dashed rounded-md p-4 relative bg-white shadow-sm">
       <div className="flex justify-between items-start mb-4">
-        <h3 className="font-medium text-[#0070C0] text-sm md:text-base">
+        <h3 className="font-medium text-scola-primary text-sm md:text-base">
           {assignment.course}
         </h3>
         <Button
