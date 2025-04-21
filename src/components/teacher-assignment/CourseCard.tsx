@@ -21,7 +21,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
   onDelete
 }) => {
   return (
-    <div className="border border-gray-200 rounded-lg p-6 relative bg-white shadow-sm hover:shadow-md transition-shadow duration-200">
+    <div className="border border-dashed border-scola-primary rounded-md p-4 relative bg-white hover:bg-scola-pastel hover:border-solid transition-all duration-200">
       <div className="flex justify-between items-start mb-6">
         <h3 className="font-medium text-scola-primary text-lg">
           {assignment.course}
