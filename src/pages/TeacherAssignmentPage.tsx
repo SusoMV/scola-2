@@ -49,7 +49,7 @@ const TeacherAssignmentPage = () => {
                 <span>Adscrición docente</span>
               </TabsTrigger>
               <TabsTrigger value="groups" className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white">
-                <Users className="h-4 w-4 mr-1" />
+                
                 <span>Grupos</span>
               </TabsTrigger>
             </TabsList>
