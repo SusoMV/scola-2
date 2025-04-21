@@ -53,18 +53,18 @@ const TeacherAssignmentPage = () => {
             className="w-full"
           >
             <TabsList 
-              className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} bg-scola-pastel`}
+              className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}
             >
               <TabsTrigger 
                 value="assignment" 
-                className="text-xs md:text-sm rounded-md data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+                className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white"
               >
                 <Users className="h-4 w-4 mr-1" />
                 <span>Adscrición docente</span>
               </TabsTrigger>
               <TabsTrigger 
                 value="groups" 
-                className="text-xs md:text-sm rounded-md data-[state=active]:bg-scola-primary data-[state=active]:text-white"
+                className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white"
               >
                 <Users className="h-4 w-4 mr-1" />
                 <span>Grupos</span>
