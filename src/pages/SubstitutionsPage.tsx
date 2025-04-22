@@ -7,12 +7,15 @@ import CreateSubstitutionDialog from '@/components/substitutions/CreateSubstitut
 import { useAuth } from '@/contexts/AuthContext';
 import { useFacultyMembers } from '@/hooks/useFacultyMembers';
 import { useSubstitutions } from '@/hooks/useSubstitutions';
+import UpcomingAbsencesSection from '@/components/substitutions/UpcomingAbsencesSection';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const SubstitutionsPage = () => {
   const { user } = useAuth();
   const { isDirector } = useFacultyMembers();
   const [openDialog, setOpenDialog] = useState(false);
-  
+  const isMobile = useIsMobile();
+
   const {
     substitutions,
     searchQuery,
@@ -21,14 +24,24 @@ const SubstitutionsPage = () => {
     handleSubmitSubstitution,
     getFilteredHistoricalSubstitutions,
     absentTeachers,
-    substituteTeachers
+    substituteTeachers,
+    getUpcomingAbsences,
+    handleDeleteUpcomingAbsence
   } = useSubstitutions();
 
   const filteredHistoricalSubstitutions = getFilteredHistoricalSubstitutions();
+  const upcomingAbsences = getUpcomingAbsences();
 
   return (
     <DashboardLayout>
       <Header isDirector={isDirector} />
+
+      {/* Sección de Próximas Ausencias */}
+      <UpcomingAbsencesSection
+        upcomingAbsences={upcomingAbsences}
+        onDelete={handleDeleteUpcomingAbsence}
+        isMobile={isMobile}
+      />
 
       <div className="flex justify-between mb-6">
         <TabsContainer 

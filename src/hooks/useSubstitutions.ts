@@ -1,6 +1,5 @@
-
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isAfter } from 'date-fns';
 import { Substitution } from '@/types/substitutions';
 
 export const useSubstitutions = () => {
@@ -137,7 +136,17 @@ export const useSubstitutions = () => {
     });
   };
 
-  // Sample data for the form
+  const getUpcomingAbsences = () => {
+    const today = format(new Date(), 'yyyy-MM-dd');
+    return historicalSubstitutions.filter(
+      sub => isAfter(new Date(sub.date), new Date(today))
+    );
+  };
+
+  const handleDeleteUpcomingAbsence = (id: string) => {
+    setHistoricalSubstitutions(historicalSubstitutions.filter(sub => sub.id !== id));
+  };
+
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];
   const substituteTeachers = ['María López', 'Ana García', 'Pablo Sánchez', 'Elena Rivas'];
 
@@ -150,6 +159,8 @@ export const useSubstitutions = () => {
     handleSubmitSubstitution,
     getFilteredHistoricalSubstitutions,
     absentTeachers,
-    substituteTeachers
+    substituteTeachers,
+    getUpcomingAbsences,
+    handleDeleteUpcomingAbsence
   };
 };
