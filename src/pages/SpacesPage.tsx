@@ -239,7 +239,10 @@ const SpacesPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {spaces.filter(space => space.category === activeCategory).length > 0 ? 
               spaces.filter(space => space.category === activeCategory).map(space => (
-                <div key={space.id} className="border rounded-md p-6 hover:shadow-md transition-shadow">
+                <div 
+                  key={space.id} 
+                  className="border border-dashed border-scola-primary rounded-md p-6 hover:bg-scola-pastel hover:border-solid transition-all duration-200 cursor-pointer"
+                >
                   <div className="border-l-4 border-[#0070C0] pl-3 mb-4">
                     <h3 className="text-lg font-medium">{space.name}</h3>
                   </div>
