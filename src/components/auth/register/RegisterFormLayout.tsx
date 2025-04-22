@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +18,7 @@ const RegisterFormLayout: React.FC<RegisterFormLayoutProps> = ({
   onSubmit
 }) => {
   return (
-    <Card className="border border-blue-300 border-dashed rounded-lg overflow-hidden">
+    <Card className="border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200 overflow-hidden">
       <CardHeader className="flex flex-col items-center justify-center pt-8 pb-6 px-6">
         <div className="flex justify-center w-full mb-6">
           <ScolaLogo className="w-full" size="lg" />
