@@ -21,6 +21,7 @@ const ViewSelector: React.FC<ViewSelectorProps> = ({
         <TabsList>
           <TabsTrigger value="week">Semana</TabsTrigger>
           <TabsTrigger value="month">Mes</TabsTrigger>
+          <TabsTrigger value="deadlines">Prazos</TabsTrigger>
         </TabsList>
         
         {onAddEvent && (

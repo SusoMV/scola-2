@@ -9,6 +9,7 @@ import Header from '@/components/agenda/Header';
 import ViewSelector from '@/components/agenda/ViewSelector';
 import { Event } from '@/types/agenda';
 import { useAgendaEvents } from '@/hooks/useAgendaEvents';
+import { DeadlinesTab } from '@/components/agenda/deadlines/DeadlinesTab';
 
 export const AgendaPage = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
@@ -65,6 +66,10 @@ export const AgendaPage = () => {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
           />
+        </TabsContent>
+
+        <TabsContent value="deadlines">
+          <DeadlinesTab />
         </TabsContent>
       </ViewSelector>
 
