@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Plus, Trash2 } from "lucide-react";
@@ -45,7 +44,6 @@ const DocumentUploader = () => {
     setTeachers(t => t.filter(tr => tr.id !== selectedId));
     setSelectedId(t => {
       const idx = teachers.findIndex(tr => tr.id === selectedId);
-      // fallback to previous or next
       if (idx > 0) return teachers[idx - 1].id;
       if (idx === 0 && teachers.length > 1) return teachers[1].id;
       return "";
@@ -133,17 +131,22 @@ const DocumentUploader = () => {
             {hours.map((hour, i) => (
               <tr key={hour} className="">
                 {/* Hora */}
-                <td className={`bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle`} style={{
-                  borderTop: i === 0 ? "2px dashed #0070C0" : "1.5px dashed #0070C0",
-                  borderBottom: "1.5px dashed #0070C0"
-                }}>{hour}</td>
+                <td
+                  className={`bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle`}
+                  style={{
+                    borderTop: i === 0 ? "1px dashed #0070C0" : "1px dashed #0070C0",
+                    borderBottom: "1px dashed #0070C0"
+                  }}
+                >
+                  {hour}
+                </td>
                 {defaultDays.map(day => (
                   <td
                     key={day}
                     className="text-center align-middle border-0"
                     style={{
-                      borderTop: i === 0 ? "2px dashed #0070C0" : "1.5px dashed #0070C0",
-                      borderBottom: "1.5px dashed #0070C0",
+                      borderTop: i === 0 ? "1px dashed #0070C0" : "1px dashed #0070C0",
+                      borderBottom: "1px dashed #0070C0",
                       color: "#999",
                       fontSize: "1.15rem",
                       height: 56
