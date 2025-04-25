@@ -101,6 +101,10 @@ export const useSubstitutions = () => {
     ));
   };
 
+  const handleDeleteUpcomingAbsence = (id: string) => {
+    setHistoricalSubstitutions(historicalSubstitutions.filter(sub => sub.id !== id));
+  };
+
   const handleSubmitSubstitution = (data: any) => {
     const newSubstitution: Substitution = {
       id: Date.now().toString(),
@@ -141,10 +145,6 @@ export const useSubstitutions = () => {
     return historicalSubstitutions.filter(
       sub => isAfter(new Date(sub.date), new Date(today))
     );
-  };
-
-  const handleDeleteUpcomingAbsence = (id: string) => {
-    setHistoricalSubstitutions(historicalSubstitutions.filter(sub => sub.id !== id));
   };
 
   const absentTeachers = ['Carlos Rodríguez', 'Lucía Fernández', 'David Martínez', 'Sara López', 'Manuel Torres'];

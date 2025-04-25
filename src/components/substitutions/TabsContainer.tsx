@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import CurrentSubstitutionsTable from './CurrentSubstitutionsTable';
 import HistoricalSubstitutionsTable from './HistoricalSubstitutionsTable';
+import UpcomingAbsencesTable from './UpcomingAbsencesTable';
 import { Substitution } from '@/types/substitutions';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -36,6 +37,9 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
           <TabsTrigger value="current" className={isMobile ? "px-3 py-1 text-xs h-6" : ""}>
             Hoxe
           </TabsTrigger>
+          <TabsTrigger value="upcoming" className={isMobile ? "px-3 py-1 text-xs h-6" : ""}>
+            Próximas
+          </TabsTrigger>
           <TabsTrigger value="historical" className={isMobile ? "px-3 py-1 text-xs h-6" : ""}>
             Histórico
           </TabsTrigger>
@@ -61,6 +65,14 @@ const TabsContainer: React.FC<TabsContainerProps> = ({
           handleToggleSeen={handleToggleSeen}
           openCreateDialog={openCreateDialog}
           isDirector={isDirector}
+        />
+      </TabsContent>
+
+      <TabsContent value="upcoming">
+        <UpcomingAbsencesTable
+          upcomingAbsences={filteredHistoricalSubstitutions.filter(sub => 
+            new Date(sub.date) > new Date()
+          )}
         />
       </TabsContent>
       
