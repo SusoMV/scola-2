@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+
+import React, { useState, useRef } from "react";
 import {
   Tabs,
   TabsList,
@@ -23,8 +24,19 @@ interface Teacher {
   schedule: Record<DayOfWeek, Record<TimeSlot, Cell>>;
 }
 
+// Core slot times for matching the mockup
 const defaultSlots: TimeSlot[] = [
-  "9:40", "10:30", "11:20", "12:10", "12:35", "13:00", "13:45"
+  "9:40", "10:30", "11:20", "12:10", "13:00", "13:45"
+];
+
+// Map to grid slot display ranges
+const slotRanges: string[] = [
+  "9:40 - 10:30",
+  "10:30 - 11:20",
+  "11:20 - 12:10",
+  "12:10 - 12:35\n12:35 - 13:00",
+  "13:00 - 13:45",
+  "13:45 - 14:40"
 ];
 
 const days: DayOfWeek[] = ["Luns", "Martes", "Mércores", "Xoves", "Venres"];
@@ -32,27 +44,21 @@ const days: DayOfWeek[] = ["Luns", "Martes", "Mércores", "Xoves", "Venres"];
 const initialTeachers: Teacher[] = [
   {
     id: "1",
-    name: "Adriano Moreno",
+    name: "Juan Ángel Anca Pena",
     schedule: days.reduce((acc, day) => ({
       ...acc,
-      [day]: Object.fromEntries(
-        defaultSlots.map(slot => [slot, { subject: "", course: "" }])
-      ),
-    }), {} as Record<DayOfWeek, Record<TimeSlot, Cell>>),
-  },
-  {
-    id: "2",
-    name: "Ana García",
-    schedule: days.reduce((acc, day) => ({
-      ...acc,
-      [day]: Object.fromEntries(
-        defaultSlots.map(slot => [slot, { subject: "", course: "" }])
-      ),
+      [day]: {
+        "9:40": { subject: day === "Luns" ? "" : day === "Martes" ? "5 anos A" : day === "Mércores" ? "3ºC" : day === "Xoves" ? "5 anos B" : "3ºB", course: "" },
+        "10:30": { subject: day === "Luns" ? "3ºA" : day === "Martes" ? "4 anos A" : day === "Mércores" ? "3ºB" : day === "Xoves" ? "3 anos A" : "3ºC", course: "" },
+        "11:20": { subject: day === "Luns" ? "3ºC" : day === "Martes" ? "4 anos B" : day === "Mércores" ? "3ºA" : day === "Xoves" ? "3 anos B" : "3ºA", course: "" },
+        "12:10": { subject: "Recreo\nHora de ler", course: "" },
+        "13:00": { subject: day === "Luns" ? "2ºA" : day === "Martes" ? "2ºB" : day === "Mércores" ? "GARDA" : day === "Xoves" ? "2ºB" : "2ºA", course: "" },
+        "13:45": { subject: day === "Luns" ? "1ºB" : day === "Martes" ? "1ºB" : day === "Mércores" ? "1ºA" : day === "Xoves" ? "1ºA" : "GARDA", course: "" }
+      }
     }), {} as Record<DayOfWeek, Record<TimeSlot, Cell>>),
   }
 ];
 
-// Utilidade para crear IDs únicos:
 function generateId() {
   return Math.random().toString(36).substring(2, 10) + Date.now();
 }
@@ -63,7 +69,6 @@ const TeacherTabs: React.FC = () => {
   const [editing, setEditing] = useState(false);
   const [editBuffer, setEditBuffer] = useState<Record<string, Teacher>>({});
 
-  // Engadir docente novo
   const addTeacher = () => {
     const name = window.prompt("Nome do docente:");
     if (!name) return;
@@ -81,7 +86,6 @@ const TeacherTabs: React.FC = () => {
     setSelectedId(id);
   };
 
-  // Eliminar docente con confirmación
   const deleteTeacher = (id: string) => {
     if (window.confirm("¿Seguro que queres eliminar este docente e o seu horario?")) {
       setTeachers(teachers.filter(t => t.id !== id));
@@ -94,7 +98,6 @@ const TeacherTabs: React.FC = () => {
     }
   };
 
-  // Activar/desactivar edición
   const startEdit = () => {
     setEditBuffer(Object.fromEntries(teachers.map(t => [t.id, JSON.parse(JSON.stringify(t))])));
     setEditing(true);
@@ -107,7 +110,6 @@ const TeacherTabs: React.FC = () => {
     setEditing(false);
   };
 
-  // Cambios en cuadrícula
   const onCellChange = (day: DayOfWeek, slot: TimeSlot, value: Cell) => {
     setEditBuffer(buffer => ({
       ...buffer,
@@ -124,7 +126,6 @@ const TeacherTabs: React.FC = () => {
     }));
   };
 
-  // Engadir nova franxa horaria á cuadrícula
   const handleAddSlot = (slot: string) => {
     setEditBuffer(buffer => {
       let teacher = buffer[selectedId];
@@ -145,27 +146,18 @@ const TeacherTabs: React.FC = () => {
     });
   };
 
-  // Slots actuais para o docente seleccionado
   const selectedTeacher = teachers.find(t => t.id === selectedId)
     || (editing && editBuffer[selectedId]);
 
-  const slots = selectedTeacher
-    ? Object.keys(selectedTeacher.schedule["Luns"])
-    : [];
+  const slots = defaultSlots;
+  const editSlots = defaultSlots;
 
-  // Adaptar slots para edición (con posible novo slot)
-  const editSlots = selectedTeacher
-    ? Object.keys((editing && editBuffer[selectedId]?.schedule?.Luns) || selectedTeacher.schedule["Luns"])
-    : [];
-
-  // Gestor do input para engadir slot personalizado
   const slotInputRef = useRef<HTMLInputElement>(null);
 
-  // Adaptar ancho en móbil/xscroll, sempre style visual consistente
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <div className="text-2xl font-bold text-scola-primary select-none">Horarios</div>
+      <div className="flex items-center justify-between mb-2">
+        <div />
         <div>
           {!editing ? (
             <Button variant="default" size="sm" onClick={startEdit} className="mr-2">
