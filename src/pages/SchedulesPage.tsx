@@ -1,8 +1,8 @@
 
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Clock, FileText } from 'lucide-react';
-import DocumentUploader from '@/components/documents/DocumentUploader';
+import { Clock } from 'lucide-react';
+import TeacherTimetable from '@/components/schedules/TeacherTimetable';
 
 const SchedulesPage = () => {
   return (
@@ -18,7 +18,7 @@ const SchedulesPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader title="Documentos de horarios" category="schedules" />
+        <TeacherTimetable />
       </div>
     </DashboardLayout>
   );
