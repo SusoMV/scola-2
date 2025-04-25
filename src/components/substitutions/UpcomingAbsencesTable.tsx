@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Table,
@@ -9,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import { Substitution } from '@/types/substitutions';
 import { useToast } from '@/hooks/use-toast';
 
@@ -38,7 +38,7 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
   }
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border bg-white p-4">
       <Table>
         <TableHeader>
           <TableRow>
@@ -47,7 +47,6 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
             <TableHead>Substituto/a</TableHead>
             <TableHead>Curso</TableHead>
             <TableHead>Hora</TableHead>
-            <TableHead>Motivo</TableHead>
             <TableHead>Especialidade</TableHead>
             <TableHead className="text-right">Accións</TableHead>
           </TableRow>
@@ -60,15 +59,14 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
               <TableCell>{absence.substituteTeacher}</TableCell>
               <TableCell>{absence.course}</TableCell>
               <TableCell>{absence.time}</TableCell>
-              <TableCell>{absence.reason}</TableCell>
               <TableCell>{absence.specialty}</TableCell>
               <TableCell className="text-right">
                 <Button
-                  variant="destructive"
-                  size="sm"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => handleDelete(absence.id)}
                 >
-                  Eliminar
+                  <Trash2 className="h-4 w-4 text-red-500" />
                 </Button>
               </TableCell>
             </TableRow>
