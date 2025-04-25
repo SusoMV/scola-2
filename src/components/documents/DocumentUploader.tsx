@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Plus, Trash2, Edit, Save } from "lucide-react";
+
 const defaultTeachers = [{
   id: "1",
   name: "Suso Martínez"
@@ -16,6 +17,7 @@ const emptySchedule = () => Object.fromEntries(defaultHours.map(hour => [hour, O
 }]))]));
 const CELL_WIDTH = 80;
 const CELL_HEIGHT = 48;
+
 const DocumentUploader = () => {
   const [teachers, setTeachers] = useState(defaultTeachers);
   const [selectedId, setSelectedId] = useState(defaultTeachers[0].id);
@@ -26,8 +28,8 @@ const DocumentUploader = () => {
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(defaultHours);
 
-  // Copia local do horario en modo edición
   const [editingSchedule, setEditingSchedule] = useState<any>({});
+
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedId(e.target.value);
   const handleAddTeacher = () => {
     const name = window.prompt("Nome do novo docente?");
@@ -88,14 +90,11 @@ const DocumentUploader = () => {
     }));
   };
 
-  // Cando se preme "Editar horario"
   const handleEdit = () => {
     setEditing(true);
-    // Cargamos o horario actual do docente na copia editable
     setEditingSchedule(JSON.parse(JSON.stringify(teacherSchedules[selectedId])));
   };
 
-  // Cando se preme "Gardar"
   const handleSave = () => {
     setTeacherSchedules(ts => ({
       ...ts,
@@ -116,7 +115,6 @@ const DocumentUploader = () => {
     }));
   };
 
-  // Horario a mostrar depende do modo edición
   const scheduleToShow = editing ? editingSchedule : teacherSchedules[selectedId];
   return <div className="rounded-lg bg-white p-8">
       <div className="flex items-center">
@@ -179,60 +177,111 @@ const DocumentUploader = () => {
               borderBottom: "1px dashed #0070C0",
               width: CELL_WIDTH,
               minWidth: CELL_WIDTH,
+              maxWidth: CELL_WIDTH,
               height: CELL_HEIGHT,
               minHeight: CELL_HEIGHT,
-              boxSizing: 'border-box'
+              maxHeight: CELL_HEIGHT,
+              boxSizing: 'border-box',
+              overflow: 'hidden'
             }} className="bg-[#E1F0FA] font-medium text-center align-middle">
                   {hour}
                 </td>
-                {defaultDays.map((day, j) => <td key={day} className="text-center align-middle" style={{
-              borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
-              borderBottom: "1px dashed #0070C0",
-              width: CELL_WIDTH,
-              minWidth: CELL_WIDTH,
-              height: CELL_HEIGHT,
-              minHeight: CELL_HEIGHT,
-              boxSizing: 'border-box',
-              padding: 4
-            }}>
-                    {editing ? <div className="flex flex-col gap-1 items-center justify-center">
-                          <input type="text" placeholder="Asignatura" value={scheduleToShow?.[hour]?.[day]?.subject || ""} style={{
-                  width: "62px"
-                }} onChange={e => handleCellChange(hour, day, "subject", e.target.value)} className="border border-gray-300 text-xs w-full rounded text-center px-0" />
-                          <input type="text" placeholder="Curso" value={scheduleToShow?.[hour]?.[day]?.group || ""} style={{
-                  width: "62px"
-                }} onChange={e => handleCellChange(hour, day, "group", e.target.value)} className="border border-gray-300 text-xs w-full rounded text-center px-0" />
-                        </div> : scheduleToShow?.[hour]?.[day]?.subject || scheduleToShow?.[hour]?.[day]?.group ? <span>
-                              <span className="font-semibold">{scheduleToShow[hour][day].subject}</span>
-                              {scheduleToShow[hour][day].group && <span className="block text-xs text-gray-500">{scheduleToShow[hour][day].group}</span>}
-                            </span> : <span className="text-gray-400 text-xs">—</span>}
+                {defaultDays.map((day, j) => <td key={day} className="text-center align-middle"
+                 style={{
+                  borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
+                  borderBottom: "1px dashed #0070C0",
+                  width: CELL_WIDTH,
+                  minWidth: CELL_WIDTH,
+                  maxWidth: CELL_WIDTH,
+                  height: CELL_HEIGHT,
+                  minHeight: CELL_HEIGHT,
+                  maxHeight: CELL_HEIGHT,
+                  boxSizing: 'border-box',
+                  padding: 4,
+                  overflow: "hidden"
+                }}>
+                    {editing ? <div className="flex flex-col gap-1 items-center justify-center w-full h-full"
+                      style={{height: CELL_HEIGHT, minHeight: CELL_HEIGHT, maxHeight: CELL_HEIGHT}}
+                    >
+                          <input
+                            type="text"
+                            placeholder="Asignatura"
+                            value={scheduleToShow?.[hour]?.[day]?.subject || ""}
+                            maxLength={16}
+                            style={{
+                              width: "66px",
+                              minWidth: "66px",
+                              maxWidth: "66px",
+                              height: "20px",
+                              minHeight: "20px",
+                              maxHeight: "20px",
+                              boxSizing: "border-box",
+                              overflow: "hidden",
+                              fontSize: "12px"
+                            }}
+                            onChange={e => handleCellChange(hour, day, "subject", e.target.value)}
+                            className="border border-gray-300 text-xs rounded text-center px-0"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Curso"
+                            value={scheduleToShow?.[hour]?.[day]?.group || ""}
+                            maxLength={10}
+                            style={{
+                              width: "66px",
+                              minWidth: "66px",
+                              maxWidth: "66px",
+                              height: "20px",
+                              minHeight: "20px",
+                              maxHeight: "20px",
+                              boxSizing: "border-box",
+                              overflow: "hidden",
+                              fontSize: "12px"
+                            }}
+                            onChange={e => handleCellChange(hour, day, "group", e.target.value)}
+                            className="border border-gray-300 text-xs rounded text-center px-0"
+                          />
+                        </div>
+                    : scheduleToShow?.[hour]?.[day]?.subject || scheduleToShow?.[hour]?.[day]?.group
+                      ? <span>
+                          <span className="font-semibold">{scheduleToShow[hour][day].subject}</span>
+                          {scheduleToShow[hour][day].group && <span className="block text-xs text-gray-500">{scheduleToShow[hour][day].group}</span>}
+                        </span>
+                      : <span className="text-gray-400 text-xs">—</span>}
                   </td>)}
               </tr>)}
             <tr>
               <td style={{
               width: CELL_WIDTH,
               minWidth: CELL_WIDTH,
+              maxWidth: CELL_WIDTH,
               height: CELL_HEIGHT,
               minHeight: CELL_HEIGHT,
+              maxHeight: CELL_HEIGHT,
               borderRight: "1px dashed #0070C0",
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
+              overflow: 'hidden'
             }} className="text-center align-middle">
                 <Button size="sm" variant="ghost" onClick={handleAddHour} title="Engadir franxa" className="rounded-full px-3" disabled={editing}>
                   <Plus className="w-5 h-5" />
                 </Button>
               </td>
               {defaultDays.map((day, j) => <td key={day} style={{
-              width: CELL_WIDTH,
-              minWidth: CELL_WIDTH,
-              height: CELL_HEIGHT,
-              minHeight: CELL_HEIGHT,
-              borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
-              boxSizing: 'border-box'
-            }} className="text-center align-middle" />)}
+                  width: CELL_WIDTH,
+                  minWidth: CELL_WIDTH,
+                  maxWidth: CELL_WIDTH,
+                  height: CELL_HEIGHT,
+                  minHeight: CELL_HEIGHT,
+                  maxHeight: CELL_HEIGHT,
+                  borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
+                  boxSizing: 'border-box',
+                  overflow: "hidden"
+                }} className="text-center align-middle" />)}
             </tr>
           </tbody>
         </table>
       </div>
     </div>;
 };
+
 export default DocumentUploader;
