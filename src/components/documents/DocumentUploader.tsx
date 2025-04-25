@@ -121,9 +121,18 @@ const DocumentUploader = () => {
         <table className="w-full border-separate border-spacing-0">
           <thead>
             <tr>
-              <th className="bg-white" style={{ width: 100 }}></th>
+              <th
+                className="bg-white"
+                style={{ width: 120, height: 56, minWidth: 120, minHeight: 56 }}
+              ></th>
               {defaultDays.map(day => (
-                <th key={day} className="pb-3 text-base font-medium text-gray-700 text-center">{day.charAt(0).toUpperCase() + day.slice(1)}</th>
+                <th
+                  key={day}
+                  className="pb-3 text-base font-medium text-gray-700 text-center"
+                  style={{ width: 120, height: 56, minWidth: 120, minHeight: 56 }}
+                >
+                  {day.charAt(0).toUpperCase() + day.slice(1)}
+                </th>
               ))}
             </tr>
           </thead>
@@ -136,6 +145,10 @@ const DocumentUploader = () => {
                   style={{
                     borderRight: "1px dashed #0070C0",
                     borderBottom: "1px dashed #0070C0",
+                    width: 120,
+                    height: 56,
+                    minWidth: 120,
+                    minHeight: 56
                   }}
                 >
                   {hour}
@@ -149,7 +162,10 @@ const DocumentUploader = () => {
                       borderBottom: "1px dashed #0070C0",
                       color: "#999",
                       fontSize: "1.15rem",
-                      height: 56
+                      width: 120,
+                      height: 56,
+                      minWidth: 120,
+                      minHeight: 56
                     }}
                   >
                     {/* Empty schedule visual */}
@@ -160,12 +176,29 @@ const DocumentUploader = () => {
             ))}
             {/* Última fila para + */}
             <tr>
-              <td>
+              <td
+                style={{
+                  width: 120,
+                  height: 56,
+                  minWidth: 120,
+                  minHeight: 56
+                }}
+              >
                 <Button size="sm" variant="ghost" onClick={handleAddHour} title="Engadir franxa" className="rounded-full px-3">
                   <Plus className="w-5 h-5" />
                 </Button>
               </td>
-              {defaultDays.map(day => <td key={day}></td>)}
+              {defaultDays.map(day => (
+                <td
+                  key={day}
+                  style={{
+                    width: 120,
+                    height: 56,
+                    minWidth: 120,
+                    minHeight: 56
+                  }}
+                ></td>
+              ))}
             </tr>
           </tbody>
         </table>
