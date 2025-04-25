@@ -27,10 +27,12 @@ const DocumentUploader = () => {
   });
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(defaultHours);
+  const [editingHours, setEditingHours] = useState<string[]>([]);
 
   const [editingSchedule, setEditingSchedule] = useState<any>({});
 
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedId(e.target.value);
+
   const handleAddTeacher = () => {
     const name = window.prompt("Nome do novo docente?");
     if (!name) return;
@@ -93,15 +95,51 @@ const DocumentUploader = () => {
   const handleEdit = () => {
     setEditing(true);
     setEditingSchedule(JSON.parse(JSON.stringify(teacherSchedules[selectedId])));
+    setEditingHours([...hours]);
   };
 
   const handleSave = () => {
+    const filteredHours = editingHours.map(h => h.trim()).filter(h => !!h);
+
+    const oldSchedule = editingSchedule;
+    const newSchedule: Record<string, any> = {};
+    filteredHours.forEach(hour => {
+      if (oldSchedule[hour]) {
+        newSchedule[hour] = oldSchedule[hour];
+      } else {
+        newSchedule[hour] = Object.fromEntries(defaultDays.map(day => [day, { subject: "", group: "" }]));
+      }
+    });
+
     setTeacherSchedules(ts => ({
       ...ts,
-      [selectedId]: editingSchedule
+      [selectedId]: newSchedule
     }));
+    setHours(filteredHours);
     setEditing(false);
   };
+
+  const handleHourChange = (idx: number, newHour: string) => {
+    setEditingHours(prev => {
+      const copy = [...prev];
+      copy[idx] = newHour;
+      return copy;
+    });
+    setEditingSchedule(prev => {
+      const copy = { ...prev };
+      const oldHour = hours[idx];
+      const newCopy: any = {};
+      Object.keys(copy).forEach((h, i) => {
+        if (i === idx) {
+          newCopy[newHour] = copy[h];
+        } else {
+          newCopy[h] = copy[h];
+        }
+      });
+      return newCopy;
+    });
+  };
+
   const handleCellChange = (hour: string, day: string, field: "subject" | "group", value: string) => {
     setEditingSchedule((prev: any) => ({
       ...prev,
@@ -116,6 +154,7 @@ const DocumentUploader = () => {
   };
 
   const scheduleToShow = editing ? editingSchedule : teacherSchedules[selectedId];
+  const hoursToShow = editing ? editingHours : hours;
   return <div className="rounded-lg bg-white p-8">
       <div className="flex items-center">
         <h2 className="text-2xl font-semibold text-black mb-6 flex-1">Horarios docentes</h2>
@@ -171,7 +210,7 @@ const DocumentUploader = () => {
             </tr>
           </thead>
           <tbody>
-            {hours.map((hour, i) => <tr key={hour}>
+            {hoursToShow.map((hour, i) => <tr key={hour}>
                 <td style={{
               borderRight: "1px dashed #0070C0",
               borderBottom: "1px dashed #0070C0",
@@ -184,8 +223,30 @@ const DocumentUploader = () => {
               boxSizing: 'border-box',
               overflow: 'hidden'
             }} className="bg-[#E1F0FA] font-medium text-center align-middle">
-                  {hour}
-                </td>
+                    {editing
+                    ? <input
+                        type="text"
+                        value={hour}
+                        maxLength={16}
+                        onChange={e => handleHourChange(i, e.target.value)}
+                        style={{
+                          width: "66px",
+                          minWidth: "66px",
+                          maxWidth: "66px",
+                          height: "28px",
+                          minHeight: "28px",
+                          maxHeight: "28px",
+                          boxSizing: "border-box",
+                          overflow: "hidden",
+                          fontSize: "14px",
+                          textAlign: "center",
+                          border: "1px solid #ccc",
+                          borderRadius: "6px"
+                        }}
+                        className="text-xs"
+                        />
+                    : hour}
+                  </td>
                 {defaultDays.map((day, j) => <td key={day} className="text-center align-middle"
                  style={{
                   borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
