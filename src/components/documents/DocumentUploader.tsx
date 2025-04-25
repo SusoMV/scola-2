@@ -129,23 +129,23 @@ const DocumentUploader = () => {
           </thead>
           <tbody>
             {hours.map((hour, i) => (
-              <tr key={hour} className="">
+              <tr key={hour}>
                 {/* Hora */}
                 <td
-                  className={`bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle`}
+                  className="bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle"
                   style={{
-                    borderTop: i === 0 ? "1px dashed #0070C0" : "1px dashed #0070C0",
-                    borderBottom: "1px dashed #0070C0"
+                    borderRight: "1px dashed #0070C0",
+                    borderBottom: "1px dashed #0070C0",
                   }}
                 >
                   {hour}
                 </td>
-                {defaultDays.map(day => (
+                {defaultDays.map((day, j) => (
                   <td
                     key={day}
                     className="text-center align-middle border-0"
                     style={{
-                      borderTop: i === 0 ? "1px dashed #0070C0" : "1px dashed #0070C0",
+                      borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
                       borderBottom: "1px dashed #0070C0",
                       color: "#999",
                       fontSize: "1.15rem",
