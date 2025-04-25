@@ -97,7 +97,7 @@ const DocumentUploader = () => {
       <h3 className="text-xl mb-6 text-black font-medium">Horarios docentes</h3>
       <div className="flex items-center justify-between mb-4">
         <FacultyDropdown teachers={teachers} selectedId={selectedId} onSelect={handleSelect} onAdd={handleAddTeacher} onDelete={handleDeleteTeacher} />
-        {!editing ? <Button variant="outline" onClick={() => setEditing(true)}>Editar horario</Button> : <Button variant="default" onClick={handleSave}>Gardar</Button>}
+        {!editing ? <Button variant="outline" onClick={() => setEditing(true)} className="bg-scola-primary text-white text-sm">Editar horario</Button> : <Button variant="default" onClick={handleSave}>Gardar</Button>}
       </div>
       <ScheduleGrid schedule={teacherSchedules[selectedId]} hours={hours} days={defaultDays} editing={editing} onSlotChange={handleSlotChange} onAddHour={handleAddHour} />
     </div>;
