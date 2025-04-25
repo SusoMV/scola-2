@@ -94,7 +94,7 @@ const DocumentUploader = () => {
           <Trash2 className="w-5 h-5 text-red-600" />
         </Button>
       </div>
-      <Button size="lg" className="bg-scola-primary text-white px-7 py-2 text-base font-semibold hover:bg-scola-primary-dark" onClick={() => setEditing(!editing)}>
+      <Button size="lg" onClick={() => setEditing(!editing)} className="bg-scola-primary text-white text-base font-semibold hover:bg-scola-primary-dark px-[18px] py-0">
         {editing ? "Gardar" : "Editar horario"}
       </Button>
     </div>
