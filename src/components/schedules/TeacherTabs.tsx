@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import {
   Tabs,
@@ -196,7 +195,6 @@ const TeacherTabs: React.FC = () => {
                       e.stopPropagation();
                       deleteTeacher(t.id);
                     }}
-                    title="Eliminar docente"
                   />}
               </TabsTrigger>
             ))}
