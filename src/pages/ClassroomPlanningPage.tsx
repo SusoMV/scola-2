@@ -18,7 +18,7 @@ const ClassroomPlanningPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader title="Documentos de planificación" category="classroom-planning" />
+        <DocumentUploader />
       </div>
     </DashboardLayout>
   );

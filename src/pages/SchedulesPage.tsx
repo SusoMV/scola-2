@@ -18,7 +18,7 @@ const SchedulesPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader title="Documentos de horarios" category="schedules" />
+        <DocumentUploader />
       </div>
     </DashboardLayout>
   );

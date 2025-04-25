@@ -18,7 +18,7 @@ const MeetingMinutesPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader title="Documentos de actas" category="meeting-minutes" />
+        <DocumentUploader />
       </div>
     </DashboardLayout>
   );

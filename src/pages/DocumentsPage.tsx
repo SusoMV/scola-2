@@ -18,7 +18,7 @@ const DocumentsPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader title="Documentos de gardas" category="gardas" />
+        <DocumentUploader />
       </div>
     </DashboardLayout>
   );
