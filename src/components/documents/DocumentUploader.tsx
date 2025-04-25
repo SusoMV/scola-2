@@ -115,7 +115,7 @@ const DocumentUploader = () => {
               height: 56,
               minWidth: 120,
               minHeight: 56
-            }} className="pb-3 text-base font-medium text-gray-700 text-center bg-scola-gray py-[5px] my-0 mx-0 px-0">
+            }} className="pb-3 text-base font-medium text-gray-700 text-center py-[5px] my-0 mx-0 px-0 bg-transparent">
                   {day.charAt(0).toUpperCase() + day.slice(1)}
                 </th>)}
             </tr>
@@ -123,14 +123,14 @@ const DocumentUploader = () => {
           <tbody>
             {hours.map((hour, i) => <tr key={hour}>
                 {/* Hora */}
-                <td className="bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle" style={{
+                <td style={{
               borderRight: "1px dashed #0070C0",
               borderBottom: "1px dashed #0070C0",
               width: 120,
               height: 56,
               minWidth: 120,
               minHeight: 56
-            }}>
+            }} className="bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle px-[29px] mx-0 my-0 py-0">
                   {hour}
                 </td>
                 {defaultDays.map((day, j) => <td key={day} className="text-center align-middle border-0" style={{
