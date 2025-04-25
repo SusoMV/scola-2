@@ -104,18 +104,20 @@ const DocumentUploader = () => {
         <table className="w-full border-separate border-spacing-0">
           <thead>
             <tr>
-              <th className="bg-white" style={{
+              <th className="pb-3 text-base font-medium text-gray-700 text-center py-[5px] my-0 mx-0 px-0 bg-transparent" style={{
               width: 120,
               height: 56,
               minWidth: 120,
               minHeight: 56
             }}></th>
-              {defaultDays.map(day => <th key={day} style={{
+              {defaultDays.map((day, idx) => <th key={day} className="pb-3 text-base font-medium text-gray-700 text-center py-[5px] my-0 mx-0 px-0 bg-transparent" style={{
               width: 120,
               height: 56,
               minWidth: 120,
-              minHeight: 56
-            }} className="pb-3 text-base font-medium text-gray-700 text-center py-[5px] my-0 mx-0 px-0 bg-transparent">
+              minHeight: 56,
+              borderRight: idx === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
+              borderBottom: "1px dashed #0070C0"
+            }}>
                   {day.charAt(0).toUpperCase() + day.slice(1)}
                 </th>)}
             </tr>
