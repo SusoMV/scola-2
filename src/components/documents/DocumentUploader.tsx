@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Plus, Trash2 } from "lucide-react";
-
-const defaultTeachers = [
-  { id: "1", name: "Suso Martínez" },
-  { id: "2", name: "Ana García" }
-];
+const defaultTeachers = [{
+  id: "1",
+  name: "Suso Martínez"
+}, {
+  id: "2",
+  name: "Ana García"
+}];
 const defaultHours = ["9:40", "10:30", "11:20", "12:10", "12:35", "13:00", "13:45"];
 const defaultDays = ["luns", "martes", "mércores", "xoves", "venres"];
-const emptySchedule = () => Object.fromEntries(defaultHours.map(hour => [hour, Object.fromEntries(defaultDays.map(day => [day, { subject: "", group: "" }]))]));
-
+const emptySchedule = () => Object.fromEntries(defaultHours.map(hour => [hour, Object.fromEntries(defaultDays.map(day => [day, {
+  subject: "",
+  group: ""
+}]))]));
 const DocumentUploader = () => {
   const [teachers, setTeachers] = useState(defaultTeachers);
   const [selectedId, setSelectedId] = useState(defaultTeachers[0].id);
@@ -19,21 +23,21 @@ const DocumentUploader = () => {
   });
   const [editing, setEditing] = useState(false);
   const [hours, setHours] = useState(defaultHours);
-
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => setSelectedId(e.target.value);
-
   const handleAddTeacher = () => {
     const name = window.prompt("Nome do novo docente?");
     if (!name) return;
     const id = crypto.randomUUID();
-    setTeachers(t => [...t, { id, name }]);
+    setTeachers(t => [...t, {
+      id,
+      name
+    }]);
     setTeacherSchedules(ts => ({
       ...ts,
       [id]: emptySchedule()
     }));
     setSelectedId(id);
   };
-
   const handleDeleteTeacher = () => {
     if (teachers.length <= 1) {
       window.alert("Debe haber polo menos un docente.");
@@ -49,12 +53,13 @@ const DocumentUploader = () => {
       return "";
     });
     setTeacherSchedules(ts => {
-      const copy = { ...ts };
+      const copy = {
+        ...ts
+      };
       delete copy[selectedId];
       return copy;
     });
   };
-
   const handleAddHour = () => {
     const time = window.prompt("Nova hora?", "");
     if (!time || hours.includes(time)) return;
@@ -63,13 +68,14 @@ const DocumentUploader = () => {
       ...ts,
       [selectedId]: {
         ...ts[selectedId],
-        [time]: Object.fromEntries(defaultDays.map(day => [day, { subject: "", group: "" }]))
+        [time]: Object.fromEntries(defaultDays.map(day => [day, {
+          subject: "",
+          group: ""
+        }]))
       }
     }));
   };
-
-  return (
-    <div className="rounded-lg bg-white p-8">
+  return <div className="rounded-lg bg-white p-8">
       {/* Título */}
       <div className="flex items-center">
         <h2 className="text-2xl font-semibold text-black mb-6 flex-1">Horarios docentes</h2>
@@ -78,40 +84,17 @@ const DocumentUploader = () => {
       {/* Barra superior: Dropdown, +, Papelera, Editar */}
       <div className="flex items-center mb-8 gap-3 justify-between">
         <div className="flex items-center gap-2">
-          <select
-            className="border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-scola-primary bg-white min-w-[180px]"
-            value={selectedId}
-            onChange={handleSelect}
-          >
-            {teachers.map(t => (
-              <option key={t.id} value={t.id}>{t.name}</option>
-            ))}
+          <select className="border border-gray-300 rounded-md px-4 py-2 text-base focus:outline-none focus:ring-2 focus:ring-scola-primary bg-white min-w-[180px]" value={selectedId} onChange={handleSelect}>
+            {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-scola-primary text-scola-primary"
-            onClick={handleAddTeacher}
-            title="Engadir docente"
-          >
+          <Button size="sm" variant="outline" className="border-scola-primary text-scola-primary" onClick={handleAddTeacher} title="Engadir docente">
             <Plus className="w-5 h-5" />
           </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="border-transparent"
-            onClick={handleDeleteTeacher}
-            title="Eliminar docente"
-            disabled={teachers.length <= 1}
-          >
+          <Button size="sm" variant="outline" className="border-transparent" onClick={handleDeleteTeacher} title="Eliminar docente" disabled={teachers.length <= 1}>
             <Trash2 className="w-5 h-5 text-red-600" />
           </Button>
         </div>
-        <Button
-          size="lg"
-          className="bg-scola-primary text-white px-7 py-2 text-base font-semibold hover:bg-scola-primary-dark"
-          onClick={() => setEditing(!editing)}
-        >
+        <Button size="lg" className="bg-scola-primary text-white px-7 py-2 text-base font-semibold hover:bg-scola-primary-dark" onClick={() => setEditing(!editing)}>
           {editing ? "Gardar" : "Editar horario"}
         </Button>
       </div>
@@ -121,90 +104,71 @@ const DocumentUploader = () => {
         <table className="w-full border-separate border-spacing-0">
           <thead>
             <tr>
-              <th
-                className="bg-white"
-                style={{ width: 120, height: 56, minWidth: 120, minHeight: 56 }}
-              ></th>
-              {defaultDays.map(day => (
-                <th
-                  key={day}
-                  className="pb-3 text-base font-medium text-gray-700 text-center"
-                  style={{ width: 120, height: 56, minWidth: 120, minHeight: 56 }}
-                >
+              <th className="bg-white" style={{
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }}></th>
+              {defaultDays.map(day => <th key={day} style={{
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }} className="pb-3 text-base font-medium text-gray-700 text-center bg-scola-gray py-[5px] my-0 mx-0 px-0">
                   {day.charAt(0).toUpperCase() + day.slice(1)}
-                </th>
-              ))}
+                </th>)}
             </tr>
           </thead>
           <tbody>
-            {hours.map((hour, i) => (
-              <tr key={hour}>
+            {hours.map((hour, i) => <tr key={hour}>
                 {/* Hora */}
-                <td
-                  className="bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle"
-                  style={{
-                    borderRight: "1px dashed #0070C0",
-                    borderBottom: "1px dashed #0070C0",
-                    width: 120,
-                    height: 56,
-                    minWidth: 120,
-                    minHeight: 56
-                  }}
-                >
+                <td className="bg-[#E1F0FA] font-medium pl-6 text-base border-0 align-middle" style={{
+              borderRight: "1px dashed #0070C0",
+              borderBottom: "1px dashed #0070C0",
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }}>
                   {hour}
                 </td>
-                {defaultDays.map((day, j) => (
-                  <td
-                    key={day}
-                    className="text-center align-middle border-0"
-                    style={{
-                      borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
-                      borderBottom: "1px dashed #0070C0",
-                      color: "#999",
-                      fontSize: "1.15rem",
-                      width: 120,
-                      height: 56,
-                      minWidth: 120,
-                      minHeight: 56
-                    }}
-                  >
+                {defaultDays.map((day, j) => <td key={day} className="text-center align-middle border-0" style={{
+              borderRight: j === defaultDays.length - 1 ? undefined : "1px dashed #0070C0",
+              borderBottom: "1px dashed #0070C0",
+              color: "#999",
+              fontSize: "1.15rem",
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }}>
                     {/* Empty schedule visual */}
                     <span className="text-gray-400">—</span>
-                  </td>
-                ))}
-              </tr>
-            ))}
+                  </td>)}
+              </tr>)}
             {/* Última fila para + */}
             <tr>
-              <td
-                style={{
-                  width: 120,
-                  height: 56,
-                  minWidth: 120,
-                  minHeight: 56
-                }}
-              >
+              <td style={{
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }}>
                 <Button size="sm" variant="ghost" onClick={handleAddHour} title="Engadir franxa" className="rounded-full px-3">
                   <Plus className="w-5 h-5" />
                 </Button>
               </td>
-              {defaultDays.map(day => (
-                <td
-                  key={day}
-                  style={{
-                    width: 120,
-                    height: 56,
-                    minWidth: 120,
-                    minHeight: 56
-                  }}
-                ></td>
-              ))}
+              {defaultDays.map(day => <td key={day} style={{
+              width: 120,
+              height: 56,
+              minWidth: 120,
+              minHeight: 56
+            }}></td>)}
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default DocumentUploader;
