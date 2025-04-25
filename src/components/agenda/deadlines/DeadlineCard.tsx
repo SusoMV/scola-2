@@ -25,12 +25,12 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
   };
 
   return (
-    <div className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200">
+    <div className="h-56 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200">
       <div className="text-scola-primary mb-2">
         <Paperclip className="w-6 h-6" />
       </div>
       <div className="flex flex-col items-center">
-        <span className="text-xs text-center text-gray-700 line-clamp-2 mb-1">{deadline.title}</span>
+        <span className="text-base font-medium text-center text-gray-700 line-clamp-2 mb-1">{deadline.title}</span>
         <div className="text-xs text-gray-400">
           {format(new Date(deadline.startDate), 'dd/MM/yyyy')} - {format(new Date(deadline.endDate), 'dd/MM/yyyy')}
         </div>
