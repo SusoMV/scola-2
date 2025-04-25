@@ -20,7 +20,7 @@ export const DeadlineCard: React.FC<DeadlineCardProps> = ({
       onAddDocument(deadline.id, file);
     }
   };
-  return <div className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:border-solid transition-all duration-200 bg-white">
+  return <div className="h-28 flex flex-col items-center justify-center p-2 border border-dashed border-scola-primary rounded-md hover:border-solid transition-all duration-200 bg-scola-gray">
       <div className="text-scola-primary mb-2">
         <Paperclip className="w-6 h-6" />
       </div>
