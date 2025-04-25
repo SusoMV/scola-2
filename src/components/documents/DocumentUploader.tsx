@@ -123,7 +123,7 @@ const DocumentUploader = () => {
 
       <div className="flex items-center mb-8 gap-3 justify-between my-0 py-[2px]">
         <div className="flex items-center gap-2">
-          <select value={selectedId} onChange={handleSelect} className="border border-gray-300 rounded-md py-2 text-base focus:outline-none focus:ring-2 focus:ring-scola-primary bg-white min-w-[180px] px-[8px] mx-0" disabled={editing}>
+          <select value={selectedId} onChange={handleSelect} className="border border-gray-300 rounded-md py-2 text-base focus:outline-none focus:ring-2 focus:ring-scola-primary bg-white min-w-[180px] px-[8px] mx-0">
             {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
           </select>
           <Button size="sm" variant="outline" className="border-scola-primary text-scola-primary" onClick={handleAddTeacher} title="Engadir docente" disabled={editing}>
