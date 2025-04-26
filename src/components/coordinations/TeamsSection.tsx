@@ -21,7 +21,7 @@ export const TeamsSection = () => {
       <div className="flex justify-end">
         <Button 
           onClick={() => setIsCreateDialogOpen(true)}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 bg-[#0070C0] hover:bg-[#005795] text-white"
         >
           <Plus className="h-4 w-4" />
           Crear novo equipo
