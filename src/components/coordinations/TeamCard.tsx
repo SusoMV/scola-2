@@ -27,7 +27,7 @@ export const TeamCard = ({ team, onDelete, onEdit }: TeamCardProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
 
   return (
-    <Card className="bg-white hover:bg-gray-50 transition-colors duration-200 border border-gray-200 shadow-sm">
+    <Card className="h-full border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-xl font-semibold text-scola-primary">{team.name}</CardTitle>
         <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export const TeamCard = ({ team, onDelete, onEdit }: TeamCardProps) => {
           <div className="text-sm text-gray-600 font-medium mt-4">Membros:</div>
           <ul className="list-disc list-inside space-y-1">
             {team.members.map((member, index) => (
-              <li key={index} className="text-gray-600 text-sm">
+              <li key={index} className="text-xs text-gray-600">
                 {member}
               </li>
             ))}
