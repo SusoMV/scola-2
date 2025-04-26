@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
@@ -7,7 +6,7 @@ import { ScheduleData } from "./TeacherSchedule";
 interface ScheduleTableProps {
   days: string[];
   hours: string[];
-  schedule: ScheduleData;
+  schedule: ScheduleData | undefined;
   editing: boolean;
   onHourChange: (idx: number, newHour: string) => void;
   onCellChange: (hour: string, day: string, field: "subject" | "group", value: string) => void;
@@ -20,7 +19,7 @@ const CELL_HEIGHT = 40;
 const ScheduleTable: React.FC<ScheduleTableProps> = ({
   days,
   hours,
-  schedule,
+  schedule = {},
   editing,
   onHourChange,
   onCellChange,

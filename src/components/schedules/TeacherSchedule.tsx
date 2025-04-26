@@ -47,6 +47,7 @@ const TeacherSchedule: React.FC<TeacherScheduleProps> = ({
   const {
     teachers,
     selectedId,
+    teacherSchedules,
     editing,
     hours,
     editingHours,
@@ -65,7 +66,11 @@ const TeacherSchedule: React.FC<TeacherScheduleProps> = ({
     defaultDays: initialDays
   });
 
-  const scheduleToShow = editing ? editingSchedule : undefined;
+  // Get the current schedule based on selectedId when not editing
+  const currentSchedule = teacherSchedules[selectedId];
+  
+  // Use the editing schedule when editing, otherwise use the current schedule
+  const scheduleToShow = editing ? editingSchedule : currentSchedule;
   const hoursToShow = editing ? editingHours : hours;
 
   return (
@@ -116,4 +121,3 @@ const TeacherSchedule: React.FC<TeacherScheduleProps> = ({
 };
 
 export default TeacherSchedule;
-
