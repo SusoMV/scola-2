@@ -27,21 +27,22 @@ export const TeamCard = ({ team, onDelete, onEdit }: TeamCardProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
 
   return (
-    <Card>
+    <Card className="bg-white hover:bg-gray-50 transition-colors duration-200 border border-gray-200 shadow-sm">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-xl font-semibold">{team.name}</CardTitle>
+        <CardTitle className="text-xl font-semibold text-scola-primary">{team.name}</CardTitle>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsEditDialogOpen(true)}
+            className="hover:bg-scola-pastel"
           >
             <Pencil className="h-4 w-4" />
           </Button>
           {!team.isDefault && (
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hover:bg-scola-pastel">
                   <Trash2 className="h-4 w-4 text-destructive" />
                 </Button>
               </AlertDialogTrigger>
@@ -65,12 +66,12 @@ export const TeamCard = ({ team, onDelete, onEdit }: TeamCardProps) => {
       </CardHeader>
       <CardContent>
         <div className="space-y-2">
-          <div className="font-semibold">Coordinador:</div>
+          <div className="text-sm text-gray-600 font-medium">Coordinador:</div>
           <div className="font-bold text-scola-primary">{team.coordinator}</div>
-          <div className="font-semibold mt-4">Membros:</div>
+          <div className="text-sm text-gray-600 font-medium mt-4">Membros:</div>
           <ul className="list-disc list-inside space-y-1">
             {team.members.map((member, index) => (
-              <li key={index} className="text-gray-600">
+              <li key={index} className="text-gray-600 text-sm">
                 {member}
               </li>
             ))}
