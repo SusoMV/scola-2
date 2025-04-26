@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Table,
@@ -31,7 +32,7 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
 
   if (upcomingAbsences.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-gray-500 bg-white rounded-lg shadow-sm p-4">
         Non hai ausencias programadas
       </div>
     );
