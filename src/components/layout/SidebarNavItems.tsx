@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
@@ -47,11 +46,6 @@ export const navItems = [
     name: 'Titorías', 
     path: '/tutoring', 
     icon: <GraduationCap className="h-5 w-5" /> 
-  },
-  { 
-    name: 'Coordinacións', 
-    path: '/teaching-teams', 
-    icon: <Users className="h-5 w-5" /> 
   },
 ];
 
