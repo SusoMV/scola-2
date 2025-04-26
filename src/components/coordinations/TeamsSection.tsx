@@ -17,7 +17,7 @@ export const TeamsSection = () => {
   } = useTeams();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white p-6 rounded-lg shadow-sm">
       <div className="flex justify-end">
         <Button 
           onClick={() => setIsCreateDialogOpen(true)}
