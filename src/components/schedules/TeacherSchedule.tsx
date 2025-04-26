@@ -71,7 +71,7 @@ const TeacherSchedule: React.FC<TeacherScheduleProps> = ({
         <h2 className="font-semibold text-black mb-6 flex-1 text-lg">Horarios docentes</h2>
       </div>
 
-      <div className="flex items-center mb-8 gap-3 justify-between my-0 py-[2px]">
+      <div className="flex items-center mb-8 gap-3 justify-between my-0 py-0">
         <TeacherControls teachers={teachers} selectedId={selectedId} onSelect={handleSelect} onAdd={handleAddTeacher} onDelete={handleDeleteTeacher} disabled={editing} />
         <Button size="lg" onClick={editing ? handleSave : handleEdit} className="bg-scola-primary text-white text-base font-semibold hover:bg-scola-primary-dark px-[18px] py-0 flex items-center gap-2">
           {editing ? <>
