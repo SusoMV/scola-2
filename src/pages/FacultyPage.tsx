@@ -17,10 +17,14 @@ const FacultyPage = () => {
     setOpenAddDialog,
     openConfirmDeleteDialog,
     setOpenConfirmDeleteDialog,
-    selectedMember,
-    setSelectedMember,
     openNewMessageDialog,
     setOpenNewMessageDialog,
+    openScheduleDialog,
+    setOpenScheduleDialog,
+    openCoordinationsDialog,
+    setOpenCoordinationsDialog,
+    selectedMember,
+    setSelectedMember,
     handleAddMember,
     handleDeleteMember,
     handleSendMessage
@@ -50,11 +54,19 @@ const FacultyPage = () => {
               setSelectedMember(member);
               setOpenNewMessageDialog(true);
             }
-          }} 
+          }}
           onDeleteClick={(member) => {
             setSelectedMember(member);
             setOpenConfirmDeleteDialog(true);
-          }} 
+          }}
+          onScheduleClick={(member) => {
+            setSelectedMember(member);
+            setOpenScheduleDialog(true);
+          }}
+          onCoordinationsClick={(member) => {
+            setSelectedMember(member);
+            setOpenCoordinationsDialog(true);
+          }}
         />
       </Card>
 
@@ -65,6 +77,10 @@ const FacultyPage = () => {
         setOpenConfirmDeleteDialog={setOpenConfirmDeleteDialog}
         openNewMessageDialog={openNewMessageDialog}
         setOpenNewMessageDialog={setOpenNewMessageDialog}
+        openScheduleDialog={openScheduleDialog}
+        setOpenScheduleDialog={setOpenScheduleDialog}
+        openCoordinationsDialog={openCoordinationsDialog}
+        setOpenCoordinationsDialog={setOpenCoordinationsDialog}
         selectedMember={selectedMember}
         facultyMembers={facultyMembers}
         onAddMember={handleAddMember}

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { FacultyMember } from './useFacultyMembers';
 import { supabase } from '@/integrations/supabase/client';
@@ -16,8 +15,10 @@ export function useFacultyActions(facultyMembers: FacultyMember[], setFacultyMem
   const { user } = useAuth();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openConfirmDeleteDialog, setOpenConfirmDeleteDialog] = useState(false);
-  const [selectedMember, setSelectedMember] = useState<FacultyMember | null>(null);
   const [openNewMessageDialog, setOpenNewMessageDialog] = useState(false);
+  const [openScheduleDialog, setOpenScheduleDialog] = useState(false);
+  const [openCoordinationsDialog, setOpenCoordinationsDialog] = useState(false);
+  const [selectedMember, setSelectedMember] = useState<FacultyMember | null>(null);
 
   const handleAddMember = async (data: FacultyFormData) => {
     try {
@@ -112,10 +113,14 @@ export function useFacultyActions(facultyMembers: FacultyMember[], setFacultyMem
     setOpenAddDialog,
     openConfirmDeleteDialog,
     setOpenConfirmDeleteDialog,
-    selectedMember,
-    setSelectedMember,
     openNewMessageDialog,
     setOpenNewMessageDialog,
+    openScheduleDialog,
+    setOpenScheduleDialog,
+    openCoordinationsDialog,
+    setOpenCoordinationsDialog,
+    selectedMember,
+    setSelectedMember,
     handleAddMember,
     handleDeleteMember,
     handleSendMessage

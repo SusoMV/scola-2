@@ -1,8 +1,9 @@
 import React from 'react';
-import { Search, MessageSquare, Trash2, Users } from 'lucide-react';
+import { Search, MessageSquare, Trash2, Users, Clock, Cog } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+
 interface FacultyMember {
   id: string;
   name: string;
@@ -10,6 +11,7 @@ interface FacultyMember {
   specialty: string;
   email: string;
 }
+
 interface FacultyListProps {
   facultyMembers: FacultyMember[];
   searchQuery: string;
@@ -18,7 +20,10 @@ interface FacultyListProps {
   isDirector: boolean;
   onMessageClick: (member: FacultyMember) => void;
   onDeleteClick: (member: FacultyMember) => void;
+  onScheduleClick: (member: FacultyMember) => void;
+  onCoordinationsClick: (member: FacultyMember) => void;
 }
+
 const FacultyList = ({
   facultyMembers,
   searchQuery,
@@ -26,10 +31,12 @@ const FacultyList = ({
   isLoading,
   isDirector,
   onMessageClick,
-  onDeleteClick
+  onDeleteClick,
+  onScheduleClick,
+  onCoordinationsClick
 }: FacultyListProps) => {
-  // Filter faculty members based on search query
   const filteredMembers = facultyMembers.filter(member => member.name.toLowerCase().includes(searchQuery.toLowerCase()) || member.specialty.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return <>
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-4">
         <div className="flex items-center gap-2 text-lg font-medium">
@@ -78,15 +85,47 @@ const FacultyList = ({
                   <TableCell>{member.specialty}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-blue-600" onClick={() => onMessageClick(member)}>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="h-8 w-8 p-0 text-blue-600"
+                        onClick={() => onMessageClick(member)}
+                      >
                         <MessageSquare className="h-4 w-4" />
                         <span className="sr-only">Enviar mensaxe</span>
                       </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-blue-600"
+                        onClick={() => onScheduleClick(member)}
+                      >
+                        <Clock className="h-4 w-4" />
+                        <span className="sr-only">Ver horario</span>
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-blue-600"
+                        onClick={() => onCoordinationsClick(member)}
+                      >
+                        <Cog className="h-4 w-4" />
+                        <span className="sr-only">Xestionar coordinacións</span>
+                      </Button>
                       
-                      {isDirector && <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-600" onClick={() => onDeleteClick(member)}>
+                      {isDirector && (
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-8 w-8 p-0 text-red-600"
+                          onClick={() => onDeleteClick(member)}
+                        >
                           <Trash2 className="h-4 w-4" />
                           <span className="sr-only">Eliminar</span>
-                        </Button>}
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>) : <TableRow>
@@ -99,4 +138,5 @@ const FacultyList = ({
       </div>
     </>;
 };
+
 export default FacultyList;

@@ -4,6 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import AddFacultyForm from './AddFacultyForm';
 import DeleteConfirmation from './DeleteConfirmation';
 import NewMessageDialog from '@/components/messages/NewMessageDialog';
+import TeacherScheduleDialog from './TeacherScheduleDialog';
+import TeacherCoordinationsDialog from './TeacherCoordinationsDialog';
 import { FacultyMember } from '@/hooks/useFacultyMembers';
 import { FacultyFormData } from '@/hooks/useFacultyActions';
 
@@ -14,6 +16,10 @@ interface FacultyDialogsProps {
   setOpenConfirmDeleteDialog: (open: boolean) => void;
   openNewMessageDialog: boolean;
   setOpenNewMessageDialog: (open: boolean) => void;
+  openScheduleDialog: boolean;
+  setOpenScheduleDialog: (open: boolean) => void;
+  openCoordinationsDialog: boolean;
+  setOpenCoordinationsDialog: (open: boolean) => void;
   selectedMember: FacultyMember | null;
   facultyMembers: FacultyMember[];
   onAddMember: (data: FacultyFormData) => void;
@@ -28,6 +34,10 @@ const FacultyDialogs: React.FC<FacultyDialogsProps> = ({
   setOpenConfirmDeleteDialog,
   openNewMessageDialog,
   setOpenNewMessageDialog,
+  openScheduleDialog,
+  setOpenScheduleDialog,
+  openCoordinationsDialog,
+  setOpenCoordinationsDialog,
   selectedMember,
   facultyMembers,
   onAddMember,
@@ -68,6 +78,18 @@ const FacultyDialogs: React.FC<FacultyDialogsProps> = ({
         }))} 
         onSubmit={onSendMessage}
         initialRecipient={selectedMember ? selectedMember.id : undefined}
+      />
+
+      <TeacherScheduleDialog
+        open={openScheduleDialog}
+        onOpenChange={setOpenScheduleDialog}
+        teacher={selectedMember}
+      />
+
+      <TeacherCoordinationsDialog
+        open={openCoordinationsDialog}
+        onOpenChange={setOpenCoordinationsDialog}
+        teacher={selectedMember}
       />
     </>
   );
