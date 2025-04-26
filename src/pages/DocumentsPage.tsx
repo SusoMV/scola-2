@@ -2,7 +2,7 @@
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Shield } from 'lucide-react';
-import DocumentUploader from '@/components/documents/DocumentUploader';
+import TeacherSchedule from '@/components/schedules/TeacherSchedule';
 
 const DocumentsPage = () => {
   return (
@@ -18,7 +18,7 @@ const DocumentsPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader />
+        <TeacherSchedule />
       </div>
     </DashboardLayout>
   );
