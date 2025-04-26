@@ -15,8 +15,8 @@ const emptySchedule = () => Object.fromEntries(defaultHours.map(hour => [hour, O
   subject: "",
   group: ""
 }]))]));
-const CELL_WIDTH = 80;
-const CELL_HEIGHT = 48;
+const CELL_WIDTH = 60;
+const CELL_HEIGHT = 40;
 
 const DocumentUploader = () => {
   const [teachers, setTeachers] = useState(defaultTeachers);
@@ -187,7 +187,7 @@ const DocumentUploader = () => {
         <table className="w-full border-separate border-spacing-0">
           <thead>
             <tr>
-              <th className="text-center align-middle pb-3 text-base font-medium text-gray-700 bg-transparent" style={{
+              <th className="text-center align-middle pb-3 text-sm font-medium text-gray-700 bg-transparent" style={{
               width: CELL_WIDTH,
               minWidth: CELL_WIDTH,
               height: CELL_HEIGHT,
@@ -196,7 +196,7 @@ const DocumentUploader = () => {
               borderBottom: `1px dashed #0070C0`,
               boxSizing: 'border-box'
             }}></th>
-              {defaultDays.map((day, idx) => <th key={day} className="text-center align-middle pb-3 text-base font-medium text-gray-700 bg-transparent" style={{
+              {defaultDays.map((day, idx) => <th key={day} className="text-center align-middle pb-3 text-sm font-medium text-gray-700 bg-transparent" style={{
               width: CELL_WIDTH,
               minWidth: CELL_WIDTH,
               height: CELL_HEIGHT,
@@ -222,7 +222,7 @@ const DocumentUploader = () => {
               maxHeight: CELL_HEIGHT,
               boxSizing: 'border-box',
               overflow: 'hidden'
-            }} className="bg-[#E1F0FA] font-medium text-center align-middle">
+            }} className="bg-[#E1F0FA] font-medium text-center align-middle text-xs">
                     {editing
                     ? <input
                         type="text"
@@ -230,15 +230,15 @@ const DocumentUploader = () => {
                         maxLength={16}
                         onChange={e => handleHourChange(i, e.target.value)}
                         style={{
-                          width: "66px",
-                          minWidth: "66px",
-                          maxWidth: "66px",
-                          height: "28px",
-                          minHeight: "28px",
-                          maxHeight: "28px",
+                          width: "50px",
+                          minWidth: "50px",
+                          maxWidth: "50px",
+                          height: "24px",
+                          minHeight: "24px",
+                          maxHeight: "24px",
                           boxSizing: "border-box",
                           overflow: "hidden",
-                          fontSize: "14px",
+                          fontSize: "12px",
                           textAlign: "center",
                           border: "1px solid #ccc",
                           borderRadius: "6px"
@@ -270,15 +270,15 @@ const DocumentUploader = () => {
                             value={scheduleToShow?.[hour]?.[day]?.subject || ""}
                             maxLength={16}
                             style={{
-                              width: "66px",
-                              minWidth: "66px",
-                              maxWidth: "66px",
+                              width: "50px",
+                              minWidth: "50px",
+                              maxWidth: "50px",
                               height: "20px",
                               minHeight: "20px",
                               maxHeight: "20px",
                               boxSizing: "border-box",
                               overflow: "hidden",
-                              fontSize: "12px"
+                              fontSize: "10px"
                             }}
                             onChange={e => handleCellChange(hour, day, "subject", e.target.value)}
                             className="border border-gray-300 text-xs rounded text-center px-0"
@@ -289,15 +289,15 @@ const DocumentUploader = () => {
                             value={scheduleToShow?.[hour]?.[day]?.group || ""}
                             maxLength={10}
                             style={{
-                              width: "66px",
-                              minWidth: "66px",
-                              maxWidth: "66px",
+                              width: "50px",
+                              minWidth: "50px",
+                              maxWidth: "50px",
                               height: "20px",
                               minHeight: "20px",
                               maxHeight: "20px",
                               boxSizing: "border-box",
                               overflow: "hidden",
-                              fontSize: "12px"
+                              fontSize: "10px"
                             }}
                             onChange={e => handleCellChange(hour, day, "group", e.target.value)}
                             className="border border-gray-300 text-xs rounded text-center px-0"
@@ -305,10 +305,10 @@ const DocumentUploader = () => {
                         </div>
                     : scheduleToShow?.[hour]?.[day]?.subject || scheduleToShow?.[hour]?.[day]?.group
                       ? <span>
-                          <span className="font-semibold">{scheduleToShow[hour][day].subject}</span>
-                          {scheduleToShow[hour][day].group && <span className="block text-xs text-gray-500">{scheduleToShow[hour][day].group}</span>}
+                          <span className="font-semibold text-xs">{scheduleToShow[hour][day].subject}</span>
+                          {scheduleToShow[hour][day].group && <span className="block text-[10px] text-gray-500">{scheduleToShow[hour][day].group}</span>}
                         </span>
-                      : <span className="text-gray-400 text-xs">—</span>}
+                      : <span className="text-gray-400 text-[10px]">—</span>}
                   </td>)}
               </tr>)}
             <tr>
