@@ -90,7 +90,11 @@ const LoginForm = () => {
               </Link>
             </div>
             
-            <Button type="submit" className="w-full bg-[#0070C0] hover:bg-[#0070C0]/90 h-12 text-lg" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              className="w-full bg-[#0070C0] h-12 text-lg" 
+              disabled={isLoading}
+            >
               {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </Button>
           </form>
