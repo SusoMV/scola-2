@@ -16,19 +16,19 @@ interface EditTeamDialogProps {
 }
 
 export const EditTeamDialog = ({ open, onOpenChange, team, onSubmit }: EditTeamDialogProps) => {
-  const form = useForm<Omit<Team, 'id'>>({
+  const form = useForm<Omit<Team, 'id'> & { membersText: string }>({
     defaultValues: {
       name: team.name,
       coordinator: team.coordinator,
-      members: team.members.join('\n'),
+      membersText: team.members.join('\n'),
     },
   });
 
-  const handleSubmit = (data: Omit<Team, 'id'>) => {
+  const handleSubmit = (data: Omit<Team, 'id'> & { membersText: string }) => {
     onSubmit({
       name: data.name,
       coordinator: data.coordinator,
-      members: data.members.split('\n').filter(Boolean),
+      members: data.membersText ? data.membersText.split('\n').filter(Boolean) : [],
     });
     onOpenChange(false);
   };
@@ -67,7 +67,7 @@ export const EditTeamDialog = ({ open, onOpenChange, team, onSubmit }: EditTeamD
             />
             <FormField
               control={form.control}
-              name="members"
+              name="membersText"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Membros (un por liña)</FormLabel>

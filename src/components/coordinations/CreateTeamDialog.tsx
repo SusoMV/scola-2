@@ -15,13 +15,13 @@ interface CreateTeamDialogProps {
 }
 
 export const CreateTeamDialog = ({ open, onOpenChange, onSubmit }: CreateTeamDialogProps) => {
-  const form = useForm<Omit<Team, 'id'>>();
+  const form = useForm<Omit<Team, 'id'> & { membersText: string }>();
 
-  const handleSubmit = (data: Omit<Team, 'id'>) => {
+  const handleSubmit = (data: Omit<Team, 'id'> & { membersText: string }) => {
     onSubmit({
       name: data.name,
       coordinator: data.coordinator,
-      members: data.members.split('\n').filter(Boolean),
+      members: data.membersText ? data.membersText.split('\n').filter(Boolean) : [],
     });
     form.reset();
   };
@@ -60,7 +60,7 @@ export const CreateTeamDialog = ({ open, onOpenChange, onSubmit }: CreateTeamDia
             />
             <FormField
               control={form.control}
-              name="members"
+              name="membersText"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Membros (un por liña)</FormLabel>
