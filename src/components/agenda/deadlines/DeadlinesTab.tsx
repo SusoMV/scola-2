@@ -23,7 +23,7 @@ export const DeadlinesTab: React.FC = () => {
   const closedDeadlines = getClosedDeadlines();
   return <div className="space-y-6 bg-white p-6 rounded-lg"> {/* Added white background and padding */}
       <div className="flex justify-between items-center">
-        <h2 className="font-bold text-xl text-left">Prazos</h2>
+        <h2 className="text-left font-medium text-xl">Prazos</h2>
         <Button className="bg-[#0070C0] hover:bg-[#0070C0]/90" onClick={() => setIsDialogOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Crear prazo
