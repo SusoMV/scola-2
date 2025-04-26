@@ -68,7 +68,7 @@ const TeacherSchedule: React.FC<TeacherScheduleProps> = ({
   const hoursToShow = editing ? editingHours : hours;
   return <div className="rounded-lg bg-white p-8">
       <div className="flex items-center">
-        <h2 className="font-semibold text-black mb-6 flex-1 text-xl">Horarios docentes</h2>
+        <h2 className="font-semibold text-black mb-6 flex-1 text-lg">Horarios docentes</h2>
       </div>
 
       <div className="flex items-center mb-8 gap-3 justify-between my-0 py-[2px]">
