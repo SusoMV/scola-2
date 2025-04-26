@@ -24,11 +24,11 @@ const TeacherControls: React.FC<TeacherControlsProps> = ({
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onSelect(e.target.value);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1">
       <select 
         value={selectedId} 
         onChange={handleSelect} 
-        className="border border-gray-300 rounded-md py-2 text-base focus:outline-none focus:ring-2 focus:ring-scola-primary bg-white min-w-[180px] px-[8px] mx-0"
+        className="border border-gray-300 rounded-md py-1 text-sm focus:outline-none focus:ring-1 focus:ring-scola-primary bg-white min-w-[140px] px-2 mx-0"
         disabled={disabled}
       >
         {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -36,22 +36,22 @@ const TeacherControls: React.FC<TeacherControlsProps> = ({
       <Button 
         size="sm" 
         variant="outline" 
-        className="border-scola-primary text-scola-primary" 
+        className="border-scola-primary text-scola-primary p-1" 
         onClick={onAdd} 
         title="Engadir docente" 
         disabled={disabled}
       >
-        <Plus className="w-5 h-5" />
+        <Plus className="w-4 h-4" />
       </Button>
       <Button 
         size="sm" 
         variant="outline" 
-        className="border-transparent" 
+        className="border-transparent p-1" 
         onClick={() => onDelete(selectedId)} 
         title="Eliminar docente" 
         disabled={teachers.length <= 1 || disabled}
       >
-        <Trash2 className="w-5 h-5 text-red-600" />
+        <Trash2 className="w-4 h-4 text-red-600" />
       </Button>
     </div>
   );
