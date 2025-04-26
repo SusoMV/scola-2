@@ -32,6 +32,7 @@ import MeetingMinutesPage from "./pages/MeetingMinutesPage";
 import PlaceholderPage from "./pages/PlaceholderPage";
 import TeacherAssignmentPage from "./pages/TeacherAssignmentPage";
 import TemplatesPage from "./pages/TemplatesPage";
+import CoordinationsPage from "./pages/CoordinationsPage";
 
 const queryClient = new QueryClient();
 
@@ -157,6 +158,11 @@ const App = () => (
             <Route path="/templates" element={
               <ProtectedRoute>
                 <TemplatesPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/coordinations" element={
+              <ProtectedRoute>
+                <CoordinationsPage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />

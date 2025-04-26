@@ -9,6 +9,7 @@ import {
   MessageSquare,
   GraduationCap,
   ArrowUpDown,
+  UsersRound,
 } from 'lucide-react';
 
 export const navItems = [
@@ -46,6 +47,11 @@ export const navItems = [
     name: 'Titorías', 
     path: '/tutoring', 
     icon: <GraduationCap className="h-5 w-5" /> 
+  },
+  { 
+    name: 'Coordinacións', 
+    path: '/coordinations', 
+    icon: <UsersRound className="h-5 w-5" /> 
   },
 ];
 

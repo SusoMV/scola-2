@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, FileText, Clock, Brain, Shield, Book, ClipboardList, Users } from 'lucide-react';
+import { Globe, FileText, Clock, Brain, Shield, Book, ClipboardList, Users, UsersRound } from 'lucide-react';
 
 export interface QuickLink {
   name: string;
@@ -67,5 +67,10 @@ export const createQuickLinks = (schoolWebUrl: string): QuickLink[] => [
     name: 'IA',
     icon: <Brain className="h-6 w-6 text-scola-primary" />,
     link: '/ai-in-development',
+  },
+  {
+    name: 'Coordinacións e equipos',
+    icon: <UsersRound className="h-6 w-6 text-scola-primary" />,
+    link: '/coordinations',
   },
 ];
