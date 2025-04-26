@@ -30,14 +30,6 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
     });
   };
 
-  if (upcomingAbsences.length === 0) {
-    return (
-      <div className="text-center py-8 text-gray-500 bg-white rounded-lg shadow-sm p-4">
-        Non hai ausencias programadas
-      </div>
-    );
-  }
-
   return (
     <div className="rounded-md border bg-white p-4">
       <Table>
@@ -53,25 +45,33 @@ const UpcomingAbsencesTable: React.FC<UpcomingAbsencesTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {upcomingAbsences.map((absence) => (
-            <TableRow key={absence.id}>
-              <TableCell>{absence.date}</TableCell>
-              <TableCell>{absence.absentTeacher}</TableCell>
-              <TableCell>{absence.substituteTeacher}</TableCell>
-              <TableCell>{absence.course}</TableCell>
-              <TableCell>{absence.time}</TableCell>
-              <TableCell>{absence.specialty}</TableCell>
-              <TableCell className="text-right">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleDelete(absence.id)}
-                >
-                  <Trash2 className="h-4 w-4 text-red-500" />
-                </Button>
+          {upcomingAbsences.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={7} className="text-center text-gray-500 h-32">
+                Non hai ausencias programadas
               </TableCell>
             </TableRow>
-          ))}
+          ) : (
+            upcomingAbsences.map((absence) => (
+              <TableRow key={absence.id}>
+                <TableCell>{absence.date}</TableCell>
+                <TableCell>{absence.absentTeacher}</TableCell>
+                <TableCell>{absence.substituteTeacher}</TableCell>
+                <TableCell>{absence.course}</TableCell>
+                <TableCell>{absence.time}</TableCell>
+                <TableCell>{absence.specialty}</TableCell>
+                <TableCell className="text-right">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDelete(absence.id)}
+                  >
+                    <Trash2 className="h-4 w-4 text-red-500" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </div>
