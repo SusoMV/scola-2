@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -9,14 +8,14 @@ import { Users } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 const TeacherAssignmentPage = () => {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("assignment");
   const [userRole, setUserRole] = useState<string | null>(null);
-
   useEffect(() => {
     // Check user role from auth context or localStorage
     const role = user?.user_metadata?.role || localStorage.getItem('user_role');
@@ -27,11 +26,9 @@ const TeacherAssignmentPage = () => {
       navigate('/dashboard');
     }
   }, [user, navigate]);
-
   if (userRole !== 'directivo' && userRole !== 'admin') {
     return null;
   }
-
   return <DashboardLayout>
       <div className="mb-6">
         <div className="flex items-center">
@@ -46,17 +43,13 @@ const TeacherAssignmentPage = () => {
       <Card className="border-0 shadow-sm">
         <CardContent className="p-6">
           <Tabs defaultValue="assignment" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'} gap-1`}>
-              <TabsTrigger 
-                value="assignment" 
-                className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white px-3 py-1 text-sm"
-              >
+            <TabsList className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-2 max-w-md'}`}>
+              <TabsTrigger value="assignment" className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white">
+                
                 <span>Adscrición docente</span>
               </TabsTrigger>
-              <TabsTrigger 
-                value="groups" 
-                className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white px-3 py-1 text-sm"
-              >
+              <TabsTrigger value="groups" className="data-[state=active]:bg-[#0070C0] data-[state=active]:text-white">
+                
                 <span>Grupos</span>
               </TabsTrigger>
             </TabsList>
