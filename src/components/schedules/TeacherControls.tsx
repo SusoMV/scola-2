@@ -23,7 +23,7 @@ const TeacherControls: React.FC<TeacherControlsProps> = ({
       <select value={selectedId} onChange={handleSelect} disabled={disabled} className="border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-scola-primary bg-white min-w-[140px] mx-0 py-[7px] px-[7px]">
         {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
       </select>
-      <Button size="sm" variant="outline" onClick={onAdd} title="Engadir docente" disabled={disabled} className="border-scola-primary text-scola-primary p-1 px-[9px]">
+      <Button size="sm" variant="outline" onClick={onAdd} title="Engadir docente" disabled={disabled} className="border-scola-primary text-scola-primary p-1 px-[9px] mx-[9px]">
         <Plus className="w-4 h-4" />
       </Button>
       <Button size="sm" variant="outline" onClick={() => onDelete(selectedId)} title="Eliminar docente" disabled={teachers.length <= 1 || disabled} className="border-transparent p-1 px-[9px]">
