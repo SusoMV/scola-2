@@ -2,7 +2,7 @@
 import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { ClipboardList } from 'lucide-react';
-import DocumentUploader from '@/components/documents/DocumentUploader';
+import MeetingMinutesUploader from '@/components/documents/MeetingMinutesUploader';
 
 const MeetingMinutesPage = () => {
   return (
@@ -10,7 +10,7 @@ const MeetingMinutesPage = () => {
       <div className="mb-6">
         <div className="flex items-center">
           <div className="flex items-center gap-2">
-            <ClipboardList className="h-6 w-6 text-scola-primary" />
+            <ClipboardList className="h-6 w-6 text-[#0070C0]" />
             <h1 className="text-2xl font-bold">Actas</h1>
           </div>
         </div>
@@ -18,7 +18,7 @@ const MeetingMinutesPage = () => {
       </div>
       
       <div className="space-y-6">
-        <DocumentUploader />
+        <MeetingMinutesUploader />
       </div>
     </DashboardLayout>
   );
