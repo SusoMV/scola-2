@@ -20,7 +20,7 @@ const TeacherControls: React.FC<TeacherControlsProps> = ({
 }) => {
   const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => onSelect(e.target.value);
   return <div className="flex items-center gap-1">
-      <select value={selectedId} onChange={handleSelect} disabled={disabled} className="border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-scola-primary bg-white min-w-[140px] mx-0 py-[7px] px-[7px]">
+      <select value={selectedId} onChange={handleSelect} disabled={disabled} className="border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-scola-primary bg-white min-w-[140px] py-[7px] px-[7px] mx-px my-[3px]">
         {teachers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
       </select>
       <Button size="sm" variant="outline" onClick={onAdd} title="Engadir docente" disabled={disabled} className="border-scola-primary text-scola-primary p-1 px-[9px] mx-[9px]">
