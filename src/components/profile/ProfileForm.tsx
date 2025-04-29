@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -11,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Shield } from 'lucide-react';
 import { useProfileImage } from '@/hooks/use-profile-image';
@@ -193,128 +194,135 @@ const ProfileForm = () => {
         <h1 className="text-2xl font-bold text-gray-800">Editar perfil</h1>
       </div>
 
-      <Card className="p-6 bg-white rounded-lg shadow-sm">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="flex flex-col md:flex-row gap-8">
-              {/* Área de imaxe de perfil */}
-              <div className="flex flex-col items-center space-y-4 my-[44px]">
-                <Avatar className="w-32 h-32 border-2 border-scola-primary">
-                  <AvatarImage src={previewUrl || ''} alt="Foto de perfil" />
-                  <AvatarFallback className="text-2xl bg-scola-primary text-white">
-                    {form.getValues().full_name?.split(' ').map(name => name[0]).join('') || 'U'}
-                  </AvatarFallback>
-                </Avatar>
+      <Card className="shadow-sm border-gray-200">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg font-medium">
+            Información persoal
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="flex flex-col md:flex-row gap-8">
+                {/* Área de imaxe de perfil */}
+                <div className="flex flex-col items-center space-y-4 my-[44px]">
+                  <Avatar className="w-32 h-32 border-2 border-scola-primary">
+                    <AvatarImage src={previewUrl || ''} alt="Foto de perfil" />
+                    <AvatarFallback className="text-2xl bg-scola-primary text-white">
+                      {form.getValues().full_name?.split(' ').map(name => name[0]).join('') || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
 
-                <div className="flex flex-col items-center">
-                  <Label htmlFor="profile_image" className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md my-[3px]">
-                    Cambiar foto
-                  </Label>
-                  <Input id="profile_image" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                  <p className="text-xs text-gray-500 mt-1">JPG, PNG ou GIF. Máx 2MB.</p>
+                  <div className="flex flex-col items-center">
+                    <Label htmlFor="profile_image" className="cursor-pointer py-1 px-3 text-sm bg-scola-primary hover:bg-scola-primary/90 text-white rounded-md my-[3px]">
+                      Cambiar foto
+                    </Label>
+                    <Input id="profile_image" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                    <p className="text-xs text-gray-500 mt-1">JPG, PNG ou GIF. Máx 2MB.</p>
+                  </div>
+
+                  {!isUserDirector && <AlertDialog open={isDirectorRequestOpen} onOpenChange={setIsDirectorRequestOpen}>
+                      <AlertDialogTrigger asChild>
+                        <Button variant="outline" className="mt-4 border-scola-primary text-scola-primary hover:bg-scola-pastel">
+                          <Shield className="h-4 w-4 mr-2" />
+                          Solicitar ser directivo
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Solicitar rol de directivo</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Enviarase unha solicitude aos directores do teu centro educativo. Se é aprobada, 
+                            cambiarase o teu rol a directivo e terás acceso ás funcionalidades adicionais.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                          <AlertDialogAction className="bg-scola-primary hover:bg-scola-primary/90" onClick={handleDirectorRequest} disabled={isLoading}>
+                            {isLoading ? 'Enviando...' : 'Enviar solicitude'}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>}
                 </div>
 
-                {!isUserDirector && <AlertDialog open={isDirectorRequestOpen} onOpenChange={setIsDirectorRequestOpen}>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="outline" className="mt-4 border-scola-primary text-scola-primary hover:bg-scola-pastel">
-                        <Shield className="h-4 w-4 mr-2" />
-                        Solicitar ser directivo
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Solicitar rol de directivo</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Enviarase unha solicitude aos directores do teu centro educativo. Se é aprobada, 
-                          cambiarase o teu rol a directivo e terás acceso ás funcionalidades adicionais.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction className="bg-scola-primary hover:bg-scola-primary/90" onClick={handleDirectorRequest} disabled={isLoading}>
-                          {isLoading ? 'Enviando...' : 'Enviar solicitude'}
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>}
+                {/* Campos do formulario */}
+                <div className="flex-1 space-y-4">
+                  <FormField control={form.control} name="full_name" render={({
+                  field
+                }) => <FormItem>
+                        <FormLabel>Nome completo</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Nome e apelidos" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+
+                  <FormField control={form.control} name="email" render={({
+                  field
+                }) => <FormItem>
+                        <FormLabel>Correo electrónico</FormLabel>
+                        <FormControl>
+                          <Input placeholder="email@exemplo.com" type="email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+
+                  <FormField control={form.control} name="school_name" render={({
+                  field
+                }) => <FormItem>
+                        <FormLabel>Centro educativo</FormLabel>
+                        <FormControl>
+                          <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona o centro educativo" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <div className="p-2">
+                                <Input placeholder="Buscar centro por nome ou código" value={searchSchool} onChange={e => setSearchSchool(e.target.value)} className="mb-2" />
+                              </div>
+                              <div className="max-h-[300px] overflow-y-auto">
+                                {filteredSchools.length > 0 ? filteredSchools.map(school => <SelectItem key={school} value={school}>
+                                      {school}
+                                    </SelectItem>) : <div className="p-2 text-center text-gray-500">
+                                    Non se atoparon resultados
+                                  </div>}
+                              </div>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+
+                  <FormField control={form.control} name="specialty" render={({
+                  field
+                }) => <FormItem>
+                        <FormLabel>Especialidade</FormLabel>
+                        <FormControl>
+                          <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona a túa especialidade" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {SPECIALTIES.map(specialty => <SelectItem key={specialty} value={specialty}>
+                                  {specialty}
+                                </SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>} />
+                </div>
               </div>
 
-              {/* Campos do formulario */}
-              <div className="flex-1 space-y-4">
-                <FormField control={form.control} name="full_name" render={({
-                field
-              }) => <FormItem>
-                      <FormLabel>Nome completo</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Nome e apelidos" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>} />
-
-                <FormField control={form.control} name="email" render={({
-                field
-              }) => <FormItem>
-                      <FormLabel>Correo electrónico</FormLabel>
-                      <FormControl>
-                        <Input placeholder="email@exemplo.com" type="email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>} />
-
-                <FormField control={form.control} name="school_name" render={({
-                field
-              }) => <FormItem>
-                      <FormLabel>Centro educativo</FormLabel>
-                      <FormControl>
-                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona o centro educativo" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <div className="p-2">
-                              <Input placeholder="Buscar centro por nome ou código" value={searchSchool} onChange={e => setSearchSchool(e.target.value)} className="mb-2" />
-                            </div>
-                            <div className="max-h-[300px] overflow-y-auto">
-                              {filteredSchools.length > 0 ? filteredSchools.map(school => <SelectItem key={school} value={school}>
-                                    {school}
-                                  </SelectItem>) : <div className="p-2 text-center text-gray-500">
-                                  Non se atoparon resultados
-                                </div>}
-                            </div>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>} />
-
-                <FormField control={form.control} name="specialty" render={({
-                field
-              }) => <FormItem>
-                      <FormLabel>Especialidade</FormLabel>
-                      <FormControl>
-                        <Select onValueChange={field.onChange} defaultValue={field.value} value={field.value}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona a túa especialidade" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {SPECIALTIES.map(specialty => <SelectItem key={specialty} value={specialty}>
-                                {specialty}
-                              </SelectItem>)}
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>} />
+              <div className="flex justify-end pt-4">
+                <Button type="submit" className="bg-scola-primary hover:bg-scola-primary/90" disabled={isLoading || isUploading}>
+                  {isLoading ? 'Gardando...' : 'Gardar cambios'}
+                </Button>
               </div>
-            </div>
-
-            <div className="flex justify-end pt-4">
-              <Button type="submit" className="bg-scola-primary hover:bg-scola-primary/90" disabled={isLoading || isUploading}>
-                {isLoading ? 'Gardando...' : 'Gardar cambios'}
-              </Button>
-            </div>
-          </form>
-        </Form>
+            </form>
+          </Form>
+        </CardContent>
       </Card>
     </div>;
 };
