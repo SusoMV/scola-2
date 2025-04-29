@@ -40,7 +40,7 @@ const ClassroomPlanningUploader = () => {
   return <Card className="shadow-sm border-gray-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium flex items-center justify-between">
-          <div>Planificación de aula en caso de substitución</div>
+          <div>Planificación en caso de substitución</div>
           <Button onClick={handleUploadClick} className="bg-scola-primary hover:bg-scola-primary/90">
             <Upload className="mr-2 h-4 w-4" /> Subir documento
           </Button>
