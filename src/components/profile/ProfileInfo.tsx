@@ -191,7 +191,7 @@ const ProfileInfo = () => {
         <div className="text-gray-500">Cargando información de perfil...</div>
       </div>;
   }
-  return <div className="w-full">
+  return <div className="w-full px-0">
       <ProfileActionButtons isEditing={isEditing} setIsEditing={setIsEditing} cancelEditing={cancelEditing} handleSaveProfile={handleSaveProfile} loading={loading} isUploading={isUploading} />
 
       <div className="flex flex-col md:flex-row gap-8 px-0">
