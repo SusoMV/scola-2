@@ -27,8 +27,8 @@ export const TeamCard = ({ team, onDelete, onEdit }: TeamCardProps) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
 
   return (
-    <Card className="h-full border border-dashed border-scola-primary rounded-md hover:bg-scola-pastel hover:border-solid transition-all duration-200">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+    <Card className="h-full shadow-sm border-gray-200 hover:shadow-md transition-all duration-200">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 bg-scola-pastel">
         <CardTitle className="text-xl font-semibold text-scola-primary">{team.name}</CardTitle>
         <div className="flex items-center gap-2">
           <Button
