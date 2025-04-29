@@ -85,7 +85,7 @@ const ProfileDataSection = ({
         </div>
       </div>;
   }
-  return <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-[95px] mx-0 py-0">
+  return <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-0 py-0 px-px">
       <Card className="p-4 bg-white rounded-lg shadow-sm">
         <p className="text-sm text-gray-500">Nome e apelidos</p>
         <p className="font-medium text-lg">{profileData.full_name}</p>
