@@ -21,10 +21,10 @@ const ProfileImageSection = ({
   handleFileChange,
   isUploading
 }: ProfileImageSectionProps) => {
-  return <div className="flex flex-col items-center space-y-4 px-0 mx-[63px] my-0">
+  return <div className="flex flex-col items-center space-y-4 px-0 my-0 mx-[21px] py-[59px]">
       <Avatar className="w-32 h-32 border-2 border-scola-primary">
         <AvatarImage src={previewUrl || profileImageUrl} alt="Foto de perfil" />
-        <AvatarFallback className="text-2xl bg-scola-primary text-white">
+        <AvatarFallback className="text-2xl bg-scola-primary text-white px-0">
           {fullName?.split(' ').map(name => name[0]).join('') || 'U'}
         </AvatarFallback>
       </Avatar>
