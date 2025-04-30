@@ -15,8 +15,8 @@ const ProfilePage = () => {
         <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
       
-      <div className="grid grid-cols-1 gap-6">
-        <div className="border rounded-lg p-6 bg-white">
+      <div className="grid grid-cols-1 gap-6 mx-auto">
+        <div className="border rounded-lg p-6 bg-white max-w-6xl mx-auto w-full">
           <ProfileInfo />
         </div>
       </div>

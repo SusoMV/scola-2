@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useProfileImage } from '@/hooks/use-profile-image';
+
 interface ProfileImageSectionProps {
   userId?: string;
   fullName: string;
@@ -12,6 +13,7 @@ interface ProfileImageSectionProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isUploading: boolean;
 }
+
 const ProfileImageSection = ({
   userId,
   fullName,
@@ -21,8 +23,8 @@ const ProfileImageSection = ({
   handleFileChange,
   isUploading
 }: ProfileImageSectionProps) => {
-  return <div className="flex flex-col items-center space-y-4 px-0 my-0 mx-[21px] py-[59px]">
-      <Avatar className="w-32 h-32 border-2 border-scola-primary">
+  return <div className="flex flex-col items-center space-y-4 px-0 my-0 mx-auto py-[59px] max-w-sm">
+      <Avatar className="w-32 h-32 border-[1px] border-scola-primary">
         <AvatarImage src={previewUrl || profileImageUrl} alt="Foto de perfil" />
         <AvatarFallback className="text-2xl bg-scola-primary text-white px-0">
           {fullName?.split(' ').map(name => name[0]).join('') || 'U'}
@@ -38,4 +40,5 @@ const ProfileImageSection = ({
         </div>}
     </div>;
 };
+
 export default ProfileImageSection;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -88,28 +89,28 @@ const ProfileDataSection = ({
       </div>;
   }
 
-  return <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-0 py-0 px-px">
-      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-2">
+  return <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mx-auto py-0 px-px max-w-5xl">
+      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px]">
         <p className="text-sm text-gray-500">Nome e apelidos</p>
         <p className="font-medium text-lg">{profileData.full_name}</p>
       </Card>
 
-      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-2">
+      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px]">
         <p className="text-sm text-gray-500">Cargo</p>
         <p className="font-medium text-lg">{profileData.role === 'directivo' ? 'Directivo' : 'Docente'}</p>
       </Card>
 
-      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-2">
+      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px]">
         <p className="text-sm text-gray-500">Email</p>
         <p className="font-medium text-lg">{profileData.email}</p>
       </Card>
 
-      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-2">
+      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px]">
         <p className="text-sm text-gray-500">Especialidade</p>
         <p className="font-medium text-lg">{profileData.specialty}</p>
       </Card>
 
-      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-2 md:col-span-2">
+      <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px] md:col-span-2">
         <p className="text-sm text-gray-500">Centro educativo</p>
         <p className="font-medium text-lg">{profileData.school_name}</p>
       </Card>
