@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Teacher, ScheduleData } from "./TeacherSchedule";
 
@@ -7,6 +6,43 @@ interface UseTeacherScheduleProps {
   defaultHours: string[];
   defaultDays: string[];
 }
+
+// Create default schedule data for each teacher
+const createDefaultScheduleData = (hours: string[], days: string[]): ScheduleData => {
+  const defaultSchedule: ScheduleData = {};
+  
+  // Sample data for the schedule
+  const sampleSubjects = [
+    { subject: "Matemáticas", group: "5º Primaria" },
+    { subject: "Lingua Galega", group: "6º Primaria" },
+    { subject: "Ciencias Naturais", group: "5º Primaria" },
+    { subject: "Educación Física", group: "3º Primaria" },
+    { subject: "Artes", group: "4º Primaria" },
+    { subject: "Inglés", group: "6º Primaria" },
+    { subject: "Historia", group: "5º Primaria" }
+  ];
+  
+  hours.forEach(hour => {
+    defaultSchedule[hour] = {};
+    days.forEach(day => {
+      // Randomly decide if this cell should have data (about 30% chance)
+      if (Math.random() < 0.3) {
+        const randomSample = sampleSubjects[Math.floor(Math.random() * sampleSubjects.length)];
+        defaultSchedule[hour][day] = {
+          subject: randomSample.subject,
+          group: randomSample.group
+        };
+      } else {
+        defaultSchedule[hour][day] = {
+          subject: "",
+          group: ""
+        };
+      }
+    });
+  });
+  
+  return defaultSchedule;
+};
 
 export const emptySchedule = (hours: string[], days: string[]) => 
   Object.fromEntries(hours.map(hour => [hour, Object.fromEntries(days.map(day => [day, {
@@ -21,10 +57,11 @@ export const useTeacherSchedule = ({
 }: UseTeacherScheduleProps) => {
   const [teachers, setTeachers] = useState<Teacher[]>(defaultTeachers);
   const [selectedId, setSelectedId] = useState(defaultTeachers[0].id);
+  
   // Initialize teacher schedules for all default teachers
   const initialSchedules: Record<string, ScheduleData> = {};
   defaultTeachers.forEach(teacher => {
-    initialSchedules[teacher.id] = emptySchedule(defaultHours, defaultDays);
+    initialSchedules[teacher.id] = createDefaultScheduleData(defaultHours, defaultDays);
   });
   
   const [teacherSchedules, setTeacherSchedules] = useState<Record<string, ScheduleData>>(initialSchedules);
@@ -42,7 +79,7 @@ export const useTeacherSchedule = ({
     setTeachers(t => [...t, { id, name }]);
     setTeacherSchedules(ts => ({
       ...ts,
-      [id]: emptySchedule(hours, defaultDays)
+      [id]: createDefaultScheduleData(hours, defaultDays)
     }));
     setSelectedId(id);
   };
