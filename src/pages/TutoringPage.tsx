@@ -5,6 +5,7 @@ import DashboardLayout from '@/components/layout/DashboardLayout';
 import AttendanceControl from '@/components/tutoring/AttendanceControl';
 import TutoringSessions from '@/components/tutoring/TutoringSessions';
 import NotesSection from '@/components/tutoring/NotesSection';
+import ComedorSection from '@/components/tutoring/ComedorSection';
 import { GraduationCap } from 'lucide-react';
 
 const TutoringPage = () => {
@@ -35,6 +36,11 @@ const TutoringPage = () => {
           >
             Anotacións
           </TabsTrigger>
+          <TabsTrigger 
+            value="comedor"
+          >
+            Comedor
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="attendance">
@@ -47,6 +53,10 @@ const TutoringPage = () => {
         
         <TabsContent value="notes">
           <NotesSection />
+        </TabsContent>
+
+        <TabsContent value="comedor">
+          <ComedorSection />
         </TabsContent>
       </Tabs>
     </DashboardLayout>
