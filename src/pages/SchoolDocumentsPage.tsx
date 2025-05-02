@@ -90,7 +90,7 @@ const SchoolDocumentsPage = () => {
         <div className="flex items-center">
           <div className="flex items-center gap-2">
             <FileText className="h-6 w-6 text-[#0070C0]" />
-            <h1 className="text-2xl font-bold">Documentos de centro</h1>
+            <h1 className="text-2xl font-bold">Documentos, plans e proxectos</h1>
           </div>
         </div>
         <div className="dotted-border w-full h-1 mt-2"></div>
