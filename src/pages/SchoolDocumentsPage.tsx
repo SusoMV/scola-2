@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { useDocuments } from '@/hooks/useDocuments';
+
 interface UploadedDocument {
   id: string;
   name: string;
@@ -14,6 +15,7 @@ interface UploadedDocument {
   date: Date;
   url: string;
 }
+
 const SchoolDocumentsPage = () => {
   const [uploadedDocuments, setUploadedDocuments] = useState<UploadedDocument[]>([{
     id: '1',
@@ -64,6 +66,7 @@ const SchoolDocumentsPage = () => {
   } = useToast();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const projectsFileInputRef = React.useRef<HTMLInputElement>(null);
+
   const handleUploadClick = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
@@ -144,6 +147,22 @@ const SchoolDocumentsPage = () => {
       description: `O documento ${documentToDelete?.name} foi eliminado correctamente.`
     });
   };
+  const handleDownloadDocument = (doc: UploadedDocument) => {
+    // In a real app, this would trigger actual file download
+    // For this demo, we'll just show a toast
+    toast({
+      title: "Documento descargado",
+      description: `O documento ${doc.name} foi descargado correctamente.`
+    });
+  };
+  const handleDownloadProjectDocument = (doc: UploadedDocument) => {
+    // In a real app, this would trigger actual file download
+    // For this demo, we'll just show a toast
+    toast({
+      title: "Documento descargado",
+      description: `O documento ${doc.name} foi descargado correctamente.`
+    });
+  };
   const formatFileSize = (bytes: number): string => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -187,10 +206,14 @@ const SchoolDocumentsPage = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-[#0070C0]" title="Descargar">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-[#0070C0]" 
+                        onClick={() => handleDownloadDocument(doc)} 
+                        title="Descargar">
                         <Download className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-red-500" onClick={() => handleDeleteDocument(doc.id)} title="Eliminar">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-red-500" 
+                        onClick={() => handleDeleteDocument(doc.id)} 
+                        title="Eliminar">
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
@@ -202,7 +225,7 @@ const SchoolDocumentsPage = () => {
           </CardContent>
         </Card>
         
-        {/* Nuevo card para Plans e proxectos */}
+        {/* Plans e proxectos card */}
         <Card className="shadow-sm border-gray-200">
           <CardHeader className="pb-2">
             <CardTitle className="text-lg font-medium flex items-center justify-between">
@@ -216,7 +239,31 @@ const SchoolDocumentsPage = () => {
             <input type="file" ref={projectsFileInputRef} className="hidden" onChange={handleProjectsFileChange} accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv" />
             
             {projectsDocuments.length > 0 ? <div className="space-y-4">
-                {projectsDocuments.map(doc => {})}
+                {projectsDocuments.map(doc => <div key={doc.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-gray-50 transition-colors my-[13px] py-[10px]">
+                    <div className="flex items-center gap-3 flex-1">
+                      <div className="bg-[#0070C0]/10 p-2 rounded-lg">
+                        <FileText className="h-6 w-6 text-[#0070C0]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">{doc.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {formatFileSize(doc.size)} • {doc.date.toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-[#0070C0]" 
+                        onClick={() => handleDownloadProjectDocument(doc)} 
+                        title="Descargar">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-red-500" 
+                        onClick={() => handleDeleteProjectDocument(doc.id)} 
+                        title="Eliminar">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>)}
               </div> : <div className="text-center py-10 text-gray-500">
                 <p>Non hai documentos subidos</p>
                 <p className="text-sm mt-2">Fai clic en "Subir documento" para engadir documentos</p>
@@ -226,4 +273,5 @@ const SchoolDocumentsPage = () => {
       </div>
     </DashboardLayout>;
 };
+
 export default SchoolDocumentsPage;
