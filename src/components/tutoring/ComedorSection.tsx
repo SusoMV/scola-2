@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CheckCircle2, UserPlus, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
+import { Switch } from '@/components/ui/switch';
 
 // Types for our data structures
 interface Student {
@@ -155,13 +156,16 @@ const ComedorSection = () => {
       };
     }
 
-    // Update total and allergic counters
+    // Update counts based on students who are present
     const presentStudents = courseStudents.filter(s => s.isPresent);
+    const presentNonAllergicStudents = presentStudents.filter(s => !s.hasAllergies);
+    const presentAllergicStudents = presentStudents.filter(s => s.hasAllergies);
+    
     updatedCourses[courseIndex] = {
       ...updatedCourses[courseIndex],
       students: courseStudents,
-      totalStudents: presentStudents.length,
-      allergicStudents: presentStudents.filter(s => s.hasAllergies).length
+      totalStudents: presentNonAllergicStudents.length,
+      allergicStudents: presentAllergicStudents.length
     };
     
     setCourses(updatedCourses);
@@ -195,12 +199,15 @@ const ComedorSection = () => {
 
     updatedCourses[courseIndex].students.push(studentToAdd);
     
-    // Recalculate counters
+    // Update counts based on students who are present
     const presentStudents = updatedCourses[courseIndex].students.filter(s => s.isPresent);
+    const presentNonAllergicStudents = presentStudents.filter(s => !s.hasAllergies);
+    const presentAllergicStudents = presentStudents.filter(s => s.hasAllergies);
+    
     updatedCourses[courseIndex] = {
       ...updatedCourses[courseIndex],
-      totalStudents: presentStudents.length,
-      allergicStudents: presentStudents.filter(s => s.hasAllergies).length
+      totalStudents: presentNonAllergicStudents.length,
+      allergicStudents: presentAllergicStudents.length
     };
 
     setCourses(updatedCourses);
@@ -277,13 +284,16 @@ const ComedorSection = () => {
       updatedCourses[targetCourseIndex].students.push(updatedStudent);
     }
 
-    // Recalculate counters for both courses
+    // Recalculate counts for both courses
     for (const idx of [originalCourseIndex, targetCourseIndex]) {
       const presentStudents = updatedCourses[idx].students.filter(s => s.isPresent);
+      const presentNonAllergicStudents = presentStudents.filter(s => !s.hasAllergies);
+      const presentAllergicStudents = presentStudents.filter(s => s.hasAllergies);
+      
       updatedCourses[idx] = {
         ...updatedCourses[idx],
-        totalStudents: presentStudents.length,
-        allergicStudents: presentStudents.filter(s => s.hasAllergies).length
+        totalStudents: presentNonAllergicStudents.length,
+        allergicStudents: presentAllergicStudents.length
       };
     }
 
@@ -301,19 +311,19 @@ const ComedorSection = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-xl font-semibold">Xestión de comedor</h2>
-        <Button 
-          onClick={() => setIsManageDialogOpen(true)}
-          className="bg-scola-primary"
-        >
-          <UserPlus className="mr-2 h-4 w-4" />
-          Engadir/Editar comensais
-        </Button>
-      </div>
-
       <Card>
         <CardContent className="p-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Xestión de comedor</h2>
+            <Button 
+              onClick={() => setIsManageDialogOpen(true)}
+              className="bg-scola-primary"
+            >
+              <UserPlus className="mr-2 h-4 w-4" />
+              Engadir/Editar comensais
+            </Button>
+          </div>
+          
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {courses.map((course, index) => (
               <Button
@@ -377,15 +387,14 @@ const ComedorSection = () => {
                           {student.isPresent ? 'Presente' : 'Ausente'}
                         </TableCell>
                         <TableCell>
-                          <div className="flex gap-2">
-                            <Button 
-                              variant="ghost" 
-                              size="sm"
-                              className={`${student.isPresent ? 'text-green-600' : 'text-gray-400'}`}
-                              onClick={() => toggleStudentPresence(courseIndex, student.id)}
-                            >
-                              <CheckCircle2 className="h-4 w-4" />
-                            </Button>
+                          <div className="flex items-center">
+                            <Switch 
+                              checked={student.isPresent} 
+                              onCheckedChange={() => toggleStudentPresence(courseIndex, student.id)}
+                            />
+                            <span className="ml-2 text-sm text-gray-600">
+                              {student.isPresent ? 'Asiste' : 'Non asiste'}
+                            </span>
                           </div>
                         </TableCell>
                       </TableRow>
