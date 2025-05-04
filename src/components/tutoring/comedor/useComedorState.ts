@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { CourseData, Student } from './types';
@@ -61,6 +60,35 @@ const initialCourses: CourseData[] = [
       { id: 14, name: "Sara Romero", course: "3º Primaria", hasAllergies: true, allergyDetails: "Frutos secos", isPresent: true },
       { id: 15, name: "Adrián Varela", course: "3º Primaria", hasAllergies: true, allergyDetails: "Pescado", isPresent: true },
       { id: 16, name: "Marta Blanco", course: "3º Primaria", hasAllergies: true, allergyDetails: "Gluten", isPresent: true },
+    ]
+  },
+  { 
+    name: "4º Primaria", 
+    totalStudents: 13, 
+    allergicStudents: 2,
+    students: [
+      { id: 17, name: "Martín Rodríguez", course: "4º Primaria", hasAllergies: true, allergyDetails: "Lactosa", isPresent: true },
+      { id: 18, name: "Claudia Gómez", course: "4º Primaria", hasAllergies: true, allergyDetails: "Kiwi", isPresent: true },
+    ]
+  },
+  { 
+    name: "5º Primaria", 
+    totalStudents: 15, 
+    allergicStudents: 3,
+    students: [
+      { id: 19, name: "Alejandro García", course: "5º Primaria", hasAllergies: false, isPresent: true },
+      { id: 20, name: "Emma Vázquez", course: "5º Primaria", hasAllergies: true, allergyDetails: "Gluten", isPresent: true },
+      { id: 21, name: "Bruno Martínez", course: "5º Primaria", hasAllergies: true, allergyDetails: "Frutos secos", isPresent: true },
+      { id: 22, name: "Carmen López", course: "5º Primaria", hasAllergies: true, allergyDetails: "Pescado", isPresent: true },
+    ]
+  },
+  { 
+    name: "6º Primaria", 
+    totalStudents: 14, 
+    allergicStudents: 1,
+    students: [
+      { id: 23, name: "Lucas Fernández", course: "6º Primaria", hasAllergies: false, isPresent: true },
+      { id: 24, name: "Valeria Castro", course: "6º Primaria", hasAllergies: true, allergyDetails: "Soja", isPresent: true },
     ]
   },
 ];
