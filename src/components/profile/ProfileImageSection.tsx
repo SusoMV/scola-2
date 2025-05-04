@@ -21,7 +21,7 @@ const ProfileImageSection = ({
   handleFileChange,
   isUploading
 }: ProfileImageSectionProps) => {
-  return <div className="flex flex-col items-center space-y-4 py-[59px] max-w-sm my-px px-[23px] mx-[240px]">
+  return <div className="flex flex-col items-center space-y-4 py-[59px] max-w-sm my-px mx-0 px-0">
       <Avatar className="w-32 h-32 border-[1px] border-scola-primary">
         <AvatarImage src={previewUrl || profileImageUrl} alt="Foto de perfil" />
         <AvatarFallback className="text-2xl bg-scola-primary text-white px-0">
