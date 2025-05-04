@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Dialog, 
@@ -37,6 +36,7 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
   setNewStudent,
   courses,
   editingStudent,
+  setEditingStudent,
   onAddStudent,
   onSaveEdit,
   onEditStudent

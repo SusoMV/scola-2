@@ -15,7 +15,7 @@ const CoursesGrid: React.FC<CoursesGridProps> = ({ courses, onCourseClick }) => 
         <Button
           key={course.name}
           variant="outline"
-          className="h-auto p-4 flex flex-col gap-2 border-2 hover:bg-gray-50"
+          className="h-auto p-4 flex flex-col gap-2 border-2 border-dashed border-[#0070C0] hover:bg-gray-50"
           onClick={() => onCourseClick(course)}
         >
           <span className="font-semibold">{course.name}</span>
