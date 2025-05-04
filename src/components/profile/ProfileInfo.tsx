@@ -194,7 +194,7 @@ const ProfileInfo = () => {
   return <div className="w-full">
       <ProfileActionButtons isEditing={isEditing} setIsEditing={setIsEditing} cancelEditing={cancelEditing} handleSaveProfile={handleSaveProfile} loading={loading} isUploading={isUploading} />
 
-      <div className="flex flex-col md:flex-row gap-8 px-0">
+      <div className="flex flex-col md:flex-row gap-8 px-[3px] py-0 my-0 mx-[4px]">
         <ProfileImageSection userId={user?.id} fullName={profileData.full_name} profileImageUrl={profileData.profile_image_url} isEditing={isEditing} previewUrl={previewUrl} handleFileChange={handleFileChange} isUploading={isUploading} />
 
         <ProfileDataSection isEditing={isEditing} profileData={profileData} editFormData={editFormData} specialties={SPECIALTIES} handleInputChange={handleInputChange} handleSelectChange={handleSelectChange} searchSchool={searchSchool} setSearchSchool={setSearchSchool} filteredSchools={filteredSchools} />
