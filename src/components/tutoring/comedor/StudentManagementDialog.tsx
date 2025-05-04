@@ -133,7 +133,6 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
           </Button>
         </div>
 
-        {/* Show existing students list for editing */}
         <div className="mt-4 max-h-[300px] overflow-y-auto">
           <h3 className="text-sm font-semibold mb-2">Comensais existentes</h3>
           <Table>
