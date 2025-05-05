@@ -82,8 +82,9 @@ const CourseDialog: React.FC<CourseDialogProps> = ({
                       <Switch 
                         checked={student.isPresent} 
                         onCheckedChange={() => onToggleStudentPresence(courseIndex, student.id)}
+                        className={student.isPresent ? "bg-green-500" : "bg-gray-300"}
                       />
-                      <span className="ml-2 text-sm text-gray-600">
+                      <span className={`ml-2 text-sm ${student.isPresent ? 'text-green-600 font-medium' : 'text-gray-400'}`}>
                         {student.isPresent ? 'Asiste' : 'Non asiste'}
                       </span>
                     </div>
