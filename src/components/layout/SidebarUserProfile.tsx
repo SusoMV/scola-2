@@ -31,7 +31,7 @@ const SidebarUserProfile: React.FC = () => {
       <Link to="/profile">
         <Button 
           variant="outline" 
-          className="mt-3 w-full text-scola-primary border-scola-primary hover:bg-scola-pastel"
+          className="mt-3 w-full text-scola-primary border border-dashed border-[#0070C0] hover:bg-scola-pastel"
         >
           <Settings className="h-4 w-4 mr-2" />
           Editar perfil
