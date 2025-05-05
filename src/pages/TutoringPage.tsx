@@ -27,6 +27,11 @@ const TutoringPage = () => {
             Control de asistencia
           </TabsTrigger>
           <TabsTrigger 
+            value="comedor"
+          >
+            Comedor
+          </TabsTrigger>
+          <TabsTrigger 
             value="sessions"
           >
             Titorías solicitadas
@@ -36,15 +41,14 @@ const TutoringPage = () => {
           >
             Anotacións
           </TabsTrigger>
-          <TabsTrigger 
-            value="comedor"
-          >
-            Comedor
-          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="attendance">
           <AttendanceControl />
+        </TabsContent>
+        
+        <TabsContent value="comedor">
+          <ComedorSection />
         </TabsContent>
         
         <TabsContent value="sessions">
@@ -53,10 +57,6 @@ const TutoringPage = () => {
         
         <TabsContent value="notes">
           <NotesSection />
-        </TabsContent>
-
-        <TabsContent value="comedor">
-          <ComedorSection />
         </TabsContent>
       </Tabs>
     </DashboardLayout>
