@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { 
   Dialog, 
   DialogContent, 
@@ -41,6 +42,15 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
   onSaveEdit,
   onEditStudent
 }) => {
+  const [filteredCourse, setFilteredCourse] = useState<string>('');
+  
+  // Reset filter when dialog opens/closes
+  useEffect(() => {
+    if (!isOpen) {
+      setFilteredCourse('');
+    }
+  }, [isOpen]);
+
   const resetForm = () => {
     setEditingStudent(null);
     setNewStudent({
@@ -52,6 +62,15 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
     });
     onOpenChange(false);
   };
+
+  // Filter students based on selected course
+  const filteredStudents = filteredCourse 
+    ? courses.flatMap(course => 
+        course.name === filteredCourse 
+          ? course.students 
+          : []
+      )
+    : courses.flatMap(course => course.students);
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -133,19 +152,32 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
           </Button>
         </div>
 
-        <div className="mt-4 max-h-[300px] overflow-y-auto">
-          <h3 className="text-sm font-semibold mb-2">Comensais existentes</h3>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Nome</TableHead>
-                <TableHead>Curso</TableHead>
-                <TableHead>Accións</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {courses.flatMap(course => 
-                course.students.map(student => (
+        <div className="mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-sm font-semibold">Comensais existentes</h3>
+            <select
+              className="p-1 text-sm border rounded-md"
+              value={filteredCourse}
+              onChange={(e) => setFilteredCourse(e.target.value)}
+            >
+              <option value="">Todos os cursos</option>
+              {courses.map((course) => (
+                <option key={course.name} value={course.name}>{course.name}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="max-h-[300px] overflow-y-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Curso</TableHead>
+                  <TableHead>Accións</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredStudents.map(student => (
                   <TableRow key={student.id} className={student.hasAllergies ? "bg-amber-50" : ""}>
                     <TableCell>{student.name}</TableCell>
                     <TableCell>{student.course}</TableCell>
@@ -159,10 +191,10 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
