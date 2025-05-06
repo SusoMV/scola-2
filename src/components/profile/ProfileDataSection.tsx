@@ -1,9 +1,11 @@
+
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { SCHOOLS } from '@/components/auth/complete-profile/constants';
+
 interface ProfileDataSectionProps {
   isEditing: boolean;
   profileData: {
@@ -26,6 +28,7 @@ interface ProfileDataSectionProps {
   setSearchSchool: (value: string) => void;
   filteredSchools: string[];
 }
+
 const ProfileDataSection = ({
   isEditing,
   profileData,
@@ -85,7 +88,9 @@ const ProfileDataSection = ({
         </div>
       </div>;
   }
-  return <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-0 max-w-5xl my-[3px] mx-[115px] px-[28px]">
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-0 w-full my-[3px] mx-0 px-0">
       <Card className="p-4 bg-white rounded-lg shadow-sm border-[#0070C0] border-dashed border-[1px]">
         <p className="text-sm text-gray-500">Nome e apelidos</p>
         <p className="font-medium text-lg">{profileData.full_name}</p>
@@ -110,6 +115,8 @@ const ProfileDataSection = ({
         <p className="text-sm text-gray-500">Centro educativo</p>
         <p className="font-medium text-lg">{profileData.school_name}</p>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default ProfileDataSection;
