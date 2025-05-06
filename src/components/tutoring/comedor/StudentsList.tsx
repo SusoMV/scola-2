@@ -57,21 +57,29 @@ const StudentsList: React.FC<StudentsListProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredStudents.map(student => (
-              <TableRow key={student.id} className={student.hasAllergies ? "bg-amber-50" : ""}>
-                <TableCell>{student.name}</TableCell>
-                <TableCell>{student.course}</TableCell>
-                <TableCell>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={() => onEditStudent(student)}
-                  >
-                    Editar
-                  </Button>
+            {filteredStudents.length > 0 ? (
+              filteredStudents.map(student => (
+                <TableRow key={student.id} className={student.hasAllergies ? "bg-amber-50" : ""}>
+                  <TableCell>{student.name}</TableCell>
+                  <TableCell>{student.course}</TableCell>
+                  <TableCell>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => onEditStudent(student)}
+                    >
+                      Editar
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={3} className="text-center py-4 text-gray-500">
+                  Non hai comensais {filteredCourse ? `no curso ${filteredCourse}` : ''}
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>

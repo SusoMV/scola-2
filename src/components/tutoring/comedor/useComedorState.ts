@@ -20,6 +20,7 @@ export const useComedorState = () => {
   const [selectedCourse, setSelectedCourse] = useState<CourseData | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isManageDialogOpen, setIsManageDialogOpen] = useState(false);
+  const [isCourseManageDialogOpen, setIsCourseManageDialogOpen] = useState(false);
   const [newStudent, setNewStudent] = useState<Partial<Student>>({
     name: '',
     course: '',
@@ -109,21 +110,53 @@ export const useComedorState = () => {
     }
   };
 
+  // Handle adding a new course
+  const handleAddCourse = (courseName: string) => {
+    // Create new course
+    const newCourse: CourseData = {
+      name: courseName,
+      totalStudents: 0,
+      allergicStudents: 0,
+      students: []
+    };
+    
+    // Add course to the list
+    const updatedCourses = [...courses, newCourse];
+    setCourses(updatedCourses);
+  };
+
+  // Handle removing a course
+  const handleRemoveCourse = (courseName: string) => {
+    // Only allow removal if course has no students
+    const courseToRemove = courses.find(course => course.name === courseName);
+    if (courseToRemove && courseToRemove.students.length > 0) {
+      return;
+    }
+    
+    // Remove course from the list
+    const updatedCourses = courses.filter(course => course.name !== courseName);
+    setCourses(updatedCourses);
+  };
+
   return {
     courses,
     selectedCourse,
     isDialogOpen,
     isManageDialogOpen,
+    isCourseManageDialogOpen,
     newStudent,
     editingStudent,
     setIsDialogOpen,
     setIsManageDialogOpen,
+    setIsCourseManageDialogOpen,
     setNewStudent,
     setEditingStudent,
     handleCourseClick,
     toggleStudentPresence: handleToggleStudentPresence,
     handleAddStudent,
     handleEditStudent,
-    handleSaveEdit
+    handleSaveEdit,
+    handleAddCourse,
+    handleRemoveCourse
   };
 };
