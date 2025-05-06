@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Trash2 } from 'lucide-react';
 import { 
   Table, 
   TableBody, 
@@ -16,6 +17,7 @@ interface StudentsListProps {
   filteredCourse: string;
   setFilteredCourse: React.Dispatch<React.SetStateAction<string>>;
   onEditStudent: (student: Student) => void;
+  onDeleteStudent?: (student: Student) => void;
   courses: string[];
 }
 
@@ -24,6 +26,7 @@ const StudentsList: React.FC<StudentsListProps> = ({
   filteredCourse,
   setFilteredCourse,
   onEditStudent,
+  onDeleteStudent,
   courses,
 }) => {
   // Filter students based on selected course
@@ -63,13 +66,25 @@ const StudentsList: React.FC<StudentsListProps> = ({
                   <TableCell>{student.name}</TableCell>
                   <TableCell>{student.course}</TableCell>
                   <TableCell>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      onClick={() => onEditStudent(student)}
-                    >
-                      Editar
-                    </Button>
+                    <div className="flex space-x-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => onEditStudent(student)}
+                      >
+                        Editar
+                      </Button>
+                      {onDeleteStudent && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-100"
+                          onClick={() => onDeleteStudent(student)}
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

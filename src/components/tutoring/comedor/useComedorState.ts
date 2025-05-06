@@ -1,11 +1,11 @@
-
 import { useState, useEffect } from 'react';
 import { CourseData, Student } from './types';
 import { initialCourses } from './data/initialCourses';
 import { 
   toggleStudentPresence, 
   addStudent, 
-  editStudent 
+  editStudent,
+  deleteStudent 
 } from './utils/studentUtils';
 import { 
   saveCourses, 
@@ -110,6 +110,14 @@ export const useComedorState = () => {
     }
   };
 
+  // Handle deleting a student
+  const handleDeleteStudent = (student: Student) => {
+    const result = deleteStudent(courses, student);
+    if (result.success) {
+      setCourses(result.courses);
+    }
+  };
+
   // Handle adding a new course
   const handleAddCourse = (courseName: string) => {
     // Create new course
@@ -156,6 +164,7 @@ export const useComedorState = () => {
     handleAddStudent,
     handleEditStudent,
     handleSaveEdit,
+    handleDeleteStudent,
     handleAddCourse,
     handleRemoveCourse
   };

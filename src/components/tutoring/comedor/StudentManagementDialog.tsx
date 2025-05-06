@@ -21,6 +21,7 @@ interface StudentManagementDialogProps {
   onAddStudent: () => void;
   onSaveEdit: () => void;
   onEditStudent: (student: Student) => void;
+  onDeleteStudent: (student: Student) => void;
 }
 
 const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
@@ -33,7 +34,8 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
   setEditingStudent,
   onAddStudent,
   onSaveEdit,
-  onEditStudent
+  onEditStudent,
+  onDeleteStudent
 }) => {
   const [filteredCourse, setFilteredCourse] = useState<string>('');
   
@@ -86,6 +88,7 @@ const StudentManagementDialog: React.FC<StudentManagementDialogProps> = ({
             filteredCourse={filteredCourse}
             setFilteredCourse={setFilteredCourse}
             onEditStudent={onEditStudent}
+            onDeleteStudent={onDeleteStudent}
             courses={courseNames}
           />
         </div>

@@ -1,4 +1,3 @@
-
 import { CourseData, Student } from '../types';
 import { toast } from 'sonner';
 
@@ -131,6 +130,43 @@ export const editStudent = (
   }
 
   toast.success("Estudante actualizado correctamente");
+  return { success: true, courses: updatedCourses };
+};
+
+// Function to delete a student
+export const deleteStudent = (
+  courses: CourseData[],
+  student: Student
+): { success: boolean; courses: CourseData[] } => {
+  let courseIndex = -1;
+  let studentIndex = -1;
+  
+  // Find the student in the courses
+  for (let i = 0; i < courses.length; i++) {
+    const foundIndex = courses[i].students.findIndex(s => s.id === student.id);
+    if (foundIndex !== -1) {
+      courseIndex = i;
+      studentIndex = foundIndex;
+      break;
+    }
+  }
+
+  if (courseIndex === -1 || studentIndex === -1) {
+    toast.error("Estudante non atopado");
+    return { success: false, courses };
+  }
+
+  // Create a copy of courses array and remove the student
+  const updatedCourses = [...courses];
+  updatedCourses[courseIndex].students.splice(studentIndex, 1);
+  
+  // Update counts for the course
+  updatedCourses[courseIndex] = {
+    ...updatedCourses[courseIndex],
+    ...updateCourseCounts(updatedCourses[courseIndex].students)
+  };
+
+  toast.success("Comensal eliminado correctamente");
   return { success: true, courses: updatedCourses };
 };
 

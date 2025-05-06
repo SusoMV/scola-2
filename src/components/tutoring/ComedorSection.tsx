@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import CourseDialog from './comedor/CourseDialog';
 import StudentManagementDialog from './comedor/StudentManagementDialog';
 import { useComedorState } from './comedor/useComedorState';
 import CourseManagementDialog from './comedor/CourseManagementDialog';
+
 const ComedorSection = () => {
   const {
     courses,
@@ -26,9 +28,11 @@ const ComedorSection = () => {
     handleAddStudent,
     handleEditStudent,
     handleSaveEdit,
+    handleDeleteStudent,
     handleAddCourse,
     handleRemoveCourse
   } = useComedorState();
+  
   return <div className="space-y-6">
       <Card>
         <CardContent className="p-6">
@@ -54,10 +58,23 @@ const ComedorSection = () => {
       <CourseDialog isOpen={isDialogOpen} onOpenChange={setIsDialogOpen} selectedCourse={selectedCourse} onToggleStudentPresence={toggleStudentPresence} courses={courses} />
 
       {/* Dialog for adding/editing students */}
-      <StudentManagementDialog isOpen={isManageDialogOpen} onOpenChange={setIsManageDialogOpen} newStudent={newStudent} setNewStudent={setNewStudent} courses={courses} editingStudent={editingStudent} setEditingStudent={setEditingStudent} onAddStudent={handleAddStudent} onSaveEdit={handleSaveEdit} onEditStudent={handleEditStudent} />
+      <StudentManagementDialog 
+        isOpen={isManageDialogOpen} 
+        onOpenChange={setIsManageDialogOpen} 
+        newStudent={newStudent} 
+        setNewStudent={setNewStudent} 
+        courses={courses} 
+        editingStudent={editingStudent} 
+        setEditingStudent={setEditingStudent} 
+        onAddStudent={handleAddStudent} 
+        onSaveEdit={handleSaveEdit} 
+        onEditStudent={handleEditStudent} 
+        onDeleteStudent={handleDeleteStudent}
+      />
 
       {/* Dialog for adding/removing courses */}
       <CourseManagementDialog isOpen={isCourseManageDialogOpen} onOpenChange={setIsCourseManageDialogOpen} courses={courses} onAddCourse={handleAddCourse} onRemoveCourse={handleRemoveCourse} />
     </div>;
 };
+
 export default ComedorSection;
