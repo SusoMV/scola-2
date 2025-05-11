@@ -26,25 +26,39 @@ export interface GroupScheduleProps {
   defaultDays?: string[];
 }
 
-const defaultGroups = [{
-  id: "1",
-  name: "1º Primaria"
-}, {
-  id: "2",
-  name: "2º Primaria"
-}, {
-  id: "3",
-  name: "3º Primaria"
-}, {
-  id: "4",
-  name: "4º Primaria"
-}, {
-  id: "5",
-  name: "5º Primaria"
-}, {
-  id: "6",
-  name: "6º Primaria"
-}];
+const defaultGroups = [
+  {
+    id: "infantil-4",
+    name: "4º Infantil"
+  },
+  {
+    id: "infantil-5",
+    name: "5º Infantil"
+  },
+  {
+    id: "infantil-6",
+    name: "6º Infantil"
+  },
+  {
+    id: "1",
+    name: "1º Primaria"
+  }, {
+    id: "2",
+    name: "2º Primaria"
+  }, {
+    id: "3",
+    name: "3º Primaria"
+  }, {
+    id: "4",
+    name: "4º Primaria"
+  }, {
+    id: "5",
+    name: "5º Primaria"
+  }, {
+    id: "6",
+    name: "6º Primaria"
+  }
+];
 const defaultHours = ["9:00", "9:50", "10:40", "11:30", "12:20", "13:10", "14:00"];
 const defaultDays = ["luns", "martes", "mércores", "xoves", "venres"];
 
