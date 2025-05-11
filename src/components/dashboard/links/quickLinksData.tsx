@@ -74,4 +74,9 @@ export const createQuickLinks = (schoolWebUrl: string): QuickLink[] => [
     icon: <UsersRound className="h-6 w-6 text-scola-primary" />,
     link: '/coordinations',
   },
+  {
+    name: 'Enquisas',
+    icon: <FileText className="h-6 w-6 text-scola-primary" />,
+    link: '/surveys',
+  },
 ];
