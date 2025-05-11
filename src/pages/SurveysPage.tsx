@@ -19,6 +19,9 @@ const SurveysPage = () => {
             <FileText className="h-6 w-6 text-scola-primary" />
             <h1 className="text-2xl font-bold">Enquisas</h1>
           </div>
+        </div>
+        <div className="dotted-border w-full h-1 mt-2"></div>
+        <div className="flex justify-end mt-4">
           <Button 
             onClick={() => setIsCreateDialogOpen(true)}
             className="bg-scola-primary hover:bg-scola-primary-dark flex items-center gap-2"
@@ -27,7 +30,6 @@ const SurveysPage = () => {
             Realizar enquisa
           </Button>
         </div>
-        <div className="dotted-border w-full h-1 mt-2"></div>
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
