@@ -5,14 +5,17 @@ import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@
 import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Survey } from '@/hooks/useSurveys';
+import SurveyResponseDialog from './SurveyResponseDialog';
 
 interface SurveysListProps {
   surveys: Survey[];
   onDelete: (id: string) => void;
+  onAddResponse: (surveyId: string, response: { userId: string; answer: string | string[] }) => void;
 }
 
-const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete }) => {
+const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddResponse }) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
   
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);
@@ -27,6 +30,10 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete }) => {
   
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('es-ES');
+  };
+
+  const handleSurveyClick = (survey: Survey) => {
+    setSelectedSurvey(survey);
   };
   
   if (surveys.length === 0) {
@@ -45,17 +52,24 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete }) => {
             <TableHead>Título da enquisa</TableHead>
             <TableHead>Tipo de resposta</TableHead>
             <TableHead>Data límite</TableHead>
+            <TableHead>Respostas</TableHead>
             <TableHead className="w-[80px]">Acción</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {surveys.map((survey) => (
             <TableRow key={survey.id}>
-              <TableCell className="font-medium">{survey.title}</TableCell>
+              <TableCell 
+                className="font-medium cursor-pointer hover:text-scola-primary hover:underline"
+                onClick={() => handleSurveyClick(survey)}
+              >
+                {survey.title}
+              </TableCell>
               <TableCell>
                 {survey.responseType === 'short' ? 'Resposta curta' : 'Resposta múltiple'}
               </TableCell>
               <TableCell>{formatDate(survey.deadline)}</TableCell>
+              <TableCell>{survey.responses.length}</TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
@@ -87,6 +101,18 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete }) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {selectedSurvey && (
+        <SurveyResponseDialog
+          survey={selectedSurvey}
+          isOpen={!!selectedSurvey}
+          onClose={() => setSelectedSurvey(null)}
+          onSubmit={(response) => {
+            onAddResponse(selectedSurvey.id, response);
+            setSelectedSurvey(null);
+          }}
+        />
+      )}
     </>
   );
 };

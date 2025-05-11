@@ -9,7 +9,7 @@ import { useSurveys } from '@/hooks/useSurveys';
 
 const SurveysPage = () => {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const { surveys, addSurvey, deleteSurvey } = useSurveys();
+  const { surveys, addSurvey, deleteSurvey, addResponse } = useSurveys();
 
   return (
     <DashboardLayout>
@@ -33,7 +33,11 @@ const SurveysPage = () => {
       </div>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <SurveysList surveys={surveys} onDelete={deleteSurvey} />
+        <SurveysList 
+          surveys={surveys} 
+          onDelete={deleteSurvey} 
+          onAddResponse={addResponse}
+        />
       </div>
 
       <CreateSurveyDialog 
