@@ -5,174 +5,152 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
-import { X } from 'lucide-react';
 import { Survey } from '@/hooks/useSurveys';
 
 interface CreateSurveyDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (survey: Omit<Survey, 'id' | 'createdAt'>) => void;
+  onSave: (survey: Omit<Survey, 'id' | 'createdAt' | 'responses'>) => Survey;
 }
 
-const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ 
-  isOpen, 
-  onClose,
-  onSave 
-}) => {
+const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState('');
   const [responseType, setResponseType] = useState<'short' | 'multiple'>('short');
-  const [options, setOptions] = useState<string[]>(['']);
-  const [deadline, setDeadline] = useState('');
-
-  const handleAddOption = () => {
-    setOptions([...options, '']);
-  };
-
+  const [options, setOptions] = useState<string[]>(['', '']);
+  const [deadline, setDeadline] = useState<Date>(new Date());
+  const [deadlineStr, setDeadlineStr] = useState<string>(new Date().toISOString().split('T')[0]);
+  
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
   };
-
-  const handleRemoveOption = (index: number) => {
-    if (options.length > 1) {
-      const newOptions = options.filter((_, i) => i !== index);
-      setOptions(newOptions);
-    }
+  
+  const addOption = () => {
+    setOptions([...options, '']);
   };
-
-  const handleSave = () => {
-    // Basic validation
-    if (!title) {
-      return;
-    }
-
-    const filteredOptions = responseType === 'multiple'
-      ? options.filter(option => option.trim() !== '')
-      : undefined;
-
-    onSave({
-      title,
-      responseType,
-      options: filteredOptions,
-      deadline: new Date(deadline)
-    });
+  
+  const removeOption = (index: number) => {
+    if (options.length <= 2) return;
+    const newOptions = [...options];
+    newOptions.splice(index, 1);
+    setOptions(newOptions);
+  };
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title.trim()) return;
     
-    // Reset form
-    setTitle('');
-    setResponseType('short');
-    setOptions(['']);
-    setDeadline('');
+    const newSurvey = {
+      title: title.trim(),
+      responseType,
+      options: responseType === 'multiple' ? options.filter(opt => opt.trim() !== '') : undefined,
+      deadline: new Date(deadlineStr),
+      responses: []
+    };
+    
+    onSave(newSurvey);
+    resetForm();
     onClose();
   };
-
+  
+  const resetForm = () => {
+    setTitle('');
+    setResponseType('short');
+    setOptions(['', '']);
+    setDeadline(new Date());
+    setDeadlineStr(new Date().toISOString().split('T')[0]);
+  };
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Nova enquisa</DialogTitle>
+          <DialogTitle>Crear nova enquisa</DialogTitle>
         </DialogHeader>
         
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="title" className="text-right">
-              Título
-            </Label>
-            <Input
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="col-span-3"
+        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          <div className="space-y-2">
+            <Label htmlFor="title">Título da enquisa</Label>
+            <Input 
+              id="title" 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              placeholder="Escriba o título da enquisa aquí"
+              required
             />
           </div>
-
-          <div className="grid grid-cols-4 items-start gap-4">
-            <Label className="text-right pt-2">
-              Tipo de resposta
-            </Label>
-            <div className="col-span-3">
-              <RadioGroup 
-                value={responseType} 
-                onValueChange={(value) => {
-                  setResponseType(value as 'short' | 'multiple');
-                  if (value === 'multiple' && options.length === 0) {
-                    setOptions(['']);
-                  }
-                }}
-                className="flex flex-col gap-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="short" id="short" />
-                  <Label htmlFor="short">Resposta curta</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="multiple" id="multiple" />
-                  <Label htmlFor="multiple">Resposta múltiple</Label>
-                </div>
-              </RadioGroup>
-            </div>
+          
+          <div className="space-y-2">
+            <Label>Tipo de resposta</Label>
+            <RadioGroup value={responseType} onValueChange={(value) => setResponseType(value as 'short' | 'multiple')}>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="short" id="short" />
+                <Label htmlFor="short">Resposta curta</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="multiple" id="multiple" />
+                <Label htmlFor="multiple">Resposta múltiple (escoller unha opción)</Label>
+              </div>
+            </RadioGroup>
           </div>
-
+          
           {responseType === 'multiple' && (
-            <div className="grid grid-cols-4 items-start gap-4">
-              <Label className="text-right pt-2">
-                Opcións
-              </Label>
-              <div className="col-span-3 space-y-2">
+            <div className="space-y-2">
+              <Label>Opcións de resposta</Label>
+              <div className="space-y-2">
                 {options.map((option, index) => (
-                  <div key={index} className="flex gap-2">
-                    <Input
-                      value={option}
-                      onChange={(e) => handleOptionChange(index, e.target.value)}
+                  <div key={index} className="flex items-center space-x-2">
+                    <Input 
+                      value={option} 
+                      onChange={(e) => handleOptionChange(index, e.target.value)} 
                       placeholder={`Opción ${index + 1}`}
-                      className="flex-1"
+                      required
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => handleRemoveOption(index)}
-                      disabled={options.length <= 1}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
+                    {options.length > 2 && (
+                      <Button 
+                        type="button" 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={() => removeOption(index)}
+                      >
+                        X
+                      </Button>
+                    )}
                   </div>
                 ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleAddOption}
-                  size="sm"
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  onClick={addOption}
+                  className="w-full mt-2"
                 >
                   Engadir opción
                 </Button>
               </div>
             </div>
           )}
-
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="deadline" className="text-right">
-              Data límite
-            </Label>
-            <Input
-              id="deadline"
-              type="date"
-              value={deadline}
-              onChange={(e) => setDeadline(e.target.value)}
-              className="col-span-3"
+          
+          <div className="space-y-2">
+            <Label htmlFor="deadline">Data límite</Label>
+            <Input 
+              id="deadline" 
+              type="date" 
+              value={deadlineStr} 
+              onChange={(e) => setDeadlineStr(e.target.value)} 
+              required
             />
           </div>
-        </div>
-        
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button onClick={handleSave} disabled={!title || !deadline}>
-            Gardar enquisa
-          </Button>
-        </DialogFooter>
+          
+          <DialogFooter className="mt-4">
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancelar
+            </Button>
+            <Button type="submit" className="bg-scola-primary hover:bg-scola-primary-dark">
+              Gardar enquisa
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );

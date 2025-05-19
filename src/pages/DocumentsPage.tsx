@@ -3,6 +3,8 @@ import React from 'react';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Shield } from 'lucide-react';
 import SubstitutionDocumentsUploader from '@/components/documents/SubstitutionDocumentsUploader';
+import TeacherSchedulesUploader from '@/components/documents/TeacherSchedulesUploader';
+import GuardsProtocolsUploader from '@/components/documents/GuardsProtocolsUploader';
 
 const DocumentsPage = () => {
   return (
@@ -19,6 +21,8 @@ const DocumentsPage = () => {
       
       <div className="space-y-6">
         <SubstitutionDocumentsUploader />
+        <TeacherSchedulesUploader />
+        <GuardsProtocolsUploader />
       </div>
     </DashboardLayout>
   );
