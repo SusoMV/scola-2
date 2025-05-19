@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
@@ -7,52 +6,47 @@ import { Button } from '@/components/ui/button';
 import { Survey } from '@/hooks/useSurveys';
 import SurveyResponseDialog from './SurveyResponseDialog';
 import SurveyResponsesViewDialog from './SurveyResponsesViewDialog';
-
 interface SurveysListProps {
   surveys: Survey[];
   onDelete: (id: string) => void;
-  onAddResponse: (surveyId: string, response: { userId: string; answer: string | string[] }) => void;
+  onAddResponse: (surveyId: string, response: {
+    userId: string;
+    answer: string | string[];
+  }) => void;
 }
-
-const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddResponse }) => {
+const SurveysList: React.FC<SurveysListProps> = ({
+  surveys,
+  onDelete,
+  onAddResponse
+}) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
   const [viewResponsesSurvey, setViewResponsesSurvey] = useState<Survey | null>(null);
-  
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);
   };
-  
   const handleConfirmDelete = () => {
     if (deleteId) {
       onDelete(deleteId);
       setDeleteId(null);
     }
   };
-  
   const formatDate = (date: Date) => {
     return new Date(date).toLocaleDateString('es-ES');
   };
-
   const handleSurveyClick = (survey: Survey) => {
     setSelectedSurvey(survey);
   };
-
   const handleViewResponses = (survey: Survey, e: React.MouseEvent) => {
     e.stopPropagation();
     setViewResponsesSurvey(survey);
   };
-  
   if (surveys.length === 0) {
-    return (
-      <div className="text-center py-8 text-gray-500">
+    return <div className="text-center py-8 text-gray-500">
         Non hai enquisas creadas aínda.
-      </div>
-    );
+      </div>;
   }
-  
-  return (
-    <>
+  return <>
       <Table>
         <TableHeader>
           <TableRow>
@@ -64,38 +58,25 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddRespo
           </TableRow>
         </TableHeader>
         <TableBody>
-          {surveys.map((survey) => (
-            <TableRow key={survey.id}>
-              <TableCell 
-                className="font-medium cursor-pointer hover:text-scola-primary hover:underline"
-                onClick={() => handleSurveyClick(survey)}
-              >
+          {surveys.map(survey => <TableRow key={survey.id}>
+              <TableCell className="font-medium cursor-pointer hover:text-scola-primary hover:underline" onClick={() => handleSurveyClick(survey)}>
                 {survey.title}
               </TableCell>
               <TableCell>
                 {survey.responseType === 'short' ? 'Resposta curta' : 'Resposta múltiple'}
               </TableCell>
               <TableCell>{formatDate(survey.deadline)}</TableCell>
-              <TableCell>
-                <span 
-                  className="cursor-pointer hover:text-scola-primary hover:underline"
-                  onClick={(e) => handleViewResponses(survey, e)}
-                >
+              <TableCell className="font-medium cursor-pointer hover:text-scola-primary hover:underline">
+                <span className="cursor-pointer hover:text-scola-primary hover:underline" onClick={e => handleViewResponses(survey, e)}>
                   {survey.responses.length}
                 </span>
               </TableCell>
               <TableCell>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => handleDeleteClick(survey.id)}
-                  className="hover:bg-red-100 text-red-600"
-                >
+                <Button variant="ghost" size="icon" onClick={() => handleDeleteClick(survey.id)} className="hover:bg-red-100 text-red-600">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </TableCell>
-            </TableRow>
-          ))}
+            </TableRow>)}
         </TableBody>
       </Table>
       
@@ -116,27 +97,12 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddRespo
         </AlertDialogContent>
       </AlertDialog>
 
-      {selectedSurvey && (
-        <SurveyResponseDialog
-          survey={selectedSurvey}
-          isOpen={!!selectedSurvey}
-          onClose={() => setSelectedSurvey(null)}
-          onSubmit={(response) => {
-            onAddResponse(selectedSurvey.id, response);
-            setSelectedSurvey(null);
-          }}
-        />
-      )}
+      {selectedSurvey && <SurveyResponseDialog survey={selectedSurvey} isOpen={!!selectedSurvey} onClose={() => setSelectedSurvey(null)} onSubmit={response => {
+      onAddResponse(selectedSurvey.id, response);
+      setSelectedSurvey(null);
+    }} />}
 
-      {viewResponsesSurvey && (
-        <SurveyResponsesViewDialog
-          survey={viewResponsesSurvey}
-          isOpen={!!viewResponsesSurvey}
-          onClose={() => setViewResponsesSurvey(null)}
-        />
-      )}
-    </>
-  );
+      {viewResponsesSurvey && <SurveyResponsesViewDialog survey={viewResponsesSurvey} isOpen={!!viewResponsesSurvey} onClose={() => setViewResponsesSurvey(null)} />}
+    </>;
 };
-
 export default SurveysList;
