@@ -6,6 +6,7 @@ import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Survey } from '@/hooks/useSurveys';
 import SurveyResponseDialog from './SurveyResponseDialog';
+import SurveyResponsesViewDialog from './SurveyResponsesViewDialog';
 
 interface SurveysListProps {
   surveys: Survey[];
@@ -16,6 +17,7 @@ interface SurveysListProps {
 const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddResponse }) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [selectedSurvey, setSelectedSurvey] = useState<Survey | null>(null);
+  const [viewResponsesSurvey, setViewResponsesSurvey] = useState<Survey | null>(null);
   
   const handleDeleteClick = (id: string) => {
     setDeleteId(id);
@@ -34,6 +36,11 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddRespo
 
   const handleSurveyClick = (survey: Survey) => {
     setSelectedSurvey(survey);
+  };
+
+  const handleViewResponses = (survey: Survey, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setViewResponsesSurvey(survey);
   };
   
   if (surveys.length === 0) {
@@ -69,7 +76,14 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddRespo
                 {survey.responseType === 'short' ? 'Resposta curta' : 'Resposta múltiple'}
               </TableCell>
               <TableCell>{formatDate(survey.deadline)}</TableCell>
-              <TableCell>{survey.responses.length}</TableCell>
+              <TableCell>
+                <span 
+                  className="cursor-pointer hover:text-scola-primary hover:underline"
+                  onClick={(e) => handleViewResponses(survey, e)}
+                >
+                  {survey.responses.length}
+                </span>
+              </TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
@@ -111,6 +125,14 @@ const SurveysList: React.FC<SurveysListProps> = ({ surveys, onDelete, onAddRespo
             onAddResponse(selectedSurvey.id, response);
             setSelectedSurvey(null);
           }}
+        />
+      )}
+
+      {viewResponsesSurvey && (
+        <SurveyResponsesViewDialog
+          survey={viewResponsesSurvey}
+          isOpen={!!viewResponsesSurvey}
+          onClose={() => setViewResponsesSurvey(null)}
         />
       )}
     </>
