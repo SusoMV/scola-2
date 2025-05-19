@@ -66,7 +66,7 @@ const SurveysList: React.FC<SurveysListProps> = ({
                 {survey.responseType === 'short' ? 'Resposta curta' : 'Resposta múltiple'}
               </TableCell>
               <TableCell>{formatDate(survey.deadline)}</TableCell>
-              <TableCell className="font-medium cursor-pointer hover:text-scola-primary hover:underline">
+              <TableCell className="font-medium">
                 <span className="cursor-pointer hover:text-scola-primary hover:underline" onClick={e => handleViewResponses(survey, e)}>
                   {survey.responses.length}
                 </span>
