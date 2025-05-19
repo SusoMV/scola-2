@@ -40,7 +40,7 @@ const SubstitutionDocumentsUploader = () => {
   return <Card className="shadow-sm border-gray-200">
       <CardHeader className="pb-2">
         <CardTitle className="text-lg font-medium flex items-center justify-between">
-          <div>Transporte / Permanencia de tarde / Patio</div>
+          <div>Gardas de transporte</div>
           <Button onClick={handleUploadClick} className="bg-scola-primary hover:bg-scola-primary/90">
             <Upload className="mr-2 h-4 w-4" /> Subir documento
           </Button>
