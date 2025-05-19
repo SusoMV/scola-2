@@ -26,7 +26,8 @@ const SurveyResponseDialog: React.FC<SurveyResponseDialogProps> = ({
   const [selectedOption, setSelectedOption] = useState('');
   
   // Mock user ID - in a real app, this would come from authentication
-  const mockUserId = 'user-1';
+  // For anonymous surveys, use "anonymous" as the userId
+  const mockUserId = survey.isAnonymous ? 'anonymous' : 'user-1';
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +49,12 @@ const SurveyResponseDialog: React.FC<SurveyResponseDialogProps> = ({
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+          {survey.isAnonymous && (
+            <div className="bg-blue-50 text-blue-700 p-2 rounded-md text-sm mb-4">
+              Esta é unha enquisa anónima. As súas respostas serán anónimas.
+            </div>
+          )}
+          
           {survey.responseType === 'short' ? (
             <div className="space-y-2">
               <Label htmlFor="response">A súa resposta</Label>

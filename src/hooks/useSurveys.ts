@@ -16,6 +16,7 @@ export interface Survey {
   options?: string[];
   deadline: Date;
   createdAt: Date;
+  isAnonymous: boolean;
   responses: SurveyResponse[];
 }
 
@@ -34,6 +35,7 @@ export const useSurveys = () => {
       ...survey,
       id: Date.now().toString(),
       createdAt: new Date(),
+      isAnonymous: survey.isAnonymous || false,
       responses: []
     };
     

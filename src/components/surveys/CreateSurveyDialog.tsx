@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Survey } from '@/hooks/useSurveys';
 
 interface CreateSurveyDialogProps {
@@ -19,6 +20,7 @@ const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ isOpen, onClose
   const [options, setOptions] = useState<string[]>(['', '']);
   const [deadline, setDeadline] = useState<Date>(new Date());
   const [deadlineStr, setDeadlineStr] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
@@ -46,6 +48,7 @@ const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ isOpen, onClose
       responseType,
       options: responseType === 'multiple' ? options.filter(opt => opt.trim() !== '') : undefined,
       deadline: new Date(deadlineStr),
+      isAnonymous,
       responses: []
     };
     
@@ -60,6 +63,7 @@ const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ isOpen, onClose
     setOptions(['', '']);
     setDeadline(new Date());
     setDeadlineStr(new Date().toISOString().split('T')[0]);
+    setIsAnonymous(false);
   };
   
   return (
@@ -140,6 +144,17 @@ const CreateSurveyDialog: React.FC<CreateSurveyDialogProps> = ({ isOpen, onClose
               onChange={(e) => setDeadlineStr(e.target.value)} 
               required
             />
+          </div>
+          
+          <div className="flex items-center space-x-2">
+            <Checkbox 
+              id="anonymous" 
+              checked={isAnonymous}
+              onCheckedChange={(checked) => setIsAnonymous(checked === true)}
+            />
+            <Label htmlFor="anonymous" className="cursor-pointer">
+              Enquisa anónima
+            </Label>
           </div>
           
           <DialogFooter className="mt-4">
