@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -6,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { format } from 'date-fns';
 import { Check, CalendarIcon, Clock, X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
@@ -233,14 +235,15 @@ const AttendanceControl = () => {
                     )}
                   </TableCell>
                   <TableCell>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => toggleJustified(absence.id)}
-                      className={absence.justified ? "text-red-600 border-red-600 hover:bg-red-50" : "text-green-600 border-green-600 hover:bg-green-50"}
-                    >
-                      {absence.justified ? "Marcar como non xustificada" : "Marcar como xustificada"}
-                    </Button>
+                    <div className="flex items-center space-x-2">
+                      <Switch
+                        checked={absence.justified}
+                        onCheckedChange={() => toggleJustified(absence.id)}
+                      />
+                      <span className="text-sm text-gray-600">
+                        {absence.justified ? "Xustificada" : "Non xustificada"}
+                      </span>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
