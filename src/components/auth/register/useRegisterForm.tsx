@@ -32,7 +32,7 @@ export const useRegisterForm = () => {
     setServerError(null);
     
     try {
-      // First, create user in your backend
+      // First, create user in your backend using the generic API function
       await createUserInBackend({
         email: values.email,
         password: values.password
