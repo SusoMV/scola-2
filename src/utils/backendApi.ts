@@ -1,4 +1,5 @@
 
+import jwt from 'jsonwebtoken';
 import { BACKEND_URL, BACKEND_JWT } from '@/config/backend';
 
 export interface CreateUserRequest {
@@ -6,14 +7,33 @@ export interface CreateUserRequest {
   password: string;
 }
 
-// Generic function to call any backend endpoint with authentication
+// Generate JWT token using HS256 algorithm for n8n authentication
+const generateJWTToken = (): string => {
+  const payload = {
+    iss: 'scola-app', // issuer
+    iat: Math.floor(Date.now() / 1000), // issued at
+    exp: Math.floor(Date.now() / 1000) + (60 * 60), // expires in 1 hour
+  };
+
+  return jwt.sign(payload, BACKEND_JWT, { 
+    algorithm: 'HS256',
+    header: {
+      typ: 'JWT',
+      alg: 'HS256'
+    }
+  });
+};
+
+// Generic function to call any backend endpoint with JWT authentication
 export const callBackendApi = async (endpoint: string, data: any): Promise<any> => {
   try {
+    const token = generateJWTToken();
+    
     const response = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${BACKEND_JWT}`
+        'Authorization': `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
