@@ -1,5 +1,5 @@
 
-import jwt from 'jsonwebtoken';
+
 import { BACKEND_URL, BACKEND_JWT } from '@/config/backend';
 
 export interface CreateUserRequest {
@@ -7,27 +7,52 @@ export interface CreateUserRequest {
   password: string;
 }
 
-// Generate JWT token using HS256 algorithm for n8n authentication
-const generateJWTToken = (): string => {
+// Base64 URL encode function
+const base64UrlEncode = (str: string): string => {
+  return btoa(str)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+};
+
+// Generate JWT token using HS256 algorithm for n8n authentication (browser-compatible)
+const generateJWTToken = async (): Promise<string> => {
+  const header = {
+    typ: 'JWT',
+    alg: 'HS256'
+  };
+
   const payload = {
     iss: 'scola-app', // issuer
     iat: Math.floor(Date.now() / 1000), // issued at
     exp: Math.floor(Date.now() / 1000) + (60 * 60), // expires in 1 hour
   };
 
-  return jwt.sign(payload, BACKEND_JWT, { 
-    algorithm: 'HS256',
-    header: {
-      typ: 'JWT',
-      alg: 'HS256'
-    }
-  });
+  const encodedHeader = base64UrlEncode(JSON.stringify(header));
+  const encodedPayload = base64UrlEncode(JSON.stringify(payload));
+  
+  const message = `${encodedHeader}.${encodedPayload}`;
+  
+  // Create signature using Web Crypto API
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(BACKEND_JWT),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  
+  const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(message));
+  const encodedSignature = base64UrlEncode(String.fromCharCode(...new Uint8Array(signature)));
+  
+  return `${message}.${encodedSignature}`;
 };
 
 // Generic function to call any backend endpoint with JWT authentication
 export const callBackendApi = async (endpoint: string, data: any): Promise<any> => {
   try {
-    const token = generateJWTToken();
+    const token = await generateJWTToken();
     
     const response = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: 'POST',
@@ -57,3 +82,4 @@ export const callBackendApi = async (endpoint: string, data: any): Promise<any> 
 export const createUserInBackend = async (userData: CreateUserRequest): Promise<void> => {
   await callBackendApi('/webhook/create/user', userData);
 };
+
