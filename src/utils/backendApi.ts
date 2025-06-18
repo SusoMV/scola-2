@@ -5,6 +5,7 @@ import { BACKEND_URL, BACKEND_JWT } from '@/config/backend';
 export interface CreateUserRequest {
   email: string;
   password: string;
+  full_name: string;
 }
 
 // Base64 URL encode function

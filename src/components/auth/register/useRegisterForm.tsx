@@ -35,7 +35,8 @@ export const useRegisterForm = () => {
       // First, create user in your backend using the generic API function
       await createUserInBackend({
         email: values.email,
-        password: values.password
+        password: values.password,
+        full_name: values.full_name
       });
 
       // Extract school name from the selected code
