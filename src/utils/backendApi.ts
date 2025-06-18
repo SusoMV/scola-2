@@ -1,11 +1,9 @@
-
-
 import { BACKEND_URL, BACKEND_JWT } from '@/config/backend';
 
 export interface CreateUserRequest {
   email: string;
   password: string;
-  full_name: string;
+  name: string;
 }
 
 // Base64 URL encode function
@@ -83,4 +81,3 @@ export const callBackendApi = async (endpoint: string, data: any): Promise<any> 
 export const createUserInBackend = async (userData: CreateUserRequest): Promise<void> => {
   await callBackendApi('/webhook/create/user', userData);
 };
-
