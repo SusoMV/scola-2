@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { RegisterFormValues, registerSchema } from './types';
+import { createUserInBackend } from '@/utils/backendApi';
 
 export const useRegisterForm = () => {
   const { signUp } = useAuth();
@@ -31,6 +32,12 @@ export const useRegisterForm = () => {
     setServerError(null);
     
     try {
+      // First, create user in your backend
+      await createUserInBackend({
+        email: values.email,
+        password: values.password
+      });
+
       // Extract school name from the selected code
       const schoolSelection = values.school_code;
       const schoolName = schoolSelection.split(' - ')[1] || schoolSelection;
@@ -44,7 +51,7 @@ export const useRegisterForm = () => {
         school_name: schoolName
       };
       
-      // Register the user
+      // Register the user in Supabase
       await signUp(values.email, values.password, userData);
       
       // Navigate to login after successful registration
