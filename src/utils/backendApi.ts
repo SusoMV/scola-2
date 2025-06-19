@@ -6,6 +6,11 @@ export interface CreateUserRequest {
   name: string;
 }
 
+export interface ValidateUserRequest {
+  email: string;
+  password: string;
+}
+
 // Base64 URL encode function
 const base64UrlEncode = (str: string): string => {
   return btoa(str)
@@ -80,4 +85,15 @@ export const callBackendApi = async (endpoint: string, data: any): Promise<any> 
 // Specific function for creating users (using the generic function)
 export const createUserInBackend = async (userData: CreateUserRequest): Promise<void> => {
   await callBackendApi('/webhook/create/user', userData);
+};
+
+// Specific function for validating user credentials
+export const validateUserInBackend = async (credentials: ValidateUserRequest): Promise<boolean> => {
+  try {
+    await callBackendApi('/webhook/validate/user-password', credentials);
+    return true;
+  } catch (error) {
+    console.error('User validation failed:', error);
+    return false;
+  }
 };

@@ -1,7 +1,7 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { validateUserInBackend } from '@/utils/backendApi';
 import { toast } from 'sonner';
 
 interface AuthContextType {
@@ -45,11 +45,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
+      // First validate credentials with backend
+      const isValidUser = await validateUserInBackend({ email, password });
+      
+      if (!isValidUser) {
+        throw new Error('Credenciais inválidas');
+      }
+
+      // If backend validation passes, proceed with Supabase login
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+      
       toast.success('Sesión iniciada correctamente');
     } catch (error: any) {
-      console.error('Error signin in:', error);
+      console.error('Error signing in:', error);
       toast.error(error.message || 'Erro ao iniciar sesión');
       throw error;
     }
