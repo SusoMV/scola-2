@@ -38,6 +38,7 @@ export const useRegisterForm = () => {
         name: values.full_name
       });
 
+      // Only show success if we reach this point (no error thrown)
       toast.success('Rexistro completado correctamente');
       
       // Navigate to login after successful registration
@@ -45,6 +46,7 @@ export const useRegisterForm = () => {
     } catch (error: any) {
       console.error('Registration error:', error);
       setServerError(error.message || 'Houbo un erro ao rexistrarse. Téntao de novo máis tarde.');
+      toast.error(error.message || 'Houbo un erro ao rexistrarse. Téntao de novo máis tarde.');
     } finally {
       setIsSubmitting(false);
     }
