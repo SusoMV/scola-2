@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,7 +10,6 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, userData: any) => Promise<void>;
   signOut: () => Promise<void>;
   updateUserMetadata: (metadata: Record<string, any>) => Promise<void>;
 }
@@ -57,27 +57,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error: any) {
       console.error('Error signing in:', error);
       toast.error(error.message || 'Erro ao iniciar sesión');
-      throw error;
-    }
-  };
-
-  const signUp = async (email: string, password: string, userData: any) => {
-    try {
-      const { error, data } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: userData
-        }
-      });
-
-      if (error) throw error;
-
-      // All users are automatically approved, we removed the conditional approval flow
-      toast.success('Rexistro completado! Por favor, verifica o teu correo electrónico.');
-    } catch (error: any) {
-      console.error('Error signing up:', error);
-      toast.error(error.message || 'Erro ao rexistrarse');
       throw error;
     }
   };
@@ -132,7 +111,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     session,
     loading,
     signIn,
-    signUp,
     signOut,
     updateUserMetadata
   };
