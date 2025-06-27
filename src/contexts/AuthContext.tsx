@@ -45,17 +45,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      // First validate credentials with backend
+      // Only validate credentials with backend
       const isValidUser = await validateUserInBackend({ email, password });
       
       if (!isValidUser) {
         throw new Error('Credenciais inválidas');
       }
 
-      // If backend validation passes, proceed with Supabase login
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) throw error;
-      
+      // If backend validation passes, show success message
       toast.success('Sesión iniciada correctamente');
     } catch (error: any) {
       console.error('Error signing in:', error);
