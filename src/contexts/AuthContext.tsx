@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -45,14 +44,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      // Only validate credentials with backend
+      // Validate credentials with backend using HTTP status codes
       const isValidUser = await validateUserInBackend({ email, password });
       
       if (!isValidUser) {
         throw new Error('Credenciais inválidas');
       }
 
-      // If backend validation passes, show success message
+      // If backend validation passes (HTTP 200), show success message
       toast.success('Sesión iniciada correctamente');
     } catch (error: any) {
       console.error('Error signing in:', error);

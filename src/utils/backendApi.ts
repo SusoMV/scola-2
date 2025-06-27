@@ -1,3 +1,4 @@
+
 import { BACKEND_URL, BACKEND_JWT } from '@/config/backend';
 
 export interface CreateUserRequest {
@@ -82,18 +83,42 @@ export const callBackendApi = async (endpoint: string, data: any): Promise<any> 
   }
 };
 
+// Special function for user validation that handles HTTP status codes
+export const validateUserInBackend = async (credentials: ValidateUserRequest): Promise<boolean> => {
+  try {
+    const token = await generateJWTToken();
+    
+    const response = await fetch(`${BACKEND_URL}/webhook/validate/user-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(credentials)
+    });
+
+    console.log(`Validation response status: ${response.status}`);
+    
+    // HTTP 200 means valid credentials, user can access
+    if (response.status === 200) {
+      return true;
+    }
+    
+    // HTTP 403 means invalid credentials, user cannot access
+    if (response.status === 403) {
+      return false;
+    }
+    
+    // Any other status code is treated as an error
+    throw new Error(`Unexpected response status: ${response.status}`);
+  } catch (error) {
+    console.error('User validation failed:', error);
+    // If there's a network error or other issue, treat as invalid
+    return false;
+  }
+};
+
 // Specific function for creating users (using the generic function)
 export const createUserInBackend = async (userData: CreateUserRequest): Promise<void> => {
   await callBackendApi('/webhook/create/user', userData);
-};
-
-// Specific function for validating user credentials
-export const validateUserInBackend = async (credentials: ValidateUserRequest): Promise<boolean> => {
-  try {
-    await callBackendApi('/webhook/validate/user-password', credentials);
-    return true;
-  } catch (error) {
-    console.error('User validation failed:', error);
-    return false;
-  }
 };
